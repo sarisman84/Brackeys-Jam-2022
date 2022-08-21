@@ -13,5 +13,5 @@ public class MapSegment : ScriptableObject
     public GameObject prefab;
 
     public Socket[] sockets;//length 6
-    //order: Right, Left, Top, Bottom, Front, Back
+    //order: Right, Top, Front, Left, Bottom, Back
 }
