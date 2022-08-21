@@ -23,6 +23,8 @@ public class FPSController : MonoBehaviour
     {
         charController = GetComponent<CharacterController>();
         mainCam = Camera.main;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
     }
 
@@ -36,12 +38,19 @@ public class FPSController : MonoBehaviour
         Vector3 forwardDir = new Vector3(mainCam.transform.forward.x, 0, mainCam.transform.forward.z);
         Vector3 rightDir = new Vector3(mainCam.transform.right.x, 0, mainCam.transform.right.z);
 
-        Vector3 move = forwardDir * input.y + rightDir * input.x;
-        charController.Move(move * Time.deltaTime * movementSpeed);
+        Vector3 move = forwardDir.normalized * input.y + rightDir.normalized * input.x;
+
+
+        float finalSpeed = sprintReference.action.ReadValue<float>() > 0 ? movementSpeed * sprintModifier : movementSpeed;
+
+        charController.Move(move * Time.deltaTime * finalSpeed);
 
 
         verticalVelocity += gravity * Time.deltaTime;
         charController.Move(new Vector3(0, verticalVelocity, 0) * Time.deltaTime);
+
+
+
     }
 
     private void OnEnable()
@@ -52,7 +61,7 @@ public class FPSController : MonoBehaviour
 
     private void OnDisable()
     {
-        sprintReference.action.Enable();
+        sprintReference.action.Disable();
         movementReference.action.Disable();
     }
 }
