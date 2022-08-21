@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: Straight02
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
-  sockets: 000000000000000001000000000000000000000001000000
+  top: 0
+  right: 0
+  front: 1
+  bottom: 0
+  left: 0
+  back: 1

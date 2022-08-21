@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: Turn 2
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
-  sockets: 000000000000000000000000010000000000000001000000
+  top: 0
+  right: 0
+  front: 1
+  bottom: 0
+  left: 1
+  back: 0

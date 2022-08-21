@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 public partial class MapGenerator
 {
     private class GridBox {
@@ -24,11 +25,16 @@ public partial class MapGenerator
             int removeCount = 0;
             int d = (int)dir;
             for(int p = possibilities.Count-1; p >= 0; p--) {
-                if (possibilities[p].sockets[d] != socket) {
+                if (possibilities[p].GetSocket(d) != socket) {
                     possibilities.RemoveAt(p);
                     removeCount++;
                 }
             }
+
+            if (possibilities.Count == 0) {
+                Debug.LogWarning("ALL possibilities for this tile have been removed");
+                ForceResult(instance.empty);
+            } 
         }
     }
 }

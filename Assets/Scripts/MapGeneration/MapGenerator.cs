@@ -16,33 +16,32 @@ public partial class MapGenerator : MonoBehaviour
     }
     
     public Vector3Int mapSize = new Vector3Int(5, 1, 5);
+    public Vector3 tileSize = Vector3.one;
 
-
-    public static int GetRndm(int length) {
-        return UnityEngine.Random.Range(0, length);
-    }
 
     private Array3D<MapSegment> map;
-
+    private Array3D<GridBox> grid;//FOR DEBUGGING ONLY
 
     public MapSegment empty;
     public MapSegment[] segments;
 
     void Start()
     {
+        //TODO: generate TurnSegments from the mapSegment
+
         GenerateMap(ref segments);
     }
 
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
     void GenerateMap(ref MapSegment[] segments) {
-        Array3D<GridBox> grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
+        grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
 
         for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments);//fill the grid
 
         MakeBorderEmpty(ref grid);
 
         int iterLimit = grid.Length;
-        //int iterLimit = 1;
+        //int iterLimit = 0;
         for (int iter = 0; iter < iterLimit; iter++) {
             if (!LowestEntropyCollapse(ref grid))//keeps collapsing until everything is collapsed
                 break;
@@ -52,16 +51,30 @@ public partial class MapGenerator : MonoBehaviour
     }
 
     void MakeBorderEmpty(ref Array3D<GridBox> grid) {
+        void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z) {
+            Vector3Int vec = Vector3Int.zero;
+            for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
+                for (vec[y] = 0; vec[y] < grid.size[y]; vec[y]++) {
+                    vec[z] = 0;
+                    grid[vec].possibilities.Add(empty);
+                    vec[z] = grid.size[z] - 1;
+                    grid[vec].possibilities.Add(empty);
+                }
+        }
         void EmptyPlane(ref Array3D<GridBox> grid, int x, int y, int z) {
             Vector3Int vec = Vector3Int.zero;
             for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
                 for (vec[y] = 0; vec[y] < grid.size[y]; vec[y]++) {
                     vec[z] = 0;
-                    ForceCollapse(ref grid, grid.GetIndex(vec), empty);
+                    Collapse(ref grid, grid.GetIndex(vec), empty);
                     vec[z] = grid.size[z] - 1;
-                    ForceCollapse(ref grid, grid.GetIndex(vec), empty);
+                    Collapse(ref grid, grid.GetIndex(vec), empty);
                 }
         }
+
+        EmptyPlanePossible(ref grid, 0, 1, 2);
+        EmptyPlanePossible(ref grid, 1, 2, 0);
+        EmptyPlanePossible(ref grid, 2, 0, 1);
 
         EmptyPlane(ref grid, 0, 1, 2);
         EmptyPlane(ref grid, 1, 2, 0);
@@ -95,11 +108,10 @@ public partial class MapGenerator : MonoBehaviour
 
     bool CollapseRndm(ref Array3D<GridBox> grid, int toCollapse) {//tries to collapse a gridbox. returns if successful
         int collapseIndex = GetRndm(grid[toCollapse].possibilities.Count);
-        return Collapse(ref grid, toCollapse, collapseIndex);
+        return Collapse(ref grid, toCollapse, grid[toCollapse].possibilities[collapseIndex]);//pick one segment of all possible segments
     }
-    bool Collapse(ref Array3D<GridBox> grid, int toCollapse, int collapseIndex) {//tries to collapse a gridbox. returns if successful
-        MapSegment collapseOn = grid[toCollapse].possibilities[collapseIndex];//pick one segment of all possible segments
-        if (grid[toCollapse].SetResult(collapseOn)) {
+    bool Collapse(ref Array3D<GridBox> grid, int toCollapse, MapSegment segment) {//tries to collapse a gridbox. returns if successful
+        if (grid[toCollapse].SetResult(segment)) {
             PropergateCollapse(ref grid, toCollapse);
             return true;
         }
@@ -109,11 +121,6 @@ public partial class MapGenerator : MonoBehaviour
         grid[toCollapse].ForceResult(segment);
         PropergateCollapse(ref grid, toCollapse);
     }
-
-
-    public enum Direction { Right, Top, Front, Left, Bottom, Back }
-    public static Vector3Int[] directions = { Vector3Int.right, Vector3Int.up, Vector3Int.forward, Vector3Int.left, Vector3Int.down, Vector3Int.back };
-    public int InvertDir(int d) { return (d + 3) % 6; }
 
     void PropergateCollapse(ref Array3D<GridBox> grid, int init) {
         Stack<int> toPropergate = new Stack<int>();
@@ -127,13 +134,13 @@ public partial class MapGenerator : MonoBehaviour
             MapSegment segment = grid[i].possibilities[0];//get the only possibility
             Vector3Int pos = grid.GetPos(i);
 
-            for(int d = 0; d < directions.Length; d++) {
-                Vector3Int neighbour = pos + directions[d];
+            for(int d = 0; d < DirExt.directions.Length; d++) {
+                Vector3Int neighbour = pos + DirExt.directions[d];
                 if (!grid.InBounds(neighbour)) continue;
 
                 int _i = grid.GetIndex(neighbour);
-                Socket socket = segment.sockets[d];
-                grid[_i].OnlyAllow(socket, (Direction)InvertDir(d));
+                Socket socket = segment.GetSocket(d);
+                grid[_i].OnlyAllow(socket, (Direction)DirExt.InvertDir(d));
 
                 if (grid[_i].possibilities.Count == 1 && !grid[_i].propergated)//if defining this socket fully collapses this gridbox
                     toPropergate.Push(_i);
@@ -141,47 +148,50 @@ public partial class MapGenerator : MonoBehaviour
         }
     }
 
-
+    //Use the grid to pick segments to place and put into the map array
     void InstantiateMap(ref Array3D<GridBox> grid) {
-        //Use the grid to pick segments to place and put into the map array
-        map = new Array3D<MapSegment>(mapSize);//NOTE: dont save the empty outermost layer
         
-        Vector3Int vec = Vector3Int.zero;
-        for (vec.x = 1; vec.x < grid.size.x - 1; vec.x++)
-            for (vec.y = 1; vec.y < grid.size.y - 1; vec.y++)
-                for (vec.z = 1; vec.z < grid.size.z - 1; vec.z++) {
-                    int gridI = grid.GetIndex(vec);
-                    int mapI = map.GetIndex(vec - Vector3Int.one);
-
-                    map[mapI] = grid[gridI].possibilities[0];//get the only possibility for this tile
-
-                    //if (grid[gridI].possibilities.Count == 1)
-                        //map[mapI] = grid[gridI].possibilities[0];//get the only possibility for this tile
-                    //else
-                        //map[mapI] = null;//ONLY FOR TESTING
-                }
-
-        /*
+        //---------------- FILLING THE MAP ARRAY -----------------------
+        map = new Array3D<MapSegment>(grid.size);//NOTE: dont save the empty outermost layer
         for (int i = 0; i < map.Length; i++) {
-            if (grid[i].possibilities.Count == 1)
-                map[i] = grid[i].possibilities[0];//get the only possibility for this tile
-            else
-                map[i] = null;//ONLY FOR TESTING
-        }*/
+            map[i] = grid[i].possibilities[0];//get the only possibility for this tile
+        }
+        
+
+        
+        //---------------- BUILDING THE MAP ---------------------------
+        Transform tileParent = new GameObject("Tile Parent").transform;
+        for (int i = 0; i < map.Length; i++) {
+            Vector3 pos = (Vector3)map.GetPos(i);
+            pos.x *= tileSize.x;
+            pos.y *= tileSize.y;
+            pos.z *= tileSize.z;
+
+            if (map[i].prefab != null)
+                Instantiate(map[i].prefab, pos, Quaternion.identity, tileParent);
+        }
     }
 
     private void OnDrawGizmos() {
         if(map != null) {
             for (int i = 0; i < map.Length; i++) {
                 Vector3Int pos = map.GetPos(i);
-                DrawGizmosSegment(pos, 0.5f, map[i], new Color[] { Color.clear, Color.green, Color.blue });    
+                if (pos.y != 1) continue;
+
+                for (int j = 0; j < grid[i].possibilities.Count; j++) {
+                    DrawGizmosSegment(pos + Vector3.down*j, 0.5f, grid[i].possibilities[j], new Color[] { Color.gray, Color.green, Color.blue });
+                }
             }
         }
     }
-    private void DrawGizmosSegment(Vector3 pos, float size, MapSegment segment, Color[] socketColor) {//{ Color.clear, Color.green, Color.blue }
-        for (int d = 0; d < directions.Length; d++) {
-            Gizmos.color = socketColor[(int)segment.sockets[d]];
-            Gizmos.DrawLine(pos, pos + (Vector3)directions[d] * size);
+    private void DrawGizmosSegment(Vector3 pos, float size, MapSegment segment, Color[] socketColor) {
+        for (int d = 0; d < DirExt.directions.Length; d++) {
+            Gizmos.color = socketColor[(int)segment.GetSocket(d)];
+            Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
+    }
+
+    public static int GetRndm(int length) {
+        return UnityEngine.Random.Range(0, length);
     }
 }
