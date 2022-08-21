@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MapSegment : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+//[System.Flags]
+public enum Socket {
+    Wall,
+    Path,
+    Door
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+[CreateAssetMenu(fileName = "New Map Segment", menuName = "Map/MapSegment")]
+public class MapSegment : ScriptableObject
+{
+    public GameObject prefab;
+
+    public Socket[] sockets;//length 6
+    //order: Right, Left, Top, Bottom, Front, Back
 }
