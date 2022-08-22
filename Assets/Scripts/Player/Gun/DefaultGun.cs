@@ -1,39 +1,19 @@
 ﻿using System.Collections;
 using UnityEngine;
 using System.Threading.Tasks;
+using Cinemachine;
 
 [CreateAssetMenu(fileName = "New Default Gun", menuName = "Gun/Default", order = 0)]
 public class DefaultGun : BaseGun
 {
-    public GameObject muzzleEffect;
-    public GameObject bulletEffect;
-    public override void OnGunUse(RaycastHit hitInfo, GameObject gunModel, MonoBehaviour coroutineStarter)
-    {
-        Transform barrel = null;
-        for (int i = 0; i < gunModel.transform.childCount; i++)
-        {
-            Transform child = gunModel.transform.GetChild(i);
-            if (child.tag.ToLower().Equals("barrel"))
-            {
-                barrel = child;
-                break;
-            }
-        }
+    [Header("Default Gun Settings")]
+    public float spreadAmm = 0.05f;
+    public float maxHitRange = 10.0f;
 
 
 
-
-        coroutineStarter.StartCoroutine(SpawnBulletEffect(barrel, hitInfo.collider ? hitInfo.point : barrel.transform.position + Camera.main.transform.forward.normalized * 500));
-        coroutineStarter.StartCoroutine(SpawnMuzzleEffect(barrel));
-        if (hitInfo.collider && hitInfo.collider.GetComponent<IDamageable>() is IDamageable damageable)
-        {
-            damageable.OnDamageTaken(5.0f);
-        }
-
-
-    }
-
-    private IEnumerator SpawnBulletEffect(Transform barrel, Vector3 targetPos)
+    private Vector3 targetPos;
+    protected override IEnumerator BulletDefinition(WeaponManager weaponManager, Transform barrel)
     {
         if (barrel == null) yield break;
 
@@ -64,12 +44,33 @@ public class DefaultGun : BaseGun
         }
 
         Destroy(obj);
-
     }
-    private IEnumerator SpawnMuzzleEffect(Transform barrel)
+
+    protected override void Fire(WeaponManager weaponManager, Transform barrel)
     {
 
+        //weaponManager.recoilCM.GenerateImpulse(Camera.main.transform.forward.normalized * recoilForce);
 
+        LayerMask mask = LayerMask.NameToLayer("Default");
+
+        Vector3 spread = Random.insideUnitSphere * spreadAmm;
+        spread.z = 0;
+
+        bool intersecting = InteractionUtilities.IntersectFromCamera(Camera.main, spread, maxHitRange, mask, out var hitInfo);
+
+        if (intersecting && hitInfo.collider.GetComponent<IDamageable>() is IDamageable damageable)
+        {
+            targetPos = hitInfo.point;
+            damageable.OnDamageTaken(damage);
+        }
+        else
+        {
+            targetPos = barrel.position + (barrel.forward.normalized + spread) * maxHitRange;
+        }
+    }
+
+    protected override IEnumerator MuzzleDefinition(WeaponManager weaponManager, Transform barrel)
+    {
         if (barrel == null) yield break;
         GameObject obj = Instantiate(muzzleEffect, barrel);
         obj.transform.localPosition = Vector3.zero;
@@ -84,7 +85,5 @@ public class DefaultGun : BaseGun
 
 
         Destroy(obj);
-
-
     }
 }
