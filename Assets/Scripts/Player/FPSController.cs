@@ -23,6 +23,9 @@ public class FPSController : MonoBehaviour
     public InputActionReference jumpReference;
     public InputActionReference crouchReference;
 
+    [Header("Debug")]
+    public bool activateInputOnStart = false;
+
 
     private CinemachinePOV povHandler;
     private CharacterController charController;
@@ -45,6 +48,10 @@ public class FPSController : MonoBehaviour
 
 
         povHandler = cameraController.GetCinemachineComponent<CinemachinePOV>();
+
+
+        if (activateInputOnStart)
+            PollingStation.Instance.optionsManager.SetStateToPlay();
     }
 
     private void Update()
