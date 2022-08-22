@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 [RequireComponent(typeof(CharacterController))]
 public class FPSController : MonoBehaviour
@@ -13,6 +14,8 @@ public class FPSController : MonoBehaviour
     public float gravity = -9.0f;
     public float jumpHeight;
 
+    public CinemachineVirtualCamera cameraController;
+
     [Header("Input References")]
     public InputActionReference movementReference;
     public InputActionReference sprintReference;
@@ -20,6 +23,7 @@ public class FPSController : MonoBehaviour
     public InputActionReference crouchReference;
 
 
+    private CinemachinePOV povHandler;
     private CharacterController charController;
     private float verticalVelocity;
     private Camera mainCam;
@@ -40,10 +44,19 @@ public class FPSController : MonoBehaviour
 
         defaultColHeight = capsCollider.height;
 
+
+        povHandler = cameraController.GetCinemachineComponent<CinemachinePOV>();
     }
 
     private void Update()
     {
+        if (PollingStation.Instance.optionsManager.currentState == OptionsManager.RuntimeState.Paused) return;
+
+
+
+        povHandler.m_HorizontalAxis.m_InputAxisValue = PollingStation.Instance.optionsManager.currentSensitivity;
+        povHandler.m_VerticalAxis.m_InputAxisValue = PollingStation.Instance.optionsManager.currentSensitivity;
+
         bool grounded = charController.isGrounded;
         if (grounded && verticalVelocity < 0)
             verticalVelocity = 0;

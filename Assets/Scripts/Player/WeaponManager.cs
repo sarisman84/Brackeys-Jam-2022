@@ -32,6 +32,8 @@ public class WeaponManager : MonoBehaviour
 
     private void Update()
     {
+        if (PollingStation.Instance.optionsManager.currentState == OptionsManager.RuntimeState.Paused) return;
+
         ResetRecoil();
         if (!currentGun) return;
 

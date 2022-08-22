@@ -11,6 +11,8 @@ public class InteractionManager : MonoBehaviour
 
     private void Update()
     {
+        if (PollingStation.Instance.optionsManager.currentState == OptionsManager.RuntimeState.Paused) return;
+
         if (interactionInput.action.ReadValue<float>() > 0 && interactionInput.action.triggered)
         {
             bool intersected = InteractionUtilities.IntersectFromCamera(Camera.main, 10.0f, interactionLayer, out var hitInfo);
