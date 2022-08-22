@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: Turn
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  prefab: {fileID: 2477383401346201670, guid: 17133f55fbd04d545b1f0df4f45529fb, type: 3}
+  weight: 1
   top: 0
   right: 1
   front: 0

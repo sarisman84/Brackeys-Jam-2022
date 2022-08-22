@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: T-Cross
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  prefab: {fileID: 1252139565982643647, guid: d07e645a6b124994780d423b255f5788, type: 3}
+  weight: 0.3
   top: 0
   right: 1
-  front: 1
+  front: 0
   bottom: 0
   left: 1
-  back: 0
+  back: 1

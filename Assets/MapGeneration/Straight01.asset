@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: Straight01
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  prefab: {fileID: 2176576072186592680, guid: c59b709cced23034c987b387b84544ae, type: 3}
+  weight: 1
   top: 0
   right: 1
   front: 0
