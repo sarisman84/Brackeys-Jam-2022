@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RoomCorner 2
   m_EditorClassIdentifier: 
   prefab: {fileID: 1195239199415267465, guid: 655b235390f7e9a4499fc22b1e46381e, type: 3}
-  weight: 1
+  weight: 0.3
   socket:
     top: 0
     right: 3
