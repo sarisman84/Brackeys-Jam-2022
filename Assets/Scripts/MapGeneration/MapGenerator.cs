@@ -290,20 +290,18 @@ public partial class MapGenerator : MonoBehaviour
 
                 if (IsEmpty(map[i])) continue;//skip empty
 
-                int section = sections.GetSection(i);
-                Color pathColor = new Color[] { Color.red, Color.cyan, Color.blue, Color.green, Color.magenta, Color.yellow }[section];
                 for (int j = 0; j < grid[i].possibilities.Count; j++)
                 {
-                    DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j], pathColor);
+                    DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j]);
                 }
             }
         }
     }
-    private void DrawGizmosSegment(Vector3 pos, float size, TurnSegment segment, Color color)
+    private void DrawGizmosSegment(Vector3 pos, float size, TurnSegment segment)
     {
         for (int d = 0; d < DirExt.directions.Length; d++)
         {
-            Gizmos.color = segment.GetSocket(d).IsCollision() ? Color.gray : color;
+            Gizmos.color = new Color[] { Color.gray, Color.green, Color.blue, Color.red }[(int)segment.GetSocket(d)];
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
     }

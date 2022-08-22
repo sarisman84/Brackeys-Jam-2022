@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &716042615814420200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 716042615814420198}
+  - component: {fileID: 716042615814420201}
+  m_Layer: 0
+  m_Name: MapGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &716042615814420198
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716042615814420200}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &716042615814420201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716042615814420200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9212f986609b63548ba9e68bd82d35d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapSize: {x: 10, y: 1, z: 10}
+  tileSize: {x: 7.5, y: 7.5, z: 7.5}
+  startSegment: {fileID: 11400000, guid: 4ad1e2148cc42e849b8bd50075b47d82, type: 2}
+  endSegment: {fileID: 11400000, guid: 59ff07f42d1cafe48a0f6afb4fbb7b7e, type: 2}
+  empty: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+  segments:
+  - {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
+  - {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+  - {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+  - {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+  - {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+  - {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+  - {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+  - {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+  - {fileID: 11400000, guid: 38874be908dff9d4e8b1897bd03c66b3, type: 2}
+  - {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+  - {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+  createOnAwake: 1

@@ -48,7 +48,9 @@ public class FPSController : MonoBehaviour
 
 
         povHandler = cameraController.GetCinemachineComponent<CinemachinePOV>();
+    }
 
+    private void Start() {
 
         if (activateInputOnStart)
             PollingStation.Instance.optionsManager.SetStateToPlay();
