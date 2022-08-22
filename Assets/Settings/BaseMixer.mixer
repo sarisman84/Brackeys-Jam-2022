@@ -123,7 +123,8 @@ AudioMixerSnapshotController:
   m_Name: Snapshot
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: bf08de2029ee93d4aa1f1f66209d8725
-  m_FloatValues: {}
+  m_FloatValues:
+    d12462f67418ee64c8450edd8b717bfd: -8690
   m_TransitionOverrides: {}
 --- !u!243 &5871973527467479303
 AudioMixerGroupController:
@@ -144,6 +145,48 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &8107480214654813140
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 9777675057045e64c9bca35a25b58bf3
+  m_EffectName: SFX Reverb
+  m_MixLevel: 5c4d1b6e79ae73544aa0aff0d3dfd58a
+  m_Parameters:
+  - m_ParameterName: Dry Level
+    m_GUID: 425cd8fcb25a72d408a87941461699a8
+  - m_ParameterName: Room
+    m_GUID: d12462f67418ee64c8450edd8b717bfd
+  - m_ParameterName: Room HF
+    m_GUID: 08baf69048c008145b040de8d4338404
+  - m_ParameterName: Decay Time
+    m_GUID: 1d792938d1125a146893caf33fd97c80
+  - m_ParameterName: Decay HF Ratio
+    m_GUID: c53f9fe24fa819d459d86d57f734905c
+  - m_ParameterName: Reflections
+    m_GUID: 2017993cb843dbf48b6fce782e113368
+  - m_ParameterName: Reflect Delay
+    m_GUID: 738e76b7f66554545a815e8ca8fe6c84
+  - m_ParameterName: Reverb
+    m_GUID: 377b90ef847d3b44087112e923bcf8b8
+  - m_ParameterName: Reverb Delay
+    m_GUID: 41ad45f81c4025246a2c67f9cd554834
+  - m_ParameterName: Diffusion
+    m_GUID: dc7ad59b417afbd4ba0607671be921eb
+  - m_ParameterName: Density
+    m_GUID: 992bd864f5b696e4fa289f9e2c914db1
+  - m_ParameterName: HF Reference
+    m_GUID: 54c4ad50c38ac8147b480a4cff24ee5d
+  - m_ParameterName: Room LF
+    m_GUID: 5d3d417202cbd0740874106a4671b0a1
+  - m_ParameterName: LF Reference
+    m_GUID: beba682ef997cd942b570fa462083138
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &8862255468260723333
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -173,6 +216,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: -9063271440355601113}
+  - {fileID: 8107480214654813140}
   m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0
