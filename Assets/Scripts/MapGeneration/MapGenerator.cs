@@ -25,9 +25,6 @@ public partial class MapGenerator : MonoBehaviour
     public MapSegment startSegment;//open only to z direction (forward)
     public MapSegment endSegment;//open only to negative z direction (backward)
 
-
-
-
     [Space]
 
     private Array3D<TurnSegment> map;
@@ -279,16 +276,16 @@ public partial class MapGenerator : MonoBehaviour
                 Color pathColor = new Color[] { Color.red, Color.cyan, Color.blue, Color.green, Color.magenta, Color.yellow }[section];
                 for (int j = 0; j < grid[i].possibilities.Count; j++)
                 {
-                    DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j], new Color[] { Color.gray, pathColor, Color.blue });
+                    DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j], pathColor);
                 }
             }
         }
     }
-    private void DrawGizmosSegment(Vector3 pos, float size, TurnSegment segment, Color[] socketColor)
+    private void DrawGizmosSegment(Vector3 pos, float size, TurnSegment segment, Color color)
     {
         for (int d = 0; d < DirExt.directions.Length; d++)
         {
-            Gizmos.color = socketColor[(int)segment.GetSocket(d)];
+            Gizmos.color = segment.GetSocket(d).IsCollision() ? Color.gray : color;
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
     }

@@ -260,6 +260,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
   - {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
   - {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+  - {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+  - {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+  - {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+  - {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+  - {fileID: 11400000, guid: 38874be908dff9d4e8b1897bd03c66b3, type: 2}
+  - {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+  - {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+  createOnAwake: 1
 --- !u!4 &1316779544
 Transform:
   m_ObjectHideFlags: 0
