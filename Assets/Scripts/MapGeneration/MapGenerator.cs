@@ -40,8 +40,17 @@ public partial class MapGenerator : MonoBehaviour
 
     void Start()
     {
-
-        //TODO: generate TurnSegments from the mapSegment
+        //generate TurnSegments from the mapSegment
+        float weightSum = 0;
+        turnSegments = new TurnSegment[segments.Length * 4];
+        for (int i = 0; i < segments.Length; i++)
+        {
+            for (int t = 0; t < 4; t++)
+            {
+                turnSegments[i * 4 + t] = new TurnSegment(segments[i], t);
+                weightSum += segments[i].weight;
+            }
+        }
 
 
         emptySegment = new TurnSegment(empty, 0);
@@ -55,8 +64,10 @@ public partial class MapGenerator : MonoBehaviour
         InstantiateMap();
     }
 
-    TurnSegment FindFittingSegment(Socket3D socket) {
-        for (int s = 0; s < turnSegments.Length; s++) {
+    TurnSegment FindFittingSegment(Socket3D socket)
+    {
+        for (int s = 0; s < turnSegments.Length; s++)
+        {
             if (turnSegments[s].Fits(socket))
                 return turnSegments[s];
         }
@@ -66,7 +77,7 @@ public partial class MapGenerator : MonoBehaviour
 
     #region MapGeneration
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
-    void GenerateMap(ref MapSegment[] segments)
+    void GenerateMap(ref TurnSegment[] segments, float weightSum)
     {
         grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
 
@@ -78,7 +89,9 @@ public partial class MapGenerator : MonoBehaviour
         //int iterLimit = 0;
         for (int iter = 0; iter < iterLimit; iter++)
         {
-            if (!LowestEntropyCollapse(ref grid))//keeps collapsing until everything is collapsed
+            if (!LowestEntropyCollapse(ref grid))
+            {//keeps collapsing until everything is collapsed
+                Debug.Log("Collapse is done");
                 break;
             }
         }
@@ -86,7 +99,7 @@ public partial class MapGenerator : MonoBehaviour
         FillMap(ref grid);
     }
 
-    void MakeBorderEmpty(ref Array3D<GridBox> grid)
+    void SetupGrid(ref Array3D<GridBox> grid)
     {
         void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z)
         {
@@ -125,6 +138,15 @@ public partial class MapGenerator : MonoBehaviour
         EmptyPlane(ref grid, 2, 0, 1);
     }
 
+    void AddStartAndEnd(ref Array3D<GridBox> grid)
+    {
+        Vector3Int startPos = new Vector3Int(1, grid.size.y - 2, 0);
+        Vector3Int endPos = new Vector3Int(grid.size.x - 2, 1, grid.size.z - 1);
+
+        grid[startPos].ForceResult(new TurnSegment(startSegment, 0));
+        grid[endPos].ForceResult(new TurnSegment(endSegment, 0));
+    }
+
     bool LowestEntropyCollapse(ref Array3D<GridBox> grid)
     {//collapse the box with the smallest number of possibilities
         //Get all the GridBoxes with the lowest Entropy
@@ -143,7 +165,7 @@ public partial class MapGenerator : MonoBehaviour
         }
 
 
-        if (min == segments.Length + 1 || minGrids.Count == 0)//if everything is already collapsed
+        if (min == turnSegments.Length + 1 || minGrids.Count == 0)//if everything is already collapsed
             return false;
 
         int toCollapse = minGrids[GetRndm(minGrids.Count)];
@@ -155,10 +177,10 @@ public partial class MapGenerator : MonoBehaviour
 
     bool CollapseRndm(ref Array3D<GridBox> grid, int toCollapse)
     {//tries to collapse a gridbox. returns if successful
-        int collapseIndex = GetRndm(grid[toCollapse].possibilities.Count);
+        int collapseIndex = grid[toCollapse].GetWeightedRnd();
         return Collapse(ref grid, toCollapse, grid[toCollapse].possibilities[collapseIndex]);//pick one segment of all possible segments
     }
-    bool Collapse(ref Array3D<GridBox> grid, int toCollapse, MapSegment segment)
+    bool Collapse(ref Array3D<GridBox> grid, int toCollapse, TurnSegment segment)
     {//tries to collapse a gridbox. returns if successful
         if (grid[toCollapse].SetResult(segment))
         {
@@ -167,7 +189,7 @@ public partial class MapGenerator : MonoBehaviour
         }
         return false;
     }
-    void ForceCollapse(ref Array3D<GridBox> grid, int toCollapse, MapSegment segment)
+    void ForceCollapse(ref Array3D<GridBox> grid, int toCollapse, TurnSegment segment)
     {
         grid[toCollapse].ForceResult(segment);
         PropergateCollapse(ref grid, toCollapse);
@@ -202,20 +224,20 @@ public partial class MapGenerator : MonoBehaviour
         }
     }
 
-    //Use the grid to pick segments to place and put into the map array
-    void InstantiateMap(ref Array3D<GridBox> grid)
-    {
-
-        //---------------- FILLING THE MAP ARRAY -----------------------
-        map = new Array3D<MapSegment>(grid.size);//NOTE: dont save the empty outermost layer
+    void FillMap(ref Array3D<GridBox> grid)
+    {//Use the grid to pick segments to put into the map array
+        map = new Array3D<TurnSegment>(grid.size);//NOTE: dont save the empty outermost layer
         for (int i = 0; i < map.Length; i++)
         {
             map[i] = grid[i].possibilities[0];//get the only possibility for this tile
         }
+    }
+
+    #endregion
 
 
-
-        //---------------- BUILDING THE MAP ---------------------------
+    void InstantiateMap()
+    {
         Transform tileParent = new GameObject("Tile Parent").transform;
         for (int i = 0; i < map.Length; i++)
         {
@@ -238,14 +260,18 @@ public partial class MapGenerator : MonoBehaviour
                 Vector3Int pos = map.GetPos(i);
                 if (pos.y != 1) continue;
 
+                if (IsEmpty(map[i])) continue;//skip empty
+
+                int section = sections.GetSection(i);
+                Color pathColor = new Color[] { Color.red, Color.cyan, Color.blue, Color.green, Color.magenta, Color.yellow }[section];
                 for (int j = 0; j < grid[i].possibilities.Count; j++)
                 {
-                    DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j], new Color[] { Color.gray, Color.green, Color.blue });
+                    DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j], new Color[] { Color.gray, pathColor, Color.blue });
                 }
             }
         }
     }
-    private void DrawGizmosSegment(Vector3 pos, float size, MapSegment segment, Color[] socketColor)
+    private void DrawGizmosSegment(Vector3 pos, float size, TurnSegment segment, Color[] socketColor)
     {
         for (int d = 0; d < DirExt.directions.Length; d++)
         {
@@ -253,6 +279,7 @@ public partial class MapGenerator : MonoBehaviour
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
     }
+
 
     public static int GetRndm(int length)
     {
