@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d33e972f4b35e4bb15e171c7974730, type: 3}
   m_Name: Default Gun
   m_EditorClassIdentifier: 
-  ammunitionAmm: 25
-  fireRate: 0.15
+  ammunitionAmm: 50
+  fireRate: 0.1
   damage: 1
   recoilForce: {x: -2, y: 2, z: 0.35}
   snappiness: 6
   returnSpeed: 2
   gunPrefab: {fileID: 7600655882056762739, guid: 0e2ad8d0c1ab8f54aa1ec48acb03d6a2, type: 3}
-  muzzleEffect: {fileID: 4216876814791705130, guid: 328ab1ad676c48b4f91c8ba7067ab9e6, type: 3}
+  muzzleEffect: {fileID: 0}
   bulletEffect: {fileID: 1303403015775871255, guid: ebf13860d302c5d4bbed69657ff5ab69, type: 3}
-  spreadAmm: 0.05
+  spreadAmm: 0.0025
   maxHitRange: 10

@@ -71,7 +71,7 @@ public class DefaultGun : BaseGun
 
     protected override IEnumerator MuzzleDefinition(WeaponManager weaponManager, Transform barrel)
     {
-        if (barrel == null) yield break;
+        if (barrel == null || !muzzleEffect) yield break;
         GameObject obj = Instantiate(muzzleEffect, barrel);
         obj.transform.localPosition = Vector3.zero;
         obj.transform.localRotation = Quaternion.identity;

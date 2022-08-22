@@ -5,14 +5,18 @@ using Cinemachine;
 
 public class WeaponManager : MonoBehaviour
 {
+    const float XAXis_ADSOffset = -0.325f;
+    const float YAxis_ADSOffset = 0.26f;
+    const float ZAxis_ADSOffset = 0.765f / 2.0f;
 
-
-
+    public float adsTransitionRate = 5.25f;
 
     public Transform gunPosition;
+    public CinemachineVirtualCamera cameraController;
+    [Header("Input Settings")]
     public InputActionReference fireInput;
     public InputActionReference adsInput;
-    public CinemachineVirtualCamera cameraController;
+
 
     private BaseGun currentGun;
     private float currentFireRate;
@@ -62,13 +66,20 @@ public class WeaponManager : MonoBehaviour
 
     private void ADS()
     {
-        currentGunModel.transform.localPosition = currentADSPOV.localPosition;
+        if (!currentGunModel) return;
+        Vector3 offsetLocal = new Vector3(XAXis_ADSOffset, YAxis_ADSOffset, -(ZAxis_ADSOffset + currentADSPOV.localPosition.z));
+
+
+
+
+        currentGunModel.transform.localPosition = Vector3.Lerp(currentGunModel.transform.localPosition, offsetLocal, Time.deltaTime * adsTransitionRate);
     }
 
 
     private void Hipfire()
     {
-        currentGunModel.transform.localPosition = Vector3.zero;
+        if (!currentGunModel) return;
+        currentGunModel.transform.localPosition = Vector3.Lerp(currentGunModel.transform.localPosition, Vector3.zero, Time.deltaTime * adsTransitionRate);
     }
 
     private void Awake()
