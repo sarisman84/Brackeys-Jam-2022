@@ -5,7 +5,7 @@ using UnityEngine;
 
 public partial class MapGenerator : MonoBehaviour
 {
-    public static MapGenerator instance;
+    public static MapGenerator instance; //<-- [Depecrated]: PollingStation in use! (Spyro)
     private void Awake()
     {
         if (instance != null)
@@ -42,24 +42,12 @@ public partial class MapGenerator : MonoBehaviour
     [Header("Debug")]
     public bool createOnAwake = true;
 
+
+    private Transform tileParent;
+
     public void LoadProcedualMap()
     {
-        PollingStation.Instance.optionsManager.onStateChangeCallback += (OptionsManager.RuntimeState state) =>
-        {
-            switch (state)
-            {
-                case OptionsManager.RuntimeState.MainMenu:
-                    //Delete map
-                    break;
 
-                case OptionsManager.RuntimeState.Playing:
-
-                    break;
-                default:
-                    break;
-            }
-            
-        };
 
 
         //generate TurnSegments from the mapSegment
@@ -88,6 +76,22 @@ public partial class MapGenerator : MonoBehaviour
 
     void Start()
     {
+        PollingStation.Instance.runtimeManager.onStateChangeCallback += (RuntimeManager.RuntimeState state) =>
+        {
+            switch (state)
+            {
+                case RuntimeManager.RuntimeState.MainMenu: //Delete map on main menu transition
+                    if (tileParent)
+                        Destroy(tileParent.gameObject);
+                    break;
+                case RuntimeManager.RuntimeState.Playing: //Generate map on starting the game from the main menu.
+                    LoadProcedualMap();
+                    break;
+            }
+
+        };
+
+
         if (createOnAwake)
             LoadProcedualMap();
     }
@@ -266,7 +270,7 @@ public partial class MapGenerator : MonoBehaviour
 
     void InstantiateMap()
     {
-        Transform tileParent = new GameObject("Tile Parent").transform;
+        tileParent = new GameObject("Tile Parent").transform;
         for (int i = 0; i < map.Length; i++)
         {
             Vector3 pos = (Vector3)map.GetPos(i);

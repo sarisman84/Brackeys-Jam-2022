@@ -15,7 +15,7 @@ public class FPSController : MonoBehaviour
     public float gravity = -9.0f;
     public float jumpHeight;
 
-    public CinemachineVirtualCamera cameraController;
+
 
     [Header("Input References")]
     public InputActionReference movementReference;
@@ -26,7 +26,7 @@ public class FPSController : MonoBehaviour
     [Header("Debug")]
     public bool activateInputOnStart = false;
 
-
+    private CinemachineVirtualCamera cameraController;
     private CinemachinePOV povHandler;
     private CharacterController charController;
     private float verticalVelocity;
@@ -46,19 +46,21 @@ public class FPSController : MonoBehaviour
 
         defaultColHeight = capsCollider.height;
 
-
-        povHandler = cameraController.GetCinemachineComponent<CinemachinePOV>();
+       
     }
 
     private void Start() {
+        cameraController = PollingStation.Instance.cameraController;
+        povHandler = cameraController.GetCinemachineComponent<CinemachinePOV>();
+
 
         if (activateInputOnStart)
-            PollingStation.Instance.optionsManager.SetStateToPlay();
+            PollingStation.Instance.runtimeManager.SetStateToPlay();
     }
 
     private void Update()
     {
-        if (PollingStation.Instance.optionsManager.currentState != OptionsManager.RuntimeState.Playing) return;
+        if (PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing) return;
 
 
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using Cinemachine;
 
 public class PollingStation
 {
@@ -15,11 +15,17 @@ public class PollingStation
         Debug.Log("[Log]<PollingStation>: Initialized Polling Station!");
     }
 
-
+    #region Getter Properties
     public OptionsManager optionsManager { get; private set; }
     public FPSController fpsController { get; private set; }
     public InteractionManager interactionManager { get; private set; }
     public WeaponManager weaponManager { get; private set; }
+    public RuntimeManager runtimeManager { get; private set; }
+    public MapGenerator mapGenerator { get; private set; }
+
+    public CinemachineVirtualCamera cameraController { get; private set; }
+    #endregion
+
     public PollingStation()
     {
         GameObject managerHolder = new GameObject("Managers");
@@ -35,6 +41,10 @@ public class PollingStation
 
     private void FetchComponents(GameObject managerHolder, GameObject gameObject)
     {
+        if (gameObject.CompareTag("PlayerCam"))
+            cameraController = gameObject.GetComponent<CinemachineVirtualCamera>();
+
+
         var components = gameObject.GetComponents<Component>();
         for (int c = 0; c < components.Length; c++)
         {
@@ -63,7 +73,7 @@ public class PollingStation
                 case InteractionManager im:
                     if (!interactionManager)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found InteractionManager");
+                        Debug.Log("[Log]<PollingStation>: Found Interaction Manager");
                         interactionManager = im;
 
                     }
@@ -73,13 +83,30 @@ public class PollingStation
                 case WeaponManager wm:
                     if (!weaponManager)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found WeaponManager");
+                        Debug.Log("[Log]<PollingStation>: Found Weapon Manager");
                         weaponManager = wm;
 
+                    }
+                    break;
+                case RuntimeManager rm:
+                    if (!runtimeManager)
+                    {
+                        Debug.Log("[Log]<PollingStation>: Found Runtime Manager");
+                        runtimeManager = rm;
+                        rm.transform.SetParent(managerHolder.transform);
                     }
 
                     break;
 
+
+                case MapGenerator mg:
+                    if (!mapGenerator)
+                    {
+                        Debug.Log("[Log]<PollingStation>: Found Map Generator");
+                        mapGenerator = mg;
+                        mg.transform.SetParent(managerHolder.transform);
+                    }
+                    break;
                 default:
                     break;
             }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Barrel
   - ADS
+  - PlayerCam
   layers:
   - Default
   - TransparentFX

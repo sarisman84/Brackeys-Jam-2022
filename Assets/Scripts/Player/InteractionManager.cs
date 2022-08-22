@@ -11,7 +11,7 @@ public class InteractionManager : MonoBehaviour
 
     private void Update()
     {
-        if (PollingStation.Instance.optionsManager.currentState != OptionsManager.RuntimeState.Playing) return;
+        if (PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing) return;
 
         if (interactionInput.action.ReadValue<float>() > 0 && interactionInput.action.triggered)
         {

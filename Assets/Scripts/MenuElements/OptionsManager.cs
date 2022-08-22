@@ -45,15 +45,10 @@ public class OptionsManager : MonoBehaviour
     [Header("Return Button Options")]
     public GameObject mainMenuGroup;
     public GameObject pauseMenuGroup;
-    public enum RuntimeState
-    {
-        MainMenu, Paused, Playing
-    }
 
 
 
-    public RuntimeState currentState { private set; get; }
-    public event Action<RuntimeState> onStateChangeCallback;
+
 
     private void Awake()
     {
@@ -68,39 +63,7 @@ public class OptionsManager : MonoBehaviour
         });
     }
 
-    void UpdateState()
-    {
-        switch (currentState)
-        {
-            case RuntimeState.MainMenu:
-            case RuntimeState.Paused:
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                break;
-            case RuntimeState.Playing:
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                break;
-            default:
-                break;
-        }
 
-
-        onStateChangeCallback?.Invoke(currentState);
-    }
-
-
-
-    public void SetState(RuntimeState aState)
-    {
-        currentState = aState;
-        UpdateState();
-    }
-
-    public void SetStateToPlay()
-    {
-        SetState(RuntimeState.Playing);
-    }
 
 
     public void SetFullscreen(bool aValue)
@@ -161,18 +124,20 @@ public class OptionsManager : MonoBehaviour
     }
 
 
+
     public void ExitOptionsMenu()
     {
+        var currentState = PollingStation.Instance.runtimeManager.currentState;
+
         switch (currentState)
         {
-            case RuntimeState.MainMenu:
+            case RuntimeManager.RuntimeState.MainMenu:
                 mainMenuGroup.SetActive(true);
                 break;
-            case RuntimeState.Paused:
+            case RuntimeManager.RuntimeState.Paused:
                 pauseMenuGroup.SetActive(true);
                 break;
         }
     }
-
 
 }

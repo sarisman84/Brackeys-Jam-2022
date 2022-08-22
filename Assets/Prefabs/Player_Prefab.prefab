@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 4032035862609972148}
   m_Layer: 0
   m_Name: CM vcam1
-  m_TagString: Untagged
+  m_TagString: PlayerCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -572,11 +572,11 @@ MonoBehaviour:
   adsModifier: 0.5
   gravity: -9
   jumpHeight: 1
-  cameraController: {fileID: 4032035862609972145}
   movementReference: {fileID: 5842201523953222143, guid: b1c9dbbe2168c894fb1503e2e5f19680, type: 3}
   sprintReference: {fileID: 4063278757339071901, guid: b1c9dbbe2168c894fb1503e2e5f19680, type: 3}
   jumpReference: {fileID: 1444753851928399591, guid: b1c9dbbe2168c894fb1503e2e5f19680, type: 3}
   crouchReference: {fileID: 4499462239386384172, guid: b1c9dbbe2168c894fb1503e2e5f19680, type: 3}
+  activateInputOnStart: 0
 --- !u!114 &4032035862778996571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,9 +589,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8315b23be36015f4c97ca90001a35159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adsTransitionRate: 5.25
+  adsTransitionRate:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0000007599592
+      value: 0.29999697
+      inSlope: 0.000009925973
+      outSlope: 0.000009925973
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.30625054
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   gunPosition: {fileID: 4032035863105379971}
-  cameraController: {fileID: 4032035862609972145}
   fireInput: {fileID: 5641840298322535304, guid: b1c9dbbe2168c894fb1503e2e5f19680, type: 3}
   adsInput: {fileID: 2029490655472933065, guid: b1c9dbbe2168c894fb1503e2e5f19680, type: 3}
 --- !u!114 &4032035862778996570

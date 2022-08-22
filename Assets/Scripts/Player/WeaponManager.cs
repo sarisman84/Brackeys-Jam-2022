@@ -9,10 +9,10 @@ public class WeaponManager : MonoBehaviour
     const float YAxis_ADSOffset = 0.26f;
     const float ZAxis_ADSOffset = 0.765f / 2.0f;
 
-    public float adsTransitionRate = 5.25f;
+    public AnimationCurve adsTransitionRate;
 
     public Transform gunPosition;
-    public CinemachineVirtualCamera cameraController;
+
     [Header("Input Settings")]
     public InputActionReference fireInput;
     public InputActionReference adsInput;
@@ -29,11 +29,18 @@ public class WeaponManager : MonoBehaviour
     //Recoil logic
     private Vector3 currentRotation;
     private Vector3 targetRotation;
+    private CinemachineVirtualCamera cameraController;
     private CinemachineRecoil rotOffset;
+    private float adsAnimCurveCounter;
+    private void Start()
+    {
+        cameraController = PollingStation.Instance.cameraController;
+        rotOffset = cameraController.GetComponentInChildren<CinemachineRecoil>();
+    }
 
     private void Update()
     {
-        if (PollingStation.Instance.optionsManager.currentState != OptionsManager.RuntimeState.Playing) return;
+        if (PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing) return;
 
         ResetRecoil();
         if (!currentGun) return;
@@ -74,21 +81,23 @@ public class WeaponManager : MonoBehaviour
 
 
 
+        adsAnimCurveCounter += Time.deltaTime;
+        adsAnimCurveCounter = Mathf.Clamp(adsAnimCurveCounter, 0, 1);
+        currentGunModel.transform.localPosition = Vector3.Lerp(currentGunModel.transform.localPosition, offsetLocal, adsTransitionRate.Evaluate(adsAnimCurveCounter));
 
-        currentGunModel.transform.localPosition = Vector3.Lerp(currentGunModel.transform.localPosition, offsetLocal, Time.deltaTime * adsTransitionRate);
+
     }
 
 
     private void Hipfire()
     {
         if (!currentGunModel) return;
-        currentGunModel.transform.localPosition = Vector3.Lerp(currentGunModel.transform.localPosition, Vector3.zero, Time.deltaTime * adsTransitionRate);
+        currentGunModel.transform.localPosition = Vector3.Lerp(currentGunModel.transform.localPosition, Vector3.zero, adsTransitionRate.Evaluate(adsAnimCurveCounter));
+        adsAnimCurveCounter -= Time.deltaTime;
+        adsAnimCurveCounter = Mathf.Clamp(adsAnimCurveCounter, 0, 1);
     }
 
-    private void Awake()
-    {
-        rotOffset = cameraController.GetComponentInChildren<CinemachineRecoil>();
-    }
+
 
     public void ApplyRecoil(Vector3 recoilForce)
     {
