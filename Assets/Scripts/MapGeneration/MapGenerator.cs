@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -18,20 +17,27 @@ public partial class MapGenerator : MonoBehaviour
     public Vector3Int mapSize = new Vector3Int(5, 1, 5);
     public Vector3 tileSize = Vector3.one;
 
+    [Space]
+    [Header("Segments")]
+
+    public MapSegment startSegment;//open only to z direction (forward)
+    public MapSegment endSegment;//open only to negative z direction (backward)
+
+    [Space]
 
     private Array3D<TurnSegment> map;
     private Array3D<GridBox> grid;//FOR DEBUGGING ONLY
+    private MapSections sections;//FOR DEBUGGING ONLY
 
     public MapSegment empty;
     private TurnSegment emptySegment;
+    public static bool IsEmpty(TurnSegment segment) { return segment.segment.socket.IsCollisionOnly(); }
 
     public MapSegment[] segments;
     private TurnSegment[] turnSegments;
 
     void Start()
     {
-        emptySegment = new TurnSegment(empty, 0);
-
         //generate TurnSegments from the mapSegment
         float weightSum = 0;
         turnSegments = new TurnSegment[segments.Length * 4];
@@ -42,16 +48,35 @@ public partial class MapGenerator : MonoBehaviour
             }
         }
 
+
+        emptySegment = new TurnSegment(empty, 0);
+
         GenerateMap(ref turnSegments, weightSum);
+
+        sections = new MapSections();
+        sections.GenerateSections(ref map);
+        sections.ConnectSections(ref map);
+
+        InstantiateMap();
     }
 
+    TurnSegment FindFittingSegment(Socket3D socket) {
+        for (int s = 0; s < turnSegments.Length; s++) {
+            if (turnSegments[s].Fits(socket))
+                return turnSegments[s];
+        }
+        Debug.LogError($"No fitting segment found for {socket}");
+        return null;
+    }
+
+    #region MapGeneration
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
     void GenerateMap(ref TurnSegment[] segments, float weightSum) {
         grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
 
         for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum);//fill the grid
 
-        MakeBorderEmpty(ref grid);
+        SetupGrid(ref grid);
 
         int iterLimit = grid.Length;
         //int iterLimit = 0;
@@ -62,10 +87,10 @@ public partial class MapGenerator : MonoBehaviour
             }
         }
 
-        InstantiateMap(ref grid);
+        FillMap(ref grid);
     }
 
-    void MakeBorderEmpty(ref Array3D<GridBox> grid) {
+    void SetupGrid(ref Array3D<GridBox> grid) {
         void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z) {
             Vector3Int vec = Vector3Int.zero;
             for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
@@ -91,9 +116,20 @@ public partial class MapGenerator : MonoBehaviour
         EmptyPlanePossible(ref grid, 1, 2, 0);
         EmptyPlanePossible(ref grid, 2, 0, 1);
 
+        //do a collapse change in here (change wont be overridden due to a soft collapse)
+        AddStartAndEnd(ref grid);
+
         EmptyPlane(ref grid, 0, 1, 2);
         EmptyPlane(ref grid, 1, 2, 0);
         EmptyPlane(ref grid, 2, 0, 1);
+    }
+
+    void AddStartAndEnd(ref Array3D<GridBox> grid) {
+        Vector3Int startPos = new Vector3Int(1, grid.size.y - 2, 0);
+        Vector3Int endPos = new Vector3Int(grid.size.x - 2, 1, grid.size.z - 1);
+
+        grid[startPos].ForceResult(new TurnSegment(startSegment, 0));
+        grid[endPos].ForceResult(new TurnSegment(endSegment, 0));
     }
 
     bool LowestEntropyCollapse(ref Array3D<GridBox> grid) {//collapse the box with the smallest number of possibilities
@@ -163,18 +199,17 @@ public partial class MapGenerator : MonoBehaviour
         }
     }
 
-    //Use the grid to pick segments to place and put into the map array
-    void InstantiateMap(ref Array3D<GridBox> grid) {
-        
-        //---------------- FILLING THE MAP ARRAY -----------------------
+    void FillMap(ref Array3D<GridBox> grid) {//Use the grid to pick segments to put into the map array
         map = new Array3D<TurnSegment>(grid.size);//NOTE: dont save the empty outermost layer
         for (int i = 0; i < map.Length; i++) {
             map[i] = grid[i].possibilities[0];//get the only possibility for this tile
         }
-        
+    }
 
-        
-        //---------------- BUILDING THE MAP ---------------------------
+    #endregion
+
+    
+    void InstantiateMap() {
         Transform tileParent = new GameObject("Tile Parent").transform;
         for (int i = 0; i < map.Length; i++) {
             Vector3 pos = (Vector3)map.GetPos(i);
@@ -193,8 +228,12 @@ public partial class MapGenerator : MonoBehaviour
                 Vector3Int pos = map.GetPos(i);
                 if (pos.y != 1) continue;
 
+                if (IsEmpty(map[i])) continue;//skip empty
+
+                int section = sections.GetSection(i);
+                Color pathColor = new Color[] { Color.red, Color.cyan, Color.blue, Color.green, Color.magenta, Color.yellow }[section];
                 for (int j = 0; j < grid[i].possibilities.Count; j++) {
-                    DrawGizmosSegment(pos + Vector3.down*j, 0.5f, grid[i].possibilities[j], new Color[] { Color.gray, Color.green, Color.blue });
+                    DrawGizmosSegment(pos + Vector3.down*j, 0.5f, grid[i].possibilities[j], new Color[] { Color.gray, pathColor, Color.blue });
                 }
             }
         }
@@ -205,6 +244,7 @@ public partial class MapGenerator : MonoBehaviour
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
     }
+
 
     public static int GetRndm(int length) {
         return UnityEngine.Random.Range(0, length);

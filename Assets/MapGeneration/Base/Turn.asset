@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 2477383401346201670, guid: 17133f55fbd04d545b1f0df4f45529fb, type: 3}
   weight: 1
-  top: 0
-  right: 1
-  front: 0
-  bottom: 0
-  left: 0
-  back: 1
+  socket:
+    top: 0
+    right: 1
+    front: 0
+    bottom: 0
+    left: 0
+    back: 1

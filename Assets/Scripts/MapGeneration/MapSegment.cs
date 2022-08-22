@@ -1,19 +1,7 @@
 using UnityEngine;
 
-public enum Socket {
-    Wall,
-    Path,
-    Door
-}
-
-[CreateAssetMenu(fileName = "New Map Segment", menuName = "Map/MapSegment")]
-public class MapSegment : ScriptableObject
-{
-    public GameObject prefab;
-    public float weight = 1.0f;
-
-    [Space]
-    [Header("Sockets")]
+[System.Serializable]
+public struct Socket3D {
     public Socket top;
     public Socket right;
     public Socket front;
@@ -26,8 +14,8 @@ public class MapSegment : ScriptableObject
     //order: Top, Right, Front, Bottom, Left, Back
     public Socket GetSocket(int i) {
         switch (i) {
-            case 0: 
-                return top; 
+            case 0:
+                return top;
             case 1:
                 return right;
             case 2:
@@ -42,6 +30,71 @@ public class MapSegment : ScriptableObject
                 return Socket.Wall;
         }
     }
+
+    public void SetSocket(int i, Socket s) {
+        switch (i) {
+            case 0:
+                top = s;
+                return;
+            case 1:
+                right = s;
+                return;
+            case 2:
+                front = s;
+                return;
+            case 3:
+                bottom = s;
+                return;
+            case 4:
+                left = s;
+                return;
+            case 5:
+                back = s;
+                return;
+        }
+    }
+
+    public Socket3D Clone() {
+        Socket3D s = new Socket3D();
+        s.top = top;
+        s.right = right;
+        s.front = front;
+        s.bottom = bottom;
+        s.left = left;
+        s.back = back;
+        return s;
+    }
+
+    public bool Equals(Socket3D other) {
+        return top   == other.top   &&
+               right == other.right &&
+               front == other.front &&
+               bottom== other.bottom&&
+               left  == other.left  &&
+               back  == other.back;
+    }
+
+    public bool IsCollisionOnly() {
+        return top.IsCollision() &&
+               right.IsCollision() &&
+               front.IsCollision() &&
+               bottom.IsCollision() &&
+               left.IsCollision() &&
+               back.IsCollision();
+    }
+
+    public override string ToString() {
+        return "{ Top:"+top + "; Right:"+right+ "; Front:" + front + "; Bottom:" + bottom + "; Left:" + left + "; Back:" + back + " }";
+    }
+}
+
+[CreateAssetMenu(fileName = "New Map Segment", menuName = "Map/MapSegment")]
+public class MapSegment : ScriptableObject
+{
+    public GameObject prefab;
+    public float weight = 1.0f;
+
+    public Socket3D socket;
 }
 
 
@@ -59,6 +112,29 @@ public class TurnSegment{
     }
 
     public Socket GetSocket(int i) {
-        return segment.GetSocket((int)DirExt.Turn((Direction)i, turn));
+        return GetSocket((Direction)i);
+    }
+    public Socket GetSocket(Direction dir) {
+        return segment.socket.GetSocket((int)DirExt.Turn(dir, turn));
+    }
+
+    public bool Fits(Socket3D other) {
+        return GetSocket(Direction.Top)    == other.top    &&
+               GetSocket(Direction.Right)  == other.right  &&
+               GetSocket(Direction.Front)  == other.front  &&
+               GetSocket(Direction.Bottom) == other.bottom &&
+               GetSocket(Direction.Left)   == other.left   &&
+               GetSocket(Direction.Back)   == other.back;
+    }
+
+    public Socket3D GetTurnedSocket3D() {
+        Socket3D socket = new Socket3D();
+        socket.top = GetSocket(Direction.Top);
+        socket.right = GetSocket(Direction.Right);
+        socket.front = GetSocket(Direction.Front);
+        socket.bottom = GetSocket(Direction.Bottom);
+        socket.left = GetSocket(Direction.Left);
+        socket.back = GetSocket(Direction.Back);
+        return socket;
     }
 }
