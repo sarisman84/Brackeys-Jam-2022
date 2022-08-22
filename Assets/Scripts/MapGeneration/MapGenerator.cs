@@ -25,6 +25,9 @@ public partial class MapGenerator : MonoBehaviour
     public MapSegment startSegment;//open only to z direction (forward)
     public MapSegment endSegment;//open only to negative z direction (backward)
 
+
+
+
     [Space]
 
     private Array3D<TurnSegment> map;
@@ -38,7 +41,11 @@ public partial class MapGenerator : MonoBehaviour
     public MapSegment[] segments;
     private TurnSegment[] turnSegments;
 
-    void Start()
+    [Space]
+    [Header("Debug")]
+    public bool createOnAwake = true;
+
+    public void LoadProcedualMap()
     {
         //generate TurnSegments from the mapSegment
         float weightSum = 0;
@@ -62,6 +69,12 @@ public partial class MapGenerator : MonoBehaviour
         sections.ConnectSections(ref map);
 
         InstantiateMap();
+    }
+
+    void Start()
+    {
+        if (createOnAwake)
+            LoadProcedualMap();
     }
 
     TurnSegment FindFittingSegment(Socket3D socket)
