@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum Socket { Wall, Path, Door }
+public enum Socket { Wall, Path, Door, Room }
 
 
 public enum Direction { Top, Right, Front, Bottom, Left, Back }
