@@ -17,6 +17,7 @@ public class WeaponManager : MonoBehaviour
     public InputActionReference fireInput;
     public InputActionReference adsInput;
 
+    public bool isAimingDownSights { get; private set; }
 
     private BaseGun currentGun;
     private float currentFireRate;
@@ -32,12 +33,12 @@ public class WeaponManager : MonoBehaviour
 
     private void Update()
     {
-        if (PollingStation.Instance.optionsManager.currentState == OptionsManager.RuntimeState.Paused) return;
+        if (PollingStation.Instance.optionsManager.currentState != OptionsManager.RuntimeState.Playing) return;
 
         ResetRecoil();
         if (!currentGun) return;
 
-
+        isAimingDownSights = adsInput.action.ReadValue<float>() > 0;
         currentFireRate += Time.deltaTime;
 
         if (currentFireRate >= currentGun.fireRate && fireInput.action.ReadValue<float>() > 0)
@@ -54,7 +55,7 @@ public class WeaponManager : MonoBehaviour
         }
 
 
-        if (adsInput.action.ReadValue<float>() > 0)
+        if (isAimingDownSights)
         {
             ADS();
         }

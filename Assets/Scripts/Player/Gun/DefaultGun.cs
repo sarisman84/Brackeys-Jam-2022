@@ -53,7 +53,7 @@ public class DefaultGun : BaseGun
 
         LayerMask mask = LayerMask.NameToLayer("Default");
 
-        Vector3 spread = Random.insideUnitSphere * spreadAmm;
+        Vector3 spread = Random.insideUnitSphere * (weaponManager.isAimingDownSights ? spreadAmm / 2.0f : spreadAmm);
         spread.z = 0;
 
         bool intersecting = InteractionUtilities.IntersectFromCamera(Camera.main, spread, maxHitRange, mask, out var hitInfo);

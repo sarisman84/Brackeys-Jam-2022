@@ -47,6 +47,24 @@ public partial class MapGenerator : MonoBehaviour
 
     public void LoadProcedualMap()
     {
+        PollingStation.Instance.optionsManager.onStateChangeCallback += (OptionsManager.RuntimeState state) =>
+        {
+            switch (state)
+            {
+                case OptionsManager.RuntimeState.MainMenu:
+                    //Delete map
+                    break;
+
+                case OptionsManager.RuntimeState.Playing:
+
+                    break;
+                default:
+                    break;
+            }
+            
+        };
+
+
         //generate TurnSegments from the mapSegment
         float weightSum = 0;
         turnSegments = new TurnSegment[segments.Length * 4];

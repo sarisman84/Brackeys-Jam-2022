@@ -97,6 +97,11 @@ public class OptionsManager : MonoBehaviour
         UpdateState();
     }
 
+    public void SetStateToPlay()
+    {
+        SetState(RuntimeState.Playing);
+    }
+
 
     public void SetFullscreen(bool aValue)
     {

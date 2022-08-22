@@ -11,6 +11,7 @@ public class FPSController : MonoBehaviour
     public float movementSpeed;
     public float sprintModifier = 1.2f;
     public float crouchModifier = 0.8f;
+    public float adsModifier = 0.5f;
     public float gravity = -9.0f;
     public float jumpHeight;
 
@@ -36,8 +37,6 @@ public class FPSController : MonoBehaviour
     {
         charController = GetComponent<CharacterController>();
         mainCam = Camera.main;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
 
 
         capsCollider = GetComponent<CapsuleCollider>();
@@ -50,7 +49,7 @@ public class FPSController : MonoBehaviour
 
     private void Update()
     {
-        if (PollingStation.Instance.optionsManager.currentState == OptionsManager.RuntimeState.Paused) return;
+        if (PollingStation.Instance.optionsManager.currentState != OptionsManager.RuntimeState.Playing) return;
 
 
 
@@ -72,6 +71,7 @@ public class FPSController : MonoBehaviour
         float finalSpeed =
             sprintReference.action.ReadValue<float>() > 0 ? movementSpeed * sprintModifier :
             crouchReference.action.ReadValue<float>() > 0 && grounded ? movementSpeed * crouchModifier :
+            PollingStation.Instance.weaponManager?.adsInput.action.ReadValue<float>() > 0 ? movementSpeed * adsModifier :
             movementSpeed;
 
         charController.Move(move * Time.deltaTime * finalSpeed);
