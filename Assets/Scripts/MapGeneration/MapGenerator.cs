@@ -19,32 +19,47 @@ public partial class MapGenerator : MonoBehaviour
     public Vector3 tileSize = Vector3.one;
 
 
-    private Array3D<MapSegment> map;
+    private Array3D<TurnSegment> map;
     private Array3D<GridBox> grid;//FOR DEBUGGING ONLY
 
     public MapSegment empty;
+    private TurnSegment emptySegment;
+
     public MapSegment[] segments;
+    private TurnSegment[] turnSegments;
 
     void Start()
     {
-        //TODO: generate TurnSegments from the mapSegment
+        emptySegment = new TurnSegment(empty, 0);
 
-        GenerateMap(ref segments);
+        //generate TurnSegments from the mapSegment
+        float weightSum = 0;
+        turnSegments = new TurnSegment[segments.Length * 4];
+        for (int i = 0; i < segments.Length; i++) {
+            for (int t = 0; t < 4; t++) {
+                turnSegments[i * 4 + t] = new TurnSegment(segments[i], t);
+                weightSum += segments[i].weight;
+            }
+        }
+
+        GenerateMap(ref turnSegments, weightSum);
     }
 
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
-    void GenerateMap(ref MapSegment[] segments) {
+    void GenerateMap(ref TurnSegment[] segments, float weightSum) {
         grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
 
-        for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments);//fill the grid
+        for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum);//fill the grid
 
         MakeBorderEmpty(ref grid);
 
         int iterLimit = grid.Length;
         //int iterLimit = 0;
         for (int iter = 0; iter < iterLimit; iter++) {
-            if (!LowestEntropyCollapse(ref grid))//keeps collapsing until everything is collapsed
+            if (!LowestEntropyCollapse(ref grid)) {//keeps collapsing until everything is collapsed
+                Debug.Log("Collapse is done");
                 break;
+            }
         }
 
         InstantiateMap(ref grid);
@@ -56,9 +71,9 @@ public partial class MapGenerator : MonoBehaviour
             for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
                 for (vec[y] = 0; vec[y] < grid.size[y]; vec[y]++) {
                     vec[z] = 0;
-                    grid[vec].possibilities.Add(empty);
+                    grid[vec].possibilities.Add(emptySegment);
                     vec[z] = grid.size[z] - 1;
-                    grid[vec].possibilities.Add(empty);
+                    grid[vec].possibilities.Add(emptySegment);
                 }
         }
         void EmptyPlane(ref Array3D<GridBox> grid, int x, int y, int z) {
@@ -66,9 +81,9 @@ public partial class MapGenerator : MonoBehaviour
             for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
                 for (vec[y] = 0; vec[y] < grid.size[y]; vec[y]++) {
                     vec[z] = 0;
-                    Collapse(ref grid, grid.GetIndex(vec), empty);
+                    Collapse(ref grid, grid.GetIndex(vec), emptySegment);
                     vec[z] = grid.size[z] - 1;
-                    Collapse(ref grid, grid.GetIndex(vec), empty);
+                    Collapse(ref grid, grid.GetIndex(vec), emptySegment);
                 }
         }
 
@@ -83,7 +98,7 @@ public partial class MapGenerator : MonoBehaviour
 
     bool LowestEntropyCollapse(ref Array3D<GridBox> grid) {//collapse the box with the smallest number of possibilities
         //Get all the GridBoxes with the lowest Entropy
-        int min = segments.Length + 1;
+        int min = turnSegments.Length + 1;
         List<int> minGrids = new List<int>();
         for (int i = 0; i < grid.Length; i++) {
             if (grid[i].possibilities.Count <= 1 || grid[i].possibilities.Count > min) continue;
@@ -92,11 +107,11 @@ public partial class MapGenerator : MonoBehaviour
                 min = grid[i].possibilities.Count;
                 minGrids.Clear();
             }
-            minGrids.Add(i);
+            minGrids.Add(i);//add every tile that has min possibilities
         }
-            
 
-        if(min == segments.Length+1 || minGrids.Count == 0)//if everything is already collapsed
+
+        if (min == turnSegments.Length + 1 || minGrids.Count == 0)//if everything is already collapsed
             return false;
             
         int toCollapse = minGrids[GetRndm(minGrids.Count)];
@@ -107,17 +122,17 @@ public partial class MapGenerator : MonoBehaviour
     }
 
     bool CollapseRndm(ref Array3D<GridBox> grid, int toCollapse) {//tries to collapse a gridbox. returns if successful
-        int collapseIndex = GetRndm(grid[toCollapse].possibilities.Count);
+        int collapseIndex = grid[toCollapse].GetWeightedRnd();
         return Collapse(ref grid, toCollapse, grid[toCollapse].possibilities[collapseIndex]);//pick one segment of all possible segments
     }
-    bool Collapse(ref Array3D<GridBox> grid, int toCollapse, MapSegment segment) {//tries to collapse a gridbox. returns if successful
+    bool Collapse(ref Array3D<GridBox> grid, int toCollapse, TurnSegment segment) {//tries to collapse a gridbox. returns if successful
         if (grid[toCollapse].SetResult(segment)) {
             PropergateCollapse(ref grid, toCollapse);
             return true;
         }
         return false;
     }
-    void ForceCollapse(ref Array3D<GridBox> grid, int toCollapse, MapSegment segment) {
+    void ForceCollapse(ref Array3D<GridBox> grid, int toCollapse, TurnSegment segment) {
         grid[toCollapse].ForceResult(segment);
         PropergateCollapse(ref grid, toCollapse);
     }
@@ -131,7 +146,7 @@ public partial class MapGenerator : MonoBehaviour
             if (grid[i].propergated) continue;
             else grid[i].propergated = true;
 
-            MapSegment segment = grid[i].possibilities[0];//get the only possibility
+            TurnSegment segment = grid[i].possibilities[0];//get the only possibility
             Vector3Int pos = grid.GetPos(i);
 
             for(int d = 0; d < DirExt.directions.Length; d++) {
@@ -152,7 +167,7 @@ public partial class MapGenerator : MonoBehaviour
     void InstantiateMap(ref Array3D<GridBox> grid) {
         
         //---------------- FILLING THE MAP ARRAY -----------------------
-        map = new Array3D<MapSegment>(grid.size);//NOTE: dont save the empty outermost layer
+        map = new Array3D<TurnSegment>(grid.size);//NOTE: dont save the empty outermost layer
         for (int i = 0; i < map.Length; i++) {
             map[i] = grid[i].possibilities[0];//get the only possibility for this tile
         }
@@ -167,8 +182,8 @@ public partial class MapGenerator : MonoBehaviour
             pos.y *= tileSize.y;
             pos.z *= tileSize.z;
 
-            if (map[i].prefab != null)
-                Instantiate(map[i].prefab, pos, Quaternion.identity, tileParent);
+            if (map[i].segment.prefab != null)
+                Instantiate(map[i].segment.prefab, pos, map[i].GetRot(), tileParent);
         }
     }
 
@@ -184,7 +199,7 @@ public partial class MapGenerator : MonoBehaviour
             }
         }
     }
-    private void DrawGizmosSegment(Vector3 pos, float size, MapSegment segment, Color[] socketColor) {
+    private void DrawGizmosSegment(Vector3 pos, float size, TurnSegment segment, Color[] socketColor) {
         for (int d = 0; d < DirExt.directions.Length; d++) {
             Gizmos.color = socketColor[(int)segment.GetSocket(d)];
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);

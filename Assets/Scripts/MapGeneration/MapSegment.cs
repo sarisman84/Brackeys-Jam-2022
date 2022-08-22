@@ -10,6 +10,7 @@ public enum Socket {
 public class MapSegment : ScriptableObject
 {
     public GameObject prefab;
+    public float weight = 1.0f;
 
     [Space]
     [Header("Sockets")]
@@ -47,6 +48,15 @@ public class MapSegment : ScriptableObject
 public class TurnSegment{
     public MapSegment segment;
     public int turn = 0;//how many 90° turns around the y-Axis we have
+
+    public TurnSegment(MapSegment segment, int turn) {
+        this.segment = segment;
+        this.turn = turn;
+    }
+
+    public Quaternion GetRot() {
+        return Quaternion.Euler(0, turn*90, 0);
+    }
 
     public Socket GetSocket(int i) {
         return segment.GetSocket((int)DirExt.Turn((Direction)i, turn));

@@ -158,11 +158,8 @@ MonoBehaviour:
   segments:
   - {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
   - {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
-  - {fileID: 11400000, guid: 8a562114d54a09c4da5c04dabfa9dcf2, type: 2}
   - {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
-  - {fileID: 11400000, guid: b4ea05eb0b4364649a80795b7e9a5659, type: 2}
-  - {fileID: 11400000, guid: 4eb02322a26919f41bc159059c89e5cd, type: 2}
-  - {fileID: 11400000, guid: c257dd33b8209ff45b1f4a3b1d9fd52a, type: 2}
+  - {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
 --- !u!4 &1316779544
 Transform:
   m_ObjectHideFlags: 0
