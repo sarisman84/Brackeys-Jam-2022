@@ -18,13 +18,18 @@ public class RuntimeManager : MonoBehaviour
 
 
     public InputActionReference pauseInput;
+    public Canvas pauseUIElement;
+
+
     private CinemachinePOV povHandler;
     private OptionsManager optionsM;
+    private MenuManager menuManager;
     private Vector2 inputVals;
 
     private void Start()
     {
         povHandler = PollingStation.Instance.cameraController.GetCinemachineComponent<CinemachinePOV>();
+        menuManager = PollingStation.Instance.menuManager;
         optionsM = PollingStation.Instance.optionsManager;
 
         povHandler.m_HorizontalAxis.m_InputAxisValue = optionsM.currentSensitivity;
@@ -61,14 +66,21 @@ public class RuntimeManager : MonoBehaviour
 
         if (pauseInput.action.ReadValue<float>() > 0 && pauseInput.action.triggered)
         {
-            switch (currentState)
+            if (menuManager.IsCurrentCanvasOpen())
             {
-                case RuntimeState.Paused:
-                    currentState = RuntimeState.Playing;
-                    break;
-                case RuntimeState.Playing:
-                    currentState = RuntimeState.Paused;
-                    break;
+                menuManager.ExitCurrentCanvas((Canvas currentCanvas) =>
+                {
+                    if (currentCanvas == pauseUIElement)
+                    {
+                        SetState(RuntimeState.Playing);
+                    }
+                });
+
+            }
+            else if (currentState == RuntimeState.Playing)
+            {
+                SetState(RuntimeState.Paused);
+                menuManager.OpenCanvas(pauseUIElement);
             }
         }
     }
@@ -128,6 +140,11 @@ public class RuntimeManager : MonoBehaviour
     public void SetStateToPlay()
     {
         SetState(RuntimeState.Playing);
+    }
+
+    public void SetStateToMenu()
+    {
+        SetState(RuntimeState.MainMenu);
     }
 
 

@@ -23,6 +23,8 @@ public class PollingStation
 
     #region Getter Properties
     public OptionsManager optionsManager { get; private set; }
+
+    public MenuManager menuManager { get; private set; }
     public FPSController fpsController { get; private set; }
     public InteractionManager interactionManager { get; private set; }
     public WeaponManager weaponManager { get; private set; }
@@ -110,7 +112,13 @@ public class PollingStation
 
                     break;
 
-
+                case MenuManager mm:
+                    if (!menuManager)
+                    {
+                        Debug.Log("[Log]<PollingStation>: Found Menu Manager");
+                        menuManager = mm;
+                    }
+                    break;
 
                 default:
                     break;

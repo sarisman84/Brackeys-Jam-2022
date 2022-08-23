@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 using System;
 
 using TMPro;
-
+using Cinemachine;
 public class OptionsManager : MonoBehaviour
 {
 
@@ -39,7 +39,7 @@ public class OptionsManager : MonoBehaviour
     //Mouse Sensitivity
     public float minSensitivity;
     public float maxSensitivity;
-    public float currentSensitivity { private set; get; }
+    public float currentSensitivity { private set; get; } = 0.25f;
 
 
     [Header("Return Button Options")]
@@ -64,6 +64,21 @@ public class OptionsManager : MonoBehaviour
     }
 
 
+    private void Start()
+    {
+        var pollingStation = PollingStation.Instance;
+        var camera = pollingStation.cameraController;
+        var povHolder = camera.GetCinemachineComponent<CinemachinePOV>();
+
+        pollingStation.runtimeManager.onStateChangeCallback += (RuntimeManager.RuntimeState state) =>
+        {
+            if (state == RuntimeManager.RuntimeState.Playing)
+            {
+                povHolder.m_HorizontalAxis.m_MaxSpeed = currentSensitivity;
+                povHolder.m_VerticalAxis.m_MaxSpeed = currentSensitivity;
+            }
+        };
+    }
 
 
     public void SetFullscreen(bool aValue)
