@@ -30,8 +30,6 @@ public partial class MapGenerator : MonoBehaviour
 
     private Transform tileParent;
 
-    public static bool IsEmpty(TurnSegment segment) { return segment.segment.socket.IsCollisionOnly(); }
-
     public void LoadProcedualMap()
     {
         Debug.Log("Start Procedural Map Generation");
@@ -71,9 +69,9 @@ public partial class MapGenerator : MonoBehaviour
             return;
         }
 
-        sections = new MapSections();
-        sections.GenerateSections(ref map);
-        sections.ConnectSections(ref map);
+        //sections = new MapSections();
+        //sections.GenerateSections(ref map);
+        //sections.ConnectSections(ref map);
 
         InstantiateMap();
 
@@ -101,29 +99,23 @@ public partial class MapGenerator : MonoBehaviour
             LoadProcedualMap();
     }
 
-    TurnSegment FindFittingSegment(Socket3D socket)
+    TurnSegment FindFittingSegment(TurnSegment[] neighbours)
     {
         for (int s = 0; s < turnSegments.Length; s++)
         {
-            if (turnSegments[s].Fits(socket))
+            if (turnSegments[s].Fits(neighbours))
                 return turnSegments[s];
         }
-        Debug.LogError($"No fitting segment found for {socket}");
-        return null;
+        Debug.LogError($"No fitting segment found");//TODO: add an output for which neighbours there are
+        return new TurnSegment();
     }
 
     #region MapGeneration
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
     void GenerateMap(ref TurnSegment[] segments, float weightSum)
     {
-        Socket[] basePossibilities = new Socket[6];
-        for(int s = 0; s < segments.Length; s++) {
-            for(int d = 0; d < 6; d++)
-                basePossibilities[d] |= segments[s].GetSocket(d);
-        }
-
         grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
-        for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum, basePossibilities);//fill the grid
+        for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum, ref segments);//fill the grid
 
         SetupGrid(ref grid);
 
@@ -257,9 +249,9 @@ public partial class MapGenerator : MonoBehaviour
                 int _i = grid.GetIndex(neighbour);
                 //if (grid[_i].possibilities.Count <= 1) continue;
 
-                //only allow sockets that can connect to the possible sockets on the other side
-                Socket socket = grid[i].possibleSockets[d];
-                int changeCount = grid[_i].OnlyAllow(socket, (Direction)DirExt.InvertDir(d));
+                //only allow tiles that can connect to the possible tiles on the other side
+                List<TurnSegment> allowedNeighbours = grid[i].possibleNeighbours[d];
+                int changeCount = grid[_i].OnlyAllow(allowedNeighbours, (Direction)DirExt.InvertDir(d));
 
                 if(changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
                     toPropergate.Push(_i);//propergate this change
@@ -297,6 +289,7 @@ public partial class MapGenerator : MonoBehaviour
         }
     }
 
+    /*
     private void OnDrawGizmos()
     {
         if (map != null)
@@ -322,7 +315,7 @@ public partial class MapGenerator : MonoBehaviour
             Gizmos.color = new Color[] { Color.gray, Color.green, Color.blue, Color.red }[(int)Mathf.Log((float)segment.GetSocket(d), 2.0f)];
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
-    }
+    }*/
 
 
     public static int GetRndm(int length)

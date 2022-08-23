@@ -1,5 +1,8 @@
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
+/*
 [System.Serializable]
 public struct Socket3D {
     public Socket top;
@@ -14,20 +17,13 @@ public struct Socket3D {
     //order: Top, Right, Front, Bottom, Left, Back
     public Socket GetSocket(int i) {
         switch (i) {
-            case 0:
-                return top;
-            case 1:
-                return right;
-            case 2:
-                return front;
-            case 3:
-                return bottom;
-            case 4:
-                return left;
-            case 5:
-                return back;
-            default:
-                return Socket.Wall;
+            case 0: return top;
+            case 1: return right;
+            case 2: return front;
+            case 3: return bottom;
+            case 4: return left;
+            case 5: return back;
+            default: return Socket.Wall;
         }
     }
 
@@ -86,7 +82,52 @@ public struct Socket3D {
     public override string ToString() {
         return "{ Top:"+top + "; Right:"+right+ "; Front:" + front + "; Bottom:" + bottom + "; Left:" + left + "; Back:" + back + " }";
     }
+}*/
+
+
+[System.Serializable]
+public struct Neighbour3D {
+    public TurnSegment[] top;
+    public TurnSegment[] right;
+    public TurnSegment[] front;
+    public TurnSegment[] bottom;
+    public TurnSegment[] left;
+    public TurnSegment[] back;
+
+    public TurnSegment[] GetNeighbours(int i) {
+        switch (i) {
+            case 0: return top;
+            case 1: return right;
+            case 2: return front;
+            case 3: return bottom;
+            case 4: return left;
+            case 5: return back;
+            default: return null;
+        }
+    }
+
+    public void SetNeighbours(int i, TurnSegment[] n) {
+        switch (i) {
+            case 0: top = n;   return;
+            case 1: right = n; return;
+            case 2: front = n; return;
+            case 3: bottom = n;return;
+            case 4: left = n;  return;
+            case 5: back = n;  return;
+        }
+    }
+
+    public bool IsEmpty() {
+        return top.Length == 0 &&
+               right.Length == 0 &&
+               front.Length == 0 &&
+               bottom.Length == 0 &&
+               left.Length == 0 &&
+               back.Length == 0;
+    }
+    public bool IsEmpty(int d) { return GetNeighbours(d).Length == 0; }
 }
+
 
 [CreateAssetMenu(fileName = "New Map Segment", menuName = "Map/MapSegment")]
 public class MapSegment : ScriptableObject
@@ -96,15 +137,21 @@ public class MapSegment : ScriptableObject
     public GameObject prefab;
     public float weight = 1.0f;
 
-    public Socket3D socket;
+    //public Socket3D socket;
+
+    [Space]
+
     public Turnable turnInstances = Turnable.Full;
+
+    [Space]
+    public Neighbour3D whitelist;
 }
 
-
-public class TurnSegment{
+[System.Serializable]
+public struct TurnSegment {
     public MapSegment segment;
-    public int turn = 0;//how many 90° turns around the y-Axis we have
-    public float weightMultiplier = 1.0f;
+    public int turn;//how many 90° turns around the y-Axis we have
+    public float weightMultiplier {get; set;}
     public float GetWeight() { return weightMultiplier * segment.weight; }
 
     public TurnSegment(MapSegment segment, int turn, float weightMul) {
@@ -122,30 +169,38 @@ public class TurnSegment{
         return Quaternion.Euler(0, turn*90, 0);
     }
 
-    public Socket GetSocket(int d) {
-        return GetSocket((Direction)d);
+    public TurnSegment[] GetNeighbours(int d) {
+        return GetNeighbours((Direction)d);
     }
-    public Socket GetSocket(Direction dir) {
-        return segment.socket.GetSocket((int)DirExt.Turn(dir, turn));
-    }
-
-    public bool Fits(Socket3D other) {
-        return GetSocket(Direction.Top)    == other.top    &&
-               GetSocket(Direction.Right)  == other.right  &&
-               GetSocket(Direction.Front)  == other.front  &&
-               GetSocket(Direction.Bottom) == other.bottom &&
-               GetSocket(Direction.Left)   == other.left   &&
-               GetSocket(Direction.Back)   == other.back;
+    public TurnSegment[] GetNeighbours(Direction dir) {
+        return segment.whitelist.GetNeighbours((int)DirExt.Turn(dir, turn));
     }
 
-    public Socket3D GetTurnedSocket3D() {
-        Socket3D socket = new Socket3D();
-        socket.top = GetSocket(Direction.Top);
-        socket.right = GetSocket(Direction.Right);
-        socket.front = GetSocket(Direction.Front);
-        socket.bottom = GetSocket(Direction.Bottom);
-        socket.left = GetSocket(Direction.Left);
-        socket.back = GetSocket(Direction.Back);
-        return socket;
+    public bool Fits(TurnSegment[] neighbours) {
+        return GetNeighbours(Direction.Top   ).Contains(neighbours[0]) &&
+               GetNeighbours(Direction.Right ).Contains(neighbours[1]) &&
+               GetNeighbours(Direction.Front ).Contains(neighbours[2]) &&
+               GetNeighbours(Direction.Bottom).Contains(neighbours[3]) &&
+               GetNeighbours(Direction.Left  ).Contains(neighbours[4]) &&
+               GetNeighbours(Direction.Back  ).Contains(neighbours[5]);
+    }
+
+    public Neighbour3D GetTurnedNeighbour3D() {
+        Neighbour3D neighbours = new Neighbour3D();
+        neighbours.top    = GetNeighbours(Direction.Top);
+        neighbours.right  = GetNeighbours(Direction.Right);
+        neighbours.front  = GetNeighbours(Direction.Front);
+        neighbours.bottom = GetNeighbours(Direction.Bottom);
+        neighbours.left   = GetNeighbours(Direction.Left);
+        neighbours.back   = GetNeighbours(Direction.Back);
+        return neighbours;
+    }
+
+
+    public bool IsEmpty() { return segment.whitelist.IsEmpty(); }
+
+    public bool Equals(TurnSegment other) {
+        return segment == other.segment &&
+               turn    == other.turn;
     }
 }

@@ -11,7 +11,7 @@ public partial class MapGenerator
         public void GenerateSections(ref Array3D<TurnSegment> map) {
             HashSet<int> visited = new HashSet<int>();
             for (int i = 0; i < map.Length; i++) {
-                if (IsEmpty(map[i]))
+                if (map[i].IsEmpty())
                     visited.Add(i);//add all empty tiles as visited
             }
             
@@ -53,7 +53,7 @@ public partial class MapGenerator
                     Vector3Int neighbour = pos + DirExt.directions[d];
                     if (!map.InBounds(neighbour)) continue;
 
-                    if (map[i].GetSocket(d).IsCollision()) continue;//only add connected
+                    if (map[i].GetNeighbours(d).Length == 0) continue;//only add connected  IMPORTANT NOTE: this is based on the IsEmpty() method.
 
                     int _i = map.GetIndex(neighbour);
                     if (visited.Contains(_i)) continue;//only add not visited
@@ -84,7 +84,7 @@ public partial class MapGenerator
                         if (!map.InBounds(neighbour)) continue;
 
                         int _i = map.GetIndex(neighbour);
-                        if (IsEmpty(map[_i])) continue;//ignore empty tiles
+                        if (map[_i].IsEmpty()) continue;//ignore empty tiles
                         if (sections[s].Contains(_i)) continue;//only add tiles from other sections
 
                         neighbours[s].Add((i, _i));//add neighbours from different sections
@@ -136,10 +136,13 @@ public partial class MapGenerator
 
 
             //------------------ CONNECT SECTIONS ----------------------
-            for (int c = 0; c < connections.Count; c++) {
+
+            //THIS NEEDS TO BE OVERWORKED DRASTICALLY
+
+            /*for (int c = 0; c < connections.Count; c++) {
                 (int a, int b) = connections[c];
-                Socket3D socketA = map[a].GetTurnedSocket3D();
-                Socket3D socketB = map[b].GetTurnedSocket3D();
+                Neighbour3D socketA = map[a].GetTurnedNeighbour3D();
+                Neighbour3D socketB = map[b].GetTurnedNeighbour3D();
 
                 Vector3Int A_ConVec = map.GetPos(b) - map.GetPos(a);
                 if(A_ConVec.sqrMagnitude != 1) {
@@ -148,14 +151,14 @@ public partial class MapGenerator
                 }
 
                 Direction A_ConDir = DirExt.ToDir(A_ConVec);
-                socketA.SetSocket((int)A_ConDir, Socket.Path);
-                socketB.SetSocket((int)A_ConDir.InvertDir(), Socket.Path);
+                socketA.SetNeighbours((int)A_ConDir, Socket.Path);
+                socketB.SetNeighbours((int)A_ConDir.InvertDir(), Socket.Path);
 
 
                 //Find a new fitting segment with the correct sockets
                 map[a] = PollingStation.Instance.mapGenerator.FindFittingSegment(socketA);
                 map[b] = PollingStation.Instance.mapGenerator.FindFittingSegment(socketB);
-            }
+            }*/
         }
         #endregion
         

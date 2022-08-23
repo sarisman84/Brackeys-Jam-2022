@@ -1,50 +1,64 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public partial class MapGenerator
 {
     private class GridBox {
         public List<TurnSegment> possibilities;
         public float weightSum;
-        public Socket[] possibleSockets;
+        public List<TurnSegment>[] possibleNeighbours;
+        public bool PossibilitiesAllow(int dir, TurnSegment[] oneOfThese) {
+            for(int pn = 0; pn < possibleNeighbours[dir].Count; pn++) {
+                for(int i = 0; i < oneOfThese.Length; i++) {
+                    if (possibleNeighbours[dir][pn].Equals(oneOfThese[i]))
+                        return true;
+                }
+            }
+            return false;
+        }
 
-        public GridBox(ref TurnSegment[] segments, float weightSum, Socket[] possibleSockets) {
+        public GridBox(ref TurnSegment[] segments, float weightSum, ref TurnSegment[] allSegments) { //Socket[] possibleSockets) {
             possibilities = new List<TurnSegment>(segments);
             this.weightSum = weightSum;
 
-            this.possibleSockets = new Socket[6];
-            for(int s = 0; s < 6; s++)
-                this.possibleSockets[s] = possibleSockets[s];
+            possibleNeighbours = new List<TurnSegment>[6];
+            for (int d = 0; d < 6; d++)
+                possibleNeighbours[d] = new List<TurnSegment>(allSegments);
         }
 
-        public bool SetResult(TurnSegment socket) {
-            if (!possibilities.Contains(socket)) return false;//dont collapse on an impossible state
+        public bool SetResult(TurnSegment segment) {
+            if (!possibilities.Contains(segment)) return false;//dont collapse on an impossible state
 
-            ForceResult(socket);
+            ForceResult(segment);
             return true;
         }
-        public void ForceResult(TurnSegment socket) {
+        public void ForceResult(TurnSegment segment) {
             possibilities.Clear();
-            possibilities.Add(socket);
+            possibilities.Add(segment);
 
-            for (int s = 0; s < 6; s++)
-                possibleSockets[s] = socket.GetSocket(s);
+            //set the only possibility -> the possible neighbours are going to be also from that possibility
+            for (int d = 0; d < 6; d++)
+                possibleNeighbours[d] = new List<TurnSegment>(segment.GetNeighbours(d));
         }
 
         //Return true if the box was fully collapsed
-        public int OnlyAllow(Socket socket, Direction dir)
+        public int OnlyAllow(List<TurnSegment> allowedNeighbours, Direction dir)//only allow these neighbours in this direction
         {
             int d = (int)dir;
 
-            //---------- REMOVE SOCKETS ----------------
-            //remove every socket in this direction that doesnt fit with one of the given "socket" 
-            possibleSockets[d] &= socket;
+            //---------- REMOVE POSSIBILITIES -----------------
+            //remove every tile in this direction that doesnt fit with one of the given tiles
+            for(int n = 0; n < possibleNeighbours[d].Count; n++) {
+                if (!allowedNeighbours.Contains(possibleNeighbours[d][n]))
+                    possibleNeighbours[d].RemoveAt(n);
+            } 
 
 
             //---------- REMOVE TILES ------------------
             int removeCount = 0;
-            for (int p = possibilities.Count - 1; p >= 0; p--) {               
-                if (!possibleSockets[d].HasFlag(possibilities[p].GetSocket(d))) {//if the possible sockets dont have this socket -> remove possibility
+            for (int p = possibilities.Count - 1; p >= 0; p--) {
+                if (!PossibilitiesAllow(d, possibilities[p].GetNeighbours(d))) {//if the possible tiles dont have this tile -> remove possibility
                     weightSum -= possibilities[p].GetWeight();//update weight to make still correct calculations
                     possibilities.RemoveAt(p);
                     removeCount++;
