@@ -15,9 +15,10 @@ MonoBehaviour:
   prefab: {fileID: 8832429630048250798, guid: 1ca04ce45db147d4ca43ce563fab9d50, type: 3}
   weight: 0.3
   socket:
-    top: 0
-    right: 3
-    front: 3
-    bottom: 0
-    left: 3
-    back: 3
+    top: 1
+    right: 8
+    front: 8
+    bottom: 1
+    left: 8
+    back: 8
+  turnInstances: 1

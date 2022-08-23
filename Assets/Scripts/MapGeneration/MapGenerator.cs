@@ -1,21 +1,8 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-
 
 public partial class MapGenerator : MonoBehaviour
 {
-    public static MapGenerator instance; //<-- [Depecrated]: PollingStation in use! (Spyro)
-    private void Awake()
-    {
-        if (instance != null)
-        {
-            Debug.LogWarning($"There is more than one {GetType().Name}");
-            return;
-        }
-        instance = this;
-    }
-
     public Vector3Int mapSize = new Vector3Int(5, 1, 5);
     public Vector3 tileSize = Vector3.one;
 
@@ -27,59 +14,77 @@ public partial class MapGenerator : MonoBehaviour
 
     [Space]
 
-    private Array3D<TurnSegment> map;
-    private Array3D<GridBox> grid;//FOR DEBUGGING ONLY
-    private MapSections sections;//FOR DEBUGGING ONLY
-
-    public MapSegment empty;
-    private TurnSegment emptySegment;
-    public static bool IsEmpty(TurnSegment segment) { return segment.segment.socket.IsCollisionOnly(); }
-
+    public MapSegment borderSegment;
     public MapSegment[] segments;
-    private TurnSegment[] turnSegments;
 
     [Space]
     [Header("Debug")]
     public bool createOnAwake = true;
+    public int generateSeed = 0;
 
+    private Array3D<TurnSegment> map;
+    private Array3D<GridBox> grid;//FOR DEBUGGING ONLY
+    private MapSections sections;//FOR DEBUGGING ONLY
+
+    private TurnSegment[] turnSegments;
 
     private Transform tileParent;
 
+    public static bool IsEmpty(TurnSegment segment) { return segment.segment.socket.IsCollisionOnly(); }
+
     public void LoadProcedualMap()
     {
+        Debug.Log("Start Procedural Map Generation");
 
-
+        if (generateSeed >= 0)
+            Random.InitState(generateSeed);
 
         //generate TurnSegments from the mapSegment
         float weightSum = 0;
-        turnSegments = new TurnSegment[segments.Length * 4];
-        for (int i = 0; i < segments.Length; i++)
         {
-            for (int t = 0; t < 4; t++)
-            {
-                turnSegments[i * 4 + t] = new TurnSegment(segments[i], t);
-                weightSum += segments[i].weight;
+            List<TurnSegment> turned = new List<TurnSegment>();
+            for (int i = 0; i < segments.Length; i++) {
+                int turns = (int)segments[i].turnInstances;
+                float weightMul = 4.0f / turns;
+                for (int t = 0; t < turns; t++) {
+                    turned.Add(new TurnSegment(segments[i], t, weightMul));
+                    weightSum += weightMul * segments[i].weight;
+                }
             }
+            turnSegments = turned.ToArray();
         }
 
-
-        emptySegment = new TurnSegment(empty, 0);
-
-        GenerateMap(ref turnSegments, weightSum);
+        bool generation = false;
+        int gen;
+        int genCount = 10;
+        for (gen = 0; gen < genCount; gen++) {//THIS LOOP IS FOR FIXING THE FAILIURE OF THE MAP GENERATION
+            try {
+                GenerateMap(ref turnSegments, weightSum);
+                generation = true;
+                break;
+            } catch {
+                Debug.LogWarning("Map Generation went wrong - trying again");
+            }
+        }
+        if (!generation) {
+            Debug.LogError($"Map could not be generated after {genCount} tries");
+            return;
+        }
 
         sections = new MapSections();
         sections.GenerateSections(ref map);
         sections.ConnectSections(ref map);
 
         InstantiateMap();
+
+        Debug.Log($"Generated Map after {gen} tries");
     }
 
     void Start()
     {
         PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
         {
-            switch (state)
-            {
+            switch (state) {
                 case RuntimeManager.RuntimeState.MainMenu: //Delete map on main menu transition
                     if (tileParent)
                         Destroy(tileParent.gameObject);
@@ -89,7 +94,6 @@ public partial class MapGenerator : MonoBehaviour
                         LoadProcedualMap();
                     break;
             }
-
         };
 
 
@@ -112,9 +116,14 @@ public partial class MapGenerator : MonoBehaviour
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
     void GenerateMap(ref TurnSegment[] segments, float weightSum)
     {
-        grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
+        Socket[] basePossibilities = new Socket[6];
+        for(int s = 0; s < segments.Length; s++) {
+            for(int d = 0; d < 6; d++)
+                basePossibilities[d] |= segments[s].GetSocket(d);
+        }
 
-        for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum);//fill the grid
+        grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
+        for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum, basePossibilities);//fill the grid
 
         SetupGrid(ref grid);
 
@@ -134,6 +143,8 @@ public partial class MapGenerator : MonoBehaviour
 
     void SetupGrid(ref Array3D<GridBox> grid)
     {
+        TurnSegment emptySegment = new TurnSegment(borderSegment, 0);
+
         void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z)
         {
             Vector3Int vec = Vector3Int.zero;
@@ -176,8 +187,8 @@ public partial class MapGenerator : MonoBehaviour
         Vector3Int startPos = new Vector3Int(1, grid.size.y - 2, 0);
         Vector3Int endPos = new Vector3Int(grid.size.x - 2, 1, grid.size.z - 1);
 
-        grid[startPos].ForceResult(new TurnSegment(startSegment, 0));
-        grid[endPos].ForceResult(new TurnSegment(endSegment, 0));
+        ForceCollapse(ref grid, grid.GetIndex(startPos), new TurnSegment(startSegment, 0));
+        ForceCollapse(ref grid, grid.GetIndex(endPos), new TurnSegment(endSegment, 0));
     }
 
     bool LowestEntropyCollapse(ref Array3D<GridBox> grid)
@@ -210,8 +221,8 @@ public partial class MapGenerator : MonoBehaviour
 
     bool CollapseRndm(ref Array3D<GridBox> grid, int toCollapse)
     {//tries to collapse a gridbox. returns if successful
-        int collapseIndex = grid[toCollapse].GetWeightedRnd();
-        return Collapse(ref grid, toCollapse, grid[toCollapse].possibilities[collapseIndex]);//pick one segment of all possible segments
+        int collapseSegment = grid[toCollapse].GetWeightedRnd();
+        return Collapse(ref grid, toCollapse, grid[toCollapse].possibilities[collapseSegment]);//pick one segment of all possible segments
     }
     bool Collapse(ref Array3D<GridBox> grid, int toCollapse, TurnSegment segment)
     {//tries to collapse a gridbox. returns if successful
@@ -228,33 +239,35 @@ public partial class MapGenerator : MonoBehaviour
         PropergateCollapse(ref grid, toCollapse);
     }
 
-    void PropergateCollapse(ref Array3D<GridBox> grid, int init)
-    {
+    void PropergateCollapse(ref Array3D<GridBox> grid, int init) {//TODO: also propergergate a change of possibilities if it didint collapse to only one possibility
         Stack<int> toPropergate = new Stack<int>();
         toPropergate.Push(init);
 
-        while (toPropergate.Count > 0)
-        {
-            int i = toPropergate.Pop();
-            if (grid[i].propergated) continue;
-            else grid[i].propergated = true;
+        //while (toPropergate.Count > 0) {
+        for(int iter = 0; iter < 6*grid.Length; iter++) {//ONLY FOR DEBUGGING
+            if (toPropergate.Count <= 0) break;
 
-            TurnSegment segment = grid[i].possibilities[0];//get the only possibility
+            int i = toPropergate.Pop();
             Vector3Int pos = grid.GetPos(i);
 
-            for (int d = 0; d < DirExt.directions.Length; d++)
-            {
+            for (int d = 0; d < DirExt.directions.Length; d++) {
                 Vector3Int neighbour = pos + DirExt.directions[d];
                 if (!grid.InBounds(neighbour)) continue;
 
                 int _i = grid.GetIndex(neighbour);
-                Socket socket = segment.GetSocket(d);
-                grid[_i].OnlyAllow(socket, (Direction)DirExt.InvertDir(d));
+                //if (grid[_i].possibilities.Count <= 1) continue;
 
-                if (grid[_i].possibilities.Count == 1 && !grid[_i].propergated)//if defining this socket fully collapses this gridbox
-                    toPropergate.Push(_i);
+                //only allow sockets that can connect to the possible sockets on the other side
+                Socket socket = grid[i].possibleSockets[d];
+                int changeCount = grid[_i].OnlyAllow(socket, (Direction)DirExt.InvertDir(d));
+
+                if(changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
+                    toPropergate.Push(_i);//propergate this change
             }
         }
+
+        if (toPropergate.Count > 0)
+            Debug.LogError("Propergation took to many iterations");
     }
 
     void FillMap(ref Array3D<GridBox> grid)
@@ -293,7 +306,7 @@ public partial class MapGenerator : MonoBehaviour
                 Vector3Int pos = map.GetPos(i);
                 if (pos.y != 1) continue;
 
-                if (IsEmpty(map[i])) continue;//skip empty
+                //if (IsEmpty(map[i])) continue;//skip empty
 
                 for (int j = 0; j < grid[i].possibilities.Count; j++)
                 {
@@ -306,7 +319,7 @@ public partial class MapGenerator : MonoBehaviour
     {
         for (int d = 0; d < DirExt.directions.Length; d++)
         {
-            Gizmos.color = new Color[] { Color.gray, Color.green, Color.blue, Color.red }[(int)segment.GetSocket(d)];
+            Gizmos.color = new Color[] { Color.gray, Color.green, Color.blue, Color.red }[(int)Mathf.Log((float)segment.GetSocket(d), 2.0f)];
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
     }

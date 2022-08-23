@@ -13,4 +13,12 @@ MonoBehaviour:
   m_Name: Empty
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
-  sockets: 000000000000000000000000000000000000000000000000
+  weight: 0
+  socket:
+    top: 1
+    right: 1
+    front: 1
+    bottom: 1
+    left: 1
+    back: 1
+  turnInstances: 1
