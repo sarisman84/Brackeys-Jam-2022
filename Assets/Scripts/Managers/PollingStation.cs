@@ -32,6 +32,9 @@ public class PollingStation
     public MapGenerator mapGenerator { get; private set; }
 
     public CinemachineVirtualCamera cameraController { get; private set; }
+
+
+    public GameObject player { get; private set; }
     #endregion
 
     public PollingStation()
@@ -48,8 +51,20 @@ public class PollingStation
 
     private void FetchComponents(GameObject gameObject)
     {
-        if (gameObject.CompareTag("PlayerCam"))
-            cameraController = gameObject.GetComponent<CinemachineVirtualCamera>();
+        switch (gameObject.tag)
+        {
+            case "PlayerCam":
+                cameraController = gameObject.GetComponent<CinemachineVirtualCamera>();
+                break;
+            case "Player":
+                player = gameObject;
+                break;
+            default:
+                break;
+        }
+
+
+
 
 
         var components = gameObject.GetComponents<Component>();
