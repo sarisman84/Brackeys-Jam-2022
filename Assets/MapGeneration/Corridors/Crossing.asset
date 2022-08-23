@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: Crossing
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5167716386640821579, guid: 59c93c8007b0b9f4eb2a2db71dd90f55, type: 3}
+  prefab: {fileID: 2278892343228216779, guid: 2c96bbca2f7359349b06302cc0a55e23, type: 3}
   weight: 0.1
   socket:
     top: 1

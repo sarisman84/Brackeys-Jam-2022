@@ -4,8 +4,7 @@ using UnityEngine;
 public enum Socket { 
     Wall = 1, 
     Path = 2, 
-    Door = 4, 
-    Room = 8
+    Room = 4
 }
 
 

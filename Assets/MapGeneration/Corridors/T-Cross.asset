@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: T-Cross
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1252139565982643647, guid: d07e645a6b124994780d423b255f5788, type: 3}
+  prefab: {fileID: 2540063585349164304, guid: 24cecf0411356474f807ffd3f6cd8865, type: 3}
   weight: 0.2
   socket:
     top: 1

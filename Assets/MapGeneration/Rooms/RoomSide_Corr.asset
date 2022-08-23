@@ -16,9 +16,9 @@ MonoBehaviour:
   weight: 0.3
   socket:
     top: 1
-    right: 8
+    right: 4
     front: 2
     bottom: 1
-    left: 8
-    back: 8
+    left: 4
+    back: 4
   turnInstances: 4
