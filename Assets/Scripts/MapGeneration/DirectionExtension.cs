@@ -1,6 +1,12 @@
 using UnityEngine;
 
-public enum Socket { Wall, Path, Door, Room }
+[System.Flags]
+public enum Socket { 
+    Wall = 1, 
+    Path = 2, 
+    Door = 4, 
+    Room = 8
+}
 
 
 public enum Direction { Top, Right, Front, Bottom, Left, Back }
@@ -31,6 +37,6 @@ public static class DirExt
     }
 
     public static bool IsCollision(this Socket s) {
-        return s <= Socket.Wall;
+        return s == Socket.Wall;
     }
 }

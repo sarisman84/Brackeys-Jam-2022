@@ -153,8 +153,8 @@ public partial class MapGenerator
 
 
                 //Find a new fitting segment with the correct sockets
-                map[a] = instance.FindFittingSegment(socketA);
-                map[b] = instance.FindFittingSegment(socketB);
+                map[a] = PollingStation.Instance.mapGenerator.FindFittingSegment(socketA);
+                map[b] = PollingStation.Instance.mapGenerator.FindFittingSegment(socketB);
             }
         }
         #endregion

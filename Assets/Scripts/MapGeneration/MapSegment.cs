@@ -91,28 +91,39 @@ public struct Socket3D {
 [CreateAssetMenu(fileName = "New Map Segment", menuName = "Map/MapSegment")]
 public class MapSegment : ScriptableObject
 {
+    public enum Turnable { Full = 4, Once = 2, None = 1 }
+
     public GameObject prefab;
     public float weight = 1.0f;
 
     public Socket3D socket;
+    public Turnable turnInstances = Turnable.Full;
 }
 
 
 public class TurnSegment{
     public MapSegment segment;
     public int turn = 0;//how many 90° turns around the y-Axis we have
+    public float weightMultiplier = 1.0f;
+    public float GetWeight() { return weightMultiplier * segment.weight; }
 
+    public TurnSegment(MapSegment segment, int turn, float weightMul) {
+        this.segment = segment;
+        this.turn = turn;
+        this.weightMultiplier = weightMul;
+    }
     public TurnSegment(MapSegment segment, int turn) {
         this.segment = segment;
         this.turn = turn;
+        this.weightMultiplier = 1.0f;
     }
 
     public Quaternion GetRot() {
         return Quaternion.Euler(0, turn*90, 0);
     }
 
-    public Socket GetSocket(int i) {
-        return GetSocket((Direction)i);
+    public Socket GetSocket(int d) {
+        return GetSocket((Direction)d);
     }
     public Socket GetSocket(Direction dir) {
         return segment.socket.GetSocket((int)DirExt.Turn(dir, turn));
