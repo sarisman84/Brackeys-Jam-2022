@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 public partial class MapGenerator
@@ -30,7 +31,9 @@ public partial class MapGenerator
                 possibleSockets[s] = socket.GetSocket(s);
         }
 
-        public int OnlyAllow(Socket socket, Direction dir) {//Return true if the box was fully collapsed
+        //Return true if the box was fully collapsed
+        public int OnlyAllow(Socket socket, Direction dir)
+        {
             int d = (int)dir;
 
             //---------- REMOVE SOCKETS ----------------
@@ -49,14 +52,16 @@ public partial class MapGenerator
             }
 
             if (possibilities.Count == 0) {
-                Debug.LogError("ALL possibilities for this tile have been removed");
+                string exception = "ALL possibilities for this tile have been removed";
+                Debug.LogWarning(exception);
+                throw new Exception(exception);
             }
             return removeCount;
         }
 
 
         public int GetWeightedRnd() {
-            float rnd = Random.Range(0.0f, weightSum);
+            float rnd = UnityEngine.Random.Range(0.0f, weightSum);
 
             float current = 0;
             for (int i = 0; i < possibilities.Count; i++) {

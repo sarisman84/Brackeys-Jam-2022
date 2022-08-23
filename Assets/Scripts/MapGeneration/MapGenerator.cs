@@ -54,21 +54,37 @@ public partial class MapGenerator : MonoBehaviour
             turnSegments = turned.ToArray();
         }
 
-        GenerateMap(ref turnSegments, weightSum);
+        bool generation = false;
+        int gen;
+        int genCount = 10;
+        for (gen = 0; gen < genCount; gen++) {//THIS LOOP IS FOR FIXING THE FAILIURE OF THE MAP GENERATION
+            try {
+                GenerateMap(ref turnSegments, weightSum);
+                generation = true;
+                break;
+            } catch {
+                Debug.LogWarning("Map Generation went wrong - trying again");
+            }
+        }
+        if (!generation) {
+            Debug.LogError($"Map could not be generated after {genCount} tries");
+            return;
+        }
 
         sections = new MapSections();
         sections.GenerateSections(ref map);
         sections.ConnectSections(ref map);
 
         InstantiateMap();
+
+        Debug.Log($"Generated Map after {gen} tries");
     }
 
     void Start()
     {
         PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
         {
-            switch (state)
-            {
+            switch (state) {
                 case RuntimeManager.RuntimeState.MainMenu: //Delete map on main menu transition
                     if (tileParent)
                         Destroy(tileParent.gameObject);
@@ -78,7 +94,6 @@ public partial class MapGenerator : MonoBehaviour
                         LoadProcedualMap();
                     break;
             }
-
         };
 
 
