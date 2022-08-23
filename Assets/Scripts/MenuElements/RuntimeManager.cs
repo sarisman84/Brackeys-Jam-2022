@@ -14,13 +14,13 @@ public class RuntimeManager : MonoBehaviour
 
     public RuntimeState currentState { private set; get; }
     public bool cameraFrozen { private set; get; }
-    public event Action<RuntimeState> onStateChangeCallback;
+    public event Action<RuntimeState, RuntimeState> onPostStateChangeCallback;
 
 
     public InputActionReference pauseInput;
     public Canvas pauseUIElement;
 
-
+    private RuntimeState previousState;
     private CinemachinePOV povHandler;
     private OptionsManager optionsM;
     private MenuManager menuManager;
@@ -48,6 +48,18 @@ public class RuntimeManager : MonoBehaviour
     }
 
 
+    bool IsValidCanvas(Canvas currentCanvas)
+    {
+        return currentCanvas != menuManager.startingCanvas;
+    }
+
+    void OnExitingCanvas(Canvas currentCanvas)
+    {
+        if (currentCanvas == pauseUIElement)
+        {
+            SetState(RuntimeState.Playing);
+        }
+    }
 
     private void Update()
     {
@@ -66,21 +78,16 @@ public class RuntimeManager : MonoBehaviour
 
         if (pauseInput.action.ReadValue<float>() > 0 && pauseInput.action.triggered)
         {
+
             if (menuManager.IsCurrentCanvasOpen())
             {
-                menuManager.ExitCurrentCanvas((Canvas currentCanvas) =>
-                {
-                    if (currentCanvas == pauseUIElement)
-                    {
-                        SetState(RuntimeState.Playing);
-                    }
-                });
+                menuManager.ExitCurrentCanvas(IsValidCanvas, OnExitingCanvas);
 
             }
             else if (currentState == RuntimeState.Playing)
             {
                 SetState(RuntimeState.Paused);
-                menuManager.OpenCanvas(pauseUIElement);
+                menuManager.HardOpenCanvas(pauseUIElement);
             }
         }
     }
@@ -110,6 +117,8 @@ public class RuntimeManager : MonoBehaviour
 
     void UpdateState()
     {
+
+
         switch (currentState)
         {
             case RuntimeState.MainMenu:
@@ -126,13 +135,14 @@ public class RuntimeManager : MonoBehaviour
         }
 
 
-        onStateChangeCallback?.Invoke(currentState);
+        onPostStateChangeCallback?.Invoke(previousState, currentState);
     }
 
 
 
     public void SetState(RuntimeState aState)
     {
+        previousState = currentState;
         currentState = aState;
         UpdateState();
     }

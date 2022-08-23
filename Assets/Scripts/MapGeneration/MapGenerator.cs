@@ -76,7 +76,7 @@ public partial class MapGenerator : MonoBehaviour
 
     void Start()
     {
-        PollingStation.Instance.runtimeManager.onStateChangeCallback += (RuntimeManager.RuntimeState state) =>
+        PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
         {
             switch (state)
             {
@@ -84,8 +84,9 @@ public partial class MapGenerator : MonoBehaviour
                     if (tileParent)
                         Destroy(tileParent.gameObject);
                     break;
-                case RuntimeManager.RuntimeState.Playing: //Generate map on starting the game from the main menu.
-                    LoadProcedualMap();
+                case RuntimeManager.RuntimeState.Playing:
+                    if (previousState == RuntimeManager.RuntimeState.MainMenu)//Generate map on starting the game from the main menu.
+                        LoadProcedualMap();
                     break;
             }
 

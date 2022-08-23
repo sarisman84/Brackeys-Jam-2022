@@ -70,7 +70,7 @@ public class OptionsManager : MonoBehaviour
         var camera = pollingStation.cameraController;
         var povHolder = camera.GetCinemachineComponent<CinemachinePOV>();
 
-        pollingStation.runtimeManager.onStateChangeCallback += (RuntimeManager.RuntimeState state) =>
+        pollingStation.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
         {
             if (state == RuntimeManager.RuntimeState.Playing)
             {

@@ -15,18 +15,10 @@ public class MenuManager : MonoBehaviour
     private void Awake()
     {
         if (startingCanvas)
-            OpenCanvas(startingCanvas.gameObject);
+            HardOpenCanvas(startingCanvas);
     }
 
-    public void OpenCanvas(GameObject targetCanvas)
-    {
-        previousCanvas = currentCanvas;
-        if (previousCanvas)
-            previousCanvas.gameObject.SetActive(false);
 
-        currentCanvas = GetCanvas(targetCanvas);
-        currentCanvas.gameObject.SetActive(true);
-    }
 
 
     public void OpenCanvas(Canvas canvas)
@@ -34,6 +26,16 @@ public class MenuManager : MonoBehaviour
         previousCanvas = currentCanvas;
         if (previousCanvas)
             previousCanvas.gameObject.SetActive(false);
+
+        currentCanvas = canvas;
+        currentCanvas.gameObject.SetActive(true);
+    }
+
+    public void HardOpenCanvas(Canvas canvas)
+    {
+        if (previousCanvas)
+            previousCanvas.gameObject.SetActive(false);
+        previousCanvas = canvas;
 
         currentCanvas = canvas;
         currentCanvas.gameObject.SetActive(true);
@@ -47,28 +49,32 @@ public class MenuManager : MonoBehaviour
 
     public void ExitCurrentCanvas()
     {
-        if (previousCanvas)
-            previousCanvas.gameObject.SetActive(true);
-
-       
-
-        currentCanvas.gameObject.SetActive(false);
-
+        HardExitCurrentCanvas();
         currentCanvas = previousCanvas;
     }
 
-    public void ExitCurrentCanvas(Action<Canvas> onExitEvent)
+
+    public void HardExitCurrentCanvas()
     {
-        ExitCurrentCanvas();
-        onExitEvent?.Invoke(currentCanvas);
+        if (previousCanvas)
+            previousCanvas.gameObject.SetActive(true);
+
+
+
+        currentCanvas.gameObject.SetActive(false);
+    }
+
+    public void ExitCurrentCanvas(Func<Canvas, bool> onPreExitEvent = null, Action<Canvas> onPostExitEvent = null)
+    {
+        if (onPreExitEvent == null || onPreExitEvent.Invoke(currentCanvas))
+        {
+            ExitCurrentCanvas();
+            onPostExitEvent?.Invoke(currentCanvas);
+        }
+
 
     }
 
-
-    private Canvas GetCanvas(GameObject obj)
-    {
-        return obj.GetComponent<Canvas>();
-    }
 
 
 
