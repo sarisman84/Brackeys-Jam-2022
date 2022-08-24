@@ -32,6 +32,12 @@ MonoBehaviour:
       turn: 0
     - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
       turn: 1
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 3
     front:
     - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
       turn: 0
@@ -50,6 +56,12 @@ MonoBehaviour:
     - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
       turn: 3
     - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
       turn: 2
     back:
     - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
