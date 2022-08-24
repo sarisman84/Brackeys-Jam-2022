@@ -14,65 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 3479635299609434533, guid: 33578c52f99578948816ce544f742401, type: 3}
   weight: 1
+  socket:
+    top: 1
+    right: 1
+    front: 1
+    bottom: 1
+    left: 2
+    back: 2
   turnInstances: 4
-  whitelist:
-    top:
-    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
-      turn: 0
-    right:
-    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
-      turn: 0
-    front:
-    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
-      turn: 0
-    bottom:
-    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
-      turn: 0
-    left:
-    - segment: {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
-      turn: 0
-    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
-      turn: 0
-    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
-      turn: 0
-    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
-      turn: 2
-    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
-      turn: 3
-    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
-      turn: 1
-    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
-      turn: 2
-    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
-      turn: 2
-    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
-      turn: 1
-    - segment: {fileID: 11400000, guid: 59ff07f42d1cafe48a0f6afb4fbb7b7e, type: 2}
-      turn: 3
-    - segment: {fileID: 11400000, guid: 4ad1e2148cc42e849b8bd50075b47d82, type: 2}
-      turn: 1
-    - segment: {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
-      turn: 2
-    - segment: {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
-      turn: 3
-    back:
-    - segment: {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
-      turn: 0
-    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
-      turn: 1
-    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
-      turn: 1
-    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
-      turn: 3
-    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
-      turn: 2
-    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
-      turn: 0
-    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
-      turn: 1
-    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
-      turn: 1
-    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
-      turn: 0
-    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
-      turn: 0

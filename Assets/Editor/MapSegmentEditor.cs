@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 [CustomEditor(typeof(MapSegment))]
 public class MapSegmentEditor : Editor
 {
-
+    /*
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
 
@@ -304,7 +304,8 @@ public class MapSegmentEditor : Editor
 
 
         }
-        
+
     }
     #endregion
+    */
 }

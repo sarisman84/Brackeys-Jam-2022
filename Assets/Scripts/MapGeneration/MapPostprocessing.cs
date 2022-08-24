@@ -53,7 +53,7 @@ public partial class MapGenerator
                     Vector3Int neighbour = pos + DirExt.directions[d];
                     if (!map.InBounds(neighbour)) continue;
 
-                    if (map[i].GetNeighbours(d).Length == 0) continue;//only add connected  IMPORTANT NOTE: this is based on the IsEmpty() method.
+                    if (map[i].GetSocket(d).IsCollision()) continue;//only add connected
 
                     int _i = map.GetIndex(neighbour);
                     if (visited.Contains(_i)) continue;//only add not visited
@@ -136,13 +136,10 @@ public partial class MapGenerator
 
 
             //------------------ CONNECT SECTIONS ----------------------
-
-            //THIS NEEDS TO BE OVERWORKED DRASTICALLY
-
-            /*for (int c = 0; c < connections.Count; c++) {
+            for (int c = 0; c < connections.Count; c++) {
                 (int a, int b) = connections[c];
-                Neighbour3D socketA = map[a].GetTurnedNeighbour3D();
-                Neighbour3D socketB = map[b].GetTurnedNeighbour3D();
+                Socket3D socketA = map[a].GetTurnedSocket3D();
+                Socket3D socketB = map[b].GetTurnedSocket3D();
 
                 Vector3Int A_ConVec = map.GetPos(b) - map.GetPos(a);
                 if(A_ConVec.sqrMagnitude != 1) {
@@ -151,14 +148,14 @@ public partial class MapGenerator
                 }
 
                 Direction A_ConDir = DirExt.ToDir(A_ConVec);
-                socketA.SetNeighbours((int)A_ConDir, Socket.Path);
-                socketB.SetNeighbours((int)A_ConDir.InvertDir(), Socket.Path);
+                socketA.SetSocket((int)A_ConDir, Socket.Path);
+                socketB.SetSocket((int)A_ConDir.InvertDir(), Socket.Path);
 
 
                 //Find a new fitting segment with the correct sockets
                 map[a] = PollingStation.Instance.mapGenerator.FindFittingSegment(socketA);
                 map[b] = PollingStation.Instance.mapGenerator.FindFittingSegment(socketB);
-            }*/
+            }
         }
         #endregion
         
