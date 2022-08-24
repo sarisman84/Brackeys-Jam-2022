@@ -22,7 +22,7 @@ public class MapSegmentEditor : Editor
     private void OnSceneGUI(SceneView view)
     {
         MapSegment segment = target as MapSegment;
-
+        MapGenerator mapGen = PollingStation.Instance.mapGenerator;
 
         var curCam = SceneView.currentDrawingSceneView.camera;
 
@@ -48,20 +48,21 @@ public class MapSegmentEditor : Editor
                 default: break;
             }
 
-            Vector3 offset = modelPos + Vector3.right * 36 * i;
+            Vector3 offset = modelPos + Vector3.right * (mapGen.tileSize.x * 3) * i;
             Handles.Label(offset + Vector3.up * 3, new GUIContent(text: GetName(segment, i)));
 
             //info.RenderTile(modelPos, upDir, Color.green);
 
             var wMapSeg = segment.whitelist.GetNeighbours(i);
-            for (int map = 0; map < wMapSeg.Length; map++)
-            {
-                TurnSegment seg = wMapSeg[map];
-                Vector3 offset2 = offset + new Vector3(0, 0, (20.0f * map));
-                info.RenderTile(offset2, Vector3.zero, Color.green);
-                TileInfo subInfo = new TileInfo(seg.segment, seg.turn);
-                subInfo.RenderTile(offset2, dir, Color.yellow);
-            }
+            if (wMapSeg != null)
+                for (int map = 0; map < wMapSeg.Length; map++)
+                {
+                    TurnSegment seg = wMapSeg[map];
+                    Vector3 offset2 = offset + new Vector3(0, 0, ((mapGen.tileSize.z * 3) * map));
+                    info.RenderTile(offset2, Vector3.zero, Color.green);
+                    TileInfo subInfo = new TileInfo(seg.segment, seg.turn);
+                    subInfo.RenderTile(offset2, dir, Color.yellow);
+                }
         }
 
 
@@ -131,7 +132,18 @@ public class MapSegmentEditor : Editor
         public void RenderTile(Vector3 aPos, Vector3 anOffset, Color renderColor)
         {
             Graphics.ClearRandomWriteTargets();
-            Gizmos.color = renderColor - new Color(0, 0, 0, 0.25f);
+            if (currentMeshes.Length == 0)
+            {
+                Mesh builtinCubeMesh = UnityExtensions.LoadAssetFromUniqueAssetPath<Mesh>("Library/unity default resources::Cube");
+                Material defaultMat = new Material(Shader.Find("Diffuse"));
+                Matrix4x4 m = Matrix4x4.TRS(aPos + anOffset, Quaternion.identity, Vector3.one * 9);
+                Graphics.DrawMesh(builtinCubeMesh, m, defaultMat, 0, SceneView.currentDrawingSceneView.camera);
+
+                return;
+            }
+
+
+
             var turnRot = Quaternion.Euler(0, m_turn * 90, 0);
 
 

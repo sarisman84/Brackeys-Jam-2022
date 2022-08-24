@@ -14,7 +14,8 @@ public class PollingStation
             if (m_Ins == null)
             {
                 m_Ins = new PollingStation();
-                Debug.Log("[Log]<PollingStation>: Initialized Polling Station!");
+                if (m_Ins.debugMode)
+                    Debug.Log("[Log]<PollingStation>: Initialized Polling Station!");
             }
 
             return m_Ins;
@@ -37,8 +38,11 @@ public class PollingStation
     public GameObject player { get; private set; }
     #endregion
 
-    public PollingStation()
+    public bool debugMode { private get; set; } = false;
+
+    public PollingStation(bool showDebug = false)
     {
+        debugMode = showDebug;
         GameObject[] gos = SceneManager.GetActiveScene().GetRootGameObjects();
 
 
@@ -77,7 +81,8 @@ public class PollingStation
                 case MapGenerator mg:
                     if (!mapGenerator)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found Map Generator");
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found Map Generator");
                         mapGenerator = mg;
 
                     }
@@ -85,7 +90,8 @@ public class PollingStation
                 case OptionsManager om:
                     if (!optionsManager)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found Options Manager");
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found Options Manager");
                         optionsManager = om;
 
                     }
@@ -95,7 +101,8 @@ public class PollingStation
                 case FPSController fpsC:
                     if (!fpsController)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found FPSController");
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found FPSController");
                         fpsController = fpsC;
 
                     }
@@ -105,7 +112,8 @@ public class PollingStation
                 case InteractionManager im:
                     if (!interactionManager)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found Interaction Manager");
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found Interaction Manager");
                         interactionManager = im;
                     }
 
@@ -114,14 +122,16 @@ public class PollingStation
                 case WeaponManager wm:
                     if (!weaponManager)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found Weapon Manager");
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found Weapon Manager");
                         weaponManager = wm;
                     }
                     break;
                 case RuntimeManager rm:
                     if (!runtimeManager)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found Runtime Manager");
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found Runtime Manager");
                         runtimeManager = rm;
                     }
 
@@ -130,7 +140,8 @@ public class PollingStation
                 case MenuManager mm:
                     if (!menuManager)
                     {
-                        Debug.Log("[Log]<PollingStation>: Found Menu Manager");
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found Menu Manager");
                         menuManager = mm;
                     }
                     break;

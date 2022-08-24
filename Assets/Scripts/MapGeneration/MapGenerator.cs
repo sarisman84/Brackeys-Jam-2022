@@ -41,10 +41,12 @@ public partial class MapGenerator : MonoBehaviour
         float weightSum = 0;
         {
             List<TurnSegment> turned = new List<TurnSegment>();
-            for (int i = 0; i < segments.Length; i++) {
+            for (int i = 0; i < segments.Length; i++)
+            {
                 int turns = (int)segments[i].turnInstances;
                 float weightMul = 4.0f / turns;
-                for (int t = 0; t < turns; t++) {
+                for (int t = 0; t < turns; t++)
+                {
                     turned.Add(new TurnSegment(segments[i], t, weightMul));
                     weightSum += weightMul * segments[i].weight;
                 }
@@ -54,17 +56,22 @@ public partial class MapGenerator : MonoBehaviour
 
         bool generation = false;
         int gen;
-        int genCount = 10;
-        for (gen = 0; gen < genCount; gen++) {//THIS LOOP IS FOR FIXING THE FAILIURE OF THE MAP GENERATION
-            try {
+        int genCount = 100;
+        for (gen = 0; gen < genCount; gen++)
+        {//THIS LOOP IS FOR FIXING THE FAILIURE OF THE MAP GENERATION
+            try
+            {
                 GenerateMap(ref turnSegments, weightSum);
                 generation = true;
                 break;
-            } catch {
+            }
+            catch
+            {
                 Debug.LogWarning("Map Generation went wrong - trying again");
             }
         }
-        if (!generation) {
+        if (!generation)
+        {
             Debug.LogError($"Map could not be generated after {genCount} tries");
             return;
         }
@@ -90,7 +97,8 @@ public partial class MapGenerator : MonoBehaviour
     {
         PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
         {
-            switch (state) {
+            switch (state)
+            {
                 case RuntimeManager.RuntimeState.MainMenu: //Delete map on main menu transition
                     if (tileParent)
                         Destroy(tileParent.gameObject);
@@ -239,18 +247,21 @@ public partial class MapGenerator : MonoBehaviour
         PropergateCollapse(ref grid, toCollapse);
     }
 
-    void PropergateCollapse(ref Array3D<GridBox> grid, int init) {//TODO: also propergergate a change of possibilities if it didint collapse to only one possibility
+    void PropergateCollapse(ref Array3D<GridBox> grid, int init)
+    {//TODO: also propergergate a change of possibilities if it didint collapse to only one possibility
         Stack<int> toPropergate = new Stack<int>();
         toPropergate.Push(init);
 
         //while (toPropergate.Count > 0) {
-        for(int iter = 0; iter < 6*grid.Length; iter++) {//ONLY FOR DEBUGGING
+        for (int iter = 0; iter < 6 * grid.Length; iter++)
+        {//ONLY FOR DEBUGGING
             if (toPropergate.Count <= 0) break;
 
             int i = toPropergate.Pop();
             Vector3Int pos = grid.GetPos(i);
 
-            for (int d = 0; d < DirExt.directions.Length; d++) {
+            for (int d = 0; d < DirExt.directions.Length; d++)
+            {
                 Vector3Int neighbour = pos + DirExt.directions[d];
                 if (!grid.InBounds(neighbour)) continue;
 
@@ -261,7 +272,7 @@ public partial class MapGenerator : MonoBehaviour
                 List<TurnSegment> allowedNeighbours = grid[i].possibleNeighbours[d];
                 int changeCount = grid[_i].OnlyAllow(allowedNeighbours, (Direction)DirExt.InvertDir(d));
 
-                if(changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
+                if (changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
                     toPropergate.Push(_i);//propergate this change
             }
         }
@@ -297,7 +308,7 @@ public partial class MapGenerator : MonoBehaviour
         }
     }
 
-    /*
+
     private void OnDrawGizmos()
     {
         if (map != null)
@@ -311,19 +322,41 @@ public partial class MapGenerator : MonoBehaviour
 
                 for (int j = 0; j < grid[i].possibilities.Count; j++)
                 {
-                    DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j]);
+                    OnGizmoDrawSegmentPossibilities(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j]);
                 }
             }
         }
     }
-    private void DrawGizmosSegment(Vector3 pos, float size, TurnSegment segment)
+    private void OnGizmoDrawSegmentPossibilities(Vector3 pos, float size, TurnSegment segment)
     {
         for (int d = 0; d < DirExt.directions.Length; d++)
         {
-            Gizmos.color = new Color[] { Color.gray, Color.green, Color.blue, Color.red }[(int)Mathf.Log((float)segment.GetSocket(d), 2.0f)];
-            Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
+            DrawSegment(segment, pos, d);
         }
-    }*/
+    }
+
+    private void DrawSegment(TurnSegment segment, Vector3 centerPos, int curDir)
+    {
+        var pref = segment.segment.prefab;
+        //Gizmos.color = new Color[] { Color.gray, Color.green, Color.blue, Color.red }[(int)Mathf.Log((float)segment.GetSocket(d), 2.0f)];
+        //Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
+
+        var filters = pref.GetComponentsInChildren<MeshFilter>();
+
+        for (int i = 0; i < filters.Length; i++)
+        {
+            MeshFilter filter = filters[i];
+            Mesh mesh = filter.mesh;
+            Transform mTrans = filter.transform;
+
+
+            Quaternion rot = mTrans.rotation * segment.GetRot();
+            Vector3 offsetPos = (segment.GetRot() * mTrans.position + centerPos) + (Vector3)DirExt.directions[curDir];
+            Vector3 scale = mTrans.localScale;
+            Gizmos.matrix = Matrix4x4.TRS(offsetPos, rot, scale);
+            Gizmos.DrawMesh(mesh);
+        }
+    }
 
 
     public static int GetRndm(int length)
