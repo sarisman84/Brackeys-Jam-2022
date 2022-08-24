@@ -57,7 +57,7 @@ public class MapSegmentEditor : Editor
             for (int map = 0; map < wMapSeg.Length; map++)
             {
                 TurnSegment seg = wMapSeg[map];
-                Vector3 offset2 = offset + new Vector3(0, 0, (18.0f * map));
+                Vector3 offset2 = offset + new Vector3(0, 0, (20.0f * map));
                 info.RenderTile(offset2, Vector3.zero, Color.green);
                 TileInfo subInfo = new TileInfo(seg.segment, seg.turn);
                 subInfo.RenderTile(offset2, dir, Color.yellow);
@@ -92,6 +92,7 @@ public class MapSegmentEditor : Editor
             materials = new Material[0];
             localSizes = new Vector3[0];
             localRots = new Quaternion[0];
+            prefabScale = Vector3.one;
             m_turn = turn;
             if (!segment) return;
             var prefab = segment.prefab;
@@ -103,12 +104,13 @@ public class MapSegmentEditor : Editor
             localSizes = new Vector3[meshFilters.Length];
             localRots = new Quaternion[meshFilters.Length];
             m_turn = turn;
+            prefabScale = prefab.transform.localScale;
             for (int i = 0; i < meshFilters.Length; i++)
             {
                 currentMeshes[i] = meshFilters[i].sharedMesh;
-                localPos[i] = meshFilters[i].transform.localPosition;
+                localPos[i] = meshFilters[i].transform.position;
                 localSizes[i] = meshFilters[i].transform.localScale;
-                localRots[i] = meshFilters[i].transform.localRotation;
+                localRots[i] = meshFilters[i].transform.rotation;
 
                 var render = meshFilters[i].GetComponent<MeshRenderer>();
                 materials[i] = render.sharedMaterial;
@@ -122,6 +124,7 @@ public class MapSegmentEditor : Editor
         Mesh[] currentMeshes;
         Material[] materials;
         Quaternion[] localRots;
+        Vector3 prefabScale;
         int m_turn;
 
 
@@ -129,12 +132,20 @@ public class MapSegmentEditor : Editor
         {
             Graphics.ClearRandomWriteTargets();
             Gizmos.color = renderColor - new Color(0, 0, 0, 0.25f);
-            var rot = Quaternion.Euler(0, m_turn * 90, 0);
+            var turnRot = Quaternion.Euler(0, m_turn * 90, 0);
+
+
 
             for (int i = 0; i < currentMeshes.Length; i++)
             {
+                Vector3 scale = new Vector3(
+                    prefabScale.x * localSizes[i].x,
+                    prefabScale.y * localSizes[i].y,
+                    prefabScale.z * localSizes[i].z);
+                Vector3 pos = m_turn != 0 ? (turnRot * localPos[i] + aPos) + anOffset : localPos[i] + aPos + anOffset;
+                Quaternion rot = m_turn != 0 ? localRots[i] * turnRot : localRots[i];
 
-                Matrix4x4 m = Matrix4x4.TRS((rot * localPos[i]) + aPos + anOffset, rot * localRots[i], localSizes[i]);
+                Matrix4x4 m = Matrix4x4.TRS(pos, rot, scale);
                 Graphics.DrawMesh(currentMeshes[i], m, materials[i], 0, SceneView.currentDrawingSceneView.camera);
 
             }
