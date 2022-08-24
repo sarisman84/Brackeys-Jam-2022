@@ -19,7 +19,7 @@ public struct Command<TEnum> where TEnum : Enum
 
     public bool TryExecuteCommand(Action<StateMachine<TEnum>.State> targetState, out Action<StateMachine<TEnum>.State> aNewState)
     {
-        if (m_requiredState.Equals(targetState))
+        if (m_requiredState.Contains(targetState))
         {
             aNewState = m_nextState;
 
@@ -34,6 +34,11 @@ public struct Command<TEnum> where TEnum : Enum
 
 public class StateMachine<TEnum> where TEnum : Enum
 {
+
+    public StateMachine()
+    {
+        currentCommands = new Dictionary<TEnum, Command<TEnum>>();
+    }
     public enum State
     {
         Exiting, Running, Entering
@@ -43,8 +48,13 @@ public class StateMachine<TEnum> where TEnum : Enum
 
 
     private Action<State> currentState;
+    public TEnum CurrentState { get; private set; }
 
 
+    public void StartingState(Action<State> startingState)
+    {
+        currentState = startingState;
+    }
     public void AddCommand(TEnum commandKey, Command<TEnum> aCommand)
     {
         if (currentCommands.ContainsKey(commandKey)) return;
@@ -64,9 +74,11 @@ public class StateMachine<TEnum> where TEnum : Enum
         Command<TEnum> command = currentCommands[aNewCommand];
         if (command.TryExecuteCommand(currentState, out var newState))
         {
-            currentState.Invoke(State.Exiting);
+            currentState?.Invoke(State.Exiting);
             currentState = newState;
-            currentState.Invoke(State.Entering);
+            currentState?.Invoke(State.Entering);
+
+            CurrentState = aNewCommand;
         }
     }
 

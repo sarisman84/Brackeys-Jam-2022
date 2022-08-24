@@ -22,7 +22,7 @@ public partial class MapGenerator : MonoBehaviour
     public bool createOnAwake = true;
     public int generateSeed = 0;
 
-    private Array3D<TurnSegment> map;
+    public Array3D<TurnSegment> map;
     private Array3D<GridBox> grid;//FOR DEBUGGING ONLY
     private MapSections sections;//FOR DEBUGGING ONLY
 
@@ -78,6 +78,14 @@ public partial class MapGenerator : MonoBehaviour
         Debug.Log($"Generated Map after {gen} tries");
     }
 
+    public Vector3Int GetGridPos(Vector3 pos)
+    {
+        pos.x /= tileSize.x;
+        pos.y /= tileSize.y;
+        pos.z /= tileSize.z;
+        return Vector3Int.FloorToInt(pos);
+    }
+
     void Start()
     {
         PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
@@ -88,8 +96,8 @@ public partial class MapGenerator : MonoBehaviour
                         Destroy(tileParent.gameObject);
                     break;
                 case RuntimeManager.RuntimeState.Playing:
-                    if (previousState == RuntimeManager.RuntimeState.MainMenu)//Generate map on starting the game from the main menu.
-                        LoadProcedualMap();
+                    //if (previousState == RuntimeManager.RuntimeState.MainMenu)//Generate map on starting the game from the main menu.
+                    //    LoadProcedualMap();
                     break;
             }
         };

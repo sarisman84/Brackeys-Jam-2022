@@ -94,6 +94,9 @@ public struct Neighbour3D {
     public TurnSegment[] left;
     public TurnSegment[] back;
 
+ 
+
+
     public TurnSegment[] GetNeighbours(int i) {
         switch (i) {
             case 0: return top;
