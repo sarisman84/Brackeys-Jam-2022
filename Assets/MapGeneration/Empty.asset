@@ -12,13 +12,261 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: Empty
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  prefab: {fileID: 4534525381264176185, guid: d495e74247ce42c45a90b91bd0fc474a, type: 3}
   weight: 0
   turnInstances: 1
   whitelist:
-    top: []
-    right: []
-    front: []
-    bottom: []
-    left: []
-    back: []
+    top:
+    - segment: {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 59ff07f42d1cafe48a0f6afb4fbb7b7e, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 4ad1e2148cc42e849b8bd50075b47d82, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 38874be908dff9d4e8b1897bd03c66b3, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 3
+    right:
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 59ff07f42d1cafe48a0f6afb4fbb7b7e, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 4ad1e2148cc42e849b8bd50075b47d82, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 3
+    front:
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 4ad1e2148cc42e849b8bd50075b47d82, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 2
+    bottom:
+    - segment: {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 59ff07f42d1cafe48a0f6afb4fbb7b7e, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 4ad1e2148cc42e849b8bd50075b47d82, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 38874be908dff9d4e8b1897bd03c66b3, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 7e287919ac84cf64488ed24b9c9cc973, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+      turn: 3
+    left:
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 59ff07f42d1cafe48a0f6afb4fbb7b7e, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 4ad1e2148cc42e849b8bd50075b47d82, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 2
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 1
+    back:
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 3
+    - segment: {fileID: 11400000}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 59ff07f42d1cafe48a0f6afb4fbb7b7e, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: c8b1d02154086e24cb3611c625fffa36, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 0
+    - segment: {fileID: 11400000, guid: 04cfdecaa33d61a499f6aa26554aff03, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
+      turn: 0

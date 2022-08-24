@@ -191,11 +191,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
       propertyPath: mapSize.x
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
       propertyPath: mapSize.z
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
       propertyPath: tileSize.x

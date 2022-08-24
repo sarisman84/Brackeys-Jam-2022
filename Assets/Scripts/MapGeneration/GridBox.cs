@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 public partial class MapGenerator
 {
@@ -8,19 +6,15 @@ public partial class MapGenerator
     {
         public List<TurnSegment> possibilities;
         public float weightSum;
-        public bool ArePossibleNeighboursAllowed(int dir, List<TurnSegment> possibleNeighbours)
+        public bool ArePossibleNeighboursAllowed(TurnSegment[] PossibilityNeighbours, List<TurnSegment> NeighbourPossibilities)
         {
-            for (int p = 0; p < possibilities.Count; p++)
-            {
-                for(int n = 0; n < possibilities[p].GetNeighbours(dir).Length; n++) {
-                    TurnSegment turnSegment = possibilities[p].GetNeighbours(dir)[n];
-                    for (int pn = 0; pn < possibleNeighbours.Count; pn++) {
-                        //if the current focused neighbour in this loop is actually part of our neighbour -> pieces fit together (returns true)
-                        if (turnSegment.Equals(possibleNeighbours[pn]))
-                            return true;
-                    }
+            for (int n = 0; n < PossibilityNeighbours.Length; n++) {
+                TurnSegment turnSegment = PossibilityNeighbours[n];
+                for (int np = 0; np < NeighbourPossibilities.Count; np++) {
+                    //if the current focused neighbour in this loop is actually part of our neighbour -> pieces fit together (returns true)
+                    if (turnSegment.Equals(NeighbourPossibilities[np]))
+                        return true;
                 }
-                
             }
             return false;
         }
@@ -74,6 +68,14 @@ public partial class MapGenerator
                 }
             }*/
 
+            bool debug = false;
+            if (neighbourPossibilities.Count == 1)
+                debug = neighbourPossibilities[0].segment.name != "Empty";
+
+            if (debug)
+                Debug.Log("n: " + neighbourPossibilities[0] + " ; d: " + dir);
+
+            
 
             //collapse this cell, so that every possibility works with the given neighbours
 
@@ -81,11 +83,14 @@ public partial class MapGenerator
             int removeCount = 0;
             for (int p = possibilities.Count - 1; p >= 0; p--)
             {
-                if (!ArePossibleNeighboursAllowed(d, neighbourPossibilities))
+                bool allowPossible = ArePossibleNeighboursAllowed(possibilities[p].GetNeighbours(d), neighbourPossibilities);
+                if(debug)
+                    Debug.Log("p: " + possibilities[p] + " ; " + allowPossible);
+                if (!allowPossible)
                 {//if the possible tiles dont have this tile -> remove possibility
                     weightSum -= possibilities[p].GetWeight();//update weight to make still correct calculations
 
-                    Debug.Log($"Removing Invalid Possibility ({possibilities[p].segment.prefab.gameObject.name})");
+                    //Debug.Log($"Removing Invalid Possibility ({possibilities[p].segment.prefab.gameObject.name})");
                     possibilities.RemoveAt(p);
 
                     removeCount++;
@@ -96,7 +101,8 @@ public partial class MapGenerator
             {
                 string exception = "ALL possibilities for this tile have been removed";
                 Debug.LogWarning(exception);
-                throw new Exception(exception);
+                SetResult(PollingStation.Instance.mapGenerator.emptySegment);
+                //throw new Exception(exception);
             }
             return removeCount;
         }

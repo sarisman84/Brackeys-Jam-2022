@@ -11,7 +11,7 @@ public struct Neighbour3D {
     public TurnSegment[] left;
     public TurnSegment[] back;
 
-
+    public TurnSegment[] GetNeighbours(Direction d) { return GetNeighbours((int)d); }
     public TurnSegment[] GetNeighbours(int i) {
         switch (i) {
             case 0: return top;
@@ -33,6 +33,10 @@ public struct Neighbour3D {
             case 4: left = n;  return;
             case 5: back = n;  return;
         }
+    }
+
+    public TurnSegment[] GetTurnedNeighbours(Direction d, int turn) {
+        return GetNeighbours(d.Turn(turn));
     }
 }
 
@@ -57,18 +61,18 @@ public class MapSegment : ScriptableObject
 [System.Serializable]
 public struct TurnSegment {
     public MapSegment segment;
-    public int turn;//how many 90° turns around the y-Axis we have
+    public int turn;//how many 90° turns around the y-Axis we have (anti-clockwise)
     public float weightMultiplier {get; set;}
     public float GetWeight() { return weightMultiplier * segment.weight; }
 
     public TurnSegment(MapSegment segment, int turn, float weightMul) {
         this.segment = segment;
-        this.turn = turn;
+        this.turn = turn%4;
         this.weightMultiplier = weightMul;
     }
     public TurnSegment(MapSegment segment, int turn) {
         this.segment = segment;
-        this.turn = turn;
+        this.turn = turn%4;
         this.weightMultiplier = 1.0f;
     }
 
@@ -109,6 +113,10 @@ public struct TurnSegment {
 
     public bool Equals(TurnSegment other) {
         return segment == other.segment &&
-               turn    == other.turn;
+               turn%4  == other.turn%4;
+    }
+
+    public override string ToString() {
+        return segment.name + "; t: " + turn;
     }
 }
