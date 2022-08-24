@@ -19,13 +19,13 @@ public static class DirExt
     public static Direction Turn(this Direction d, int turn) {
         turn = turn % 4;
         //if (d == Direction.Top || d == Direction.Bottom)
-            //return d;
+        //return d;
 
         /*int d_ = (int)d;
         d_ = (d_ + (d_ % 3) * (turn % 2) + 3 * (turn / 2)) % 6;//s += mod3 if s=1 or 3     s += 3 if s>1 (inverse)
         return (Direction)d_;*/
 
-        switch (d) {
+        /*switch (d) {
             case Direction.Right: return Direction.Front;
             case Direction.Front: return Direction.Left;
             case Direction.Left: return Direction.Back;
@@ -33,7 +33,24 @@ public static class DirExt
 
             case Direction.Top: return Direction.Top;
             default: return Direction.Bottom;
+        }*/
+        Direction TurnOnce(Direction dir) {
+            switch (dir) {//CLOCKWISE
+                case Direction.Right: return Direction.Back;
+                case Direction.Front: return Direction.Right;
+                case Direction.Left: return Direction.Front;
+                case Direction.Back: return Direction.Left;
+
+                case Direction.Top: return Direction.Top;
+                default: return Direction.Bottom;
+            }
         }
+
+        Direction d2 = d;
+        for(int i = 0; i < turn; i++) {
+            d2 = TurnOnce(d2);
+        }
+        return d2;
     }
 
     public static Direction ToDir(Vector3Int dir) {

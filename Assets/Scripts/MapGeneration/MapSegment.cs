@@ -61,7 +61,7 @@ public class MapSegment : ScriptableObject
 [System.Serializable]
 public struct TurnSegment {
     public MapSegment segment;
-    public int turn;//how many 90° turns around the y-Axis we have (anti-clockwise)
+    public int turn;//how many 90° turns around the y-Axis we have (CLOCKWISE)
     public float weightMultiplier {get; set;}
     public float GetWeight() { return weightMultiplier * segment.weight; }
 

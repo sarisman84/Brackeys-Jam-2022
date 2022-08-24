@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
+using UnityEngine.Rendering;
 
 [CustomEditor(typeof(MapSegment))]
 public class MapSegmentEditor : Editor
@@ -16,8 +17,7 @@ public class MapSegmentEditor : Editor
         GUILayout.Space(20);
 
         if(GUILayout.Button("Add missing rules from other tiles")) {
-            //Merge(ref segment.whitelist, LoadWhitelist(segment));
-            segment.whitelist = LoadWhitelist(segment);
+            Merge(ref segment.whitelist, LoadWhitelist(segment));
         }
         if (GUILayout.Button("Check Whitelist with other tiles")) {
             CompareWhitelist(segment.whitelist, LoadWhitelist(segment), segment);
@@ -58,9 +58,9 @@ public class MapSegmentEditor : Editor
             Direction dir = (Direction)d;
             for (int i = 0; i < mapSegments.Length; i++) {
                 if (ContainsInSomeOrientation(mapSegments[i].whitelist.GetNeighbours(dir), segment, out int turn)) {
-                    int segmentTurn = (-turn + 4) % 4;
-                    int wDir = (int)dir.Turn(4 - segmentTurn);
-                    whitelist[wDir].Add(new TurnSegment(mapSegments[i], segmentTurn));//add the segment with the inverse turn
+                    int invTurn = -turn + 4;
+                    int wDir = (int)dir.InvertDir().Turn(invTurn);
+                    whitelist[wDir].Add(new TurnSegment(mapSegments[i], invTurn));//add the segment with the inverse turn
                 }  
             }
         }
@@ -72,9 +72,19 @@ public class MapSegmentEditor : Editor
 
     public void Merge(ref Neighbour3D n1, Neighbour3D n2) {//merges n2 into n1
         for (int d = 0; d < 6; d++) {
-            List<TurnSegment> union = new List<TurnSegment>();
-            union.AddRange(n1.GetNeighbours(d));
-            union.AddRange(n2.GetNeighbours(d));
+            List<TurnSegment> union = new List<TurnSegment>(n1.GetNeighbours(d));
+            for(int i = 0; i < n2.GetNeighbours(d).Length; i++) {
+                bool contains = false;//check if the union contains already this element
+                TurnSegment check = n2.GetNeighbours(d)[i];
+                for(int u = 0; u < union.Count; u++) {
+                    if (union[u].Equals(check)) {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (!contains)
+                    union.Add(check);//otherwise add it
+            }
             n1.SetNeighbours(d, union.ToArray());
         }
     }
@@ -105,7 +115,7 @@ public class MapSegmentEditor : Editor
             Rule inverse = new Rule();
             inverse.owner = other.segment;
             inverse.other = new TurnSegment(owner, invRuleTurn);
-            inverse.dir = dir.InvertDir().Turn(other.turn);
+            inverse.dir = dir.InvertDir().Turn(invRuleTurn);
             return inverse;
         }
 
@@ -122,19 +132,17 @@ public class MapSegmentEditor : Editor
         }
 
         for(int d = 0; d < 6; d++) {
-            /*
             for(int n1 = 0; n1 < whitelist.GetNeighbours(d).Length; n1++) {
                 if (!Contains(other.GetNeighbours(d), whitelist.GetNeighbours(d)[n1])) {
                     Rule rule = new Rule(thisSegment, whitelist.GetNeighbours(d)[n1], (Direction)d);
                     PrintRuleMatch(rule);
                 }
-            }*/
-
+            }
             
             for (int o = 0; o < other.GetNeighbours(d).Length; o++) {
                 if (!Contains(whitelist.GetNeighbours(d), other.GetNeighbours(d)[o])) {
                     Rule rule = new Rule(thisSegment, other.GetNeighbours(d)[o], (Direction)d);
-                    PrintRuleMatch(rule.InverseRule());
+                    PrintRuleMatch(rule);
                 }
             }
         }
