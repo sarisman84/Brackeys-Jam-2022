@@ -16,7 +16,9 @@ MonoBehaviour:
   weight: 0.3
   turnInstances: 4
   whitelist:
-    top: []
+    top:
+    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+      turn: 0
     right:
     - segment: {fileID: 11400000, guid: 1e7af6a8106b75543a8508a4635cb463, type: 2}
       turn: 1
@@ -41,7 +43,9 @@ MonoBehaviour:
       turn: 0
     - segment: {fileID: 11400000, guid: bed0acaa1b12ef54a9cd20605be47b8a, type: 2}
       turn: 1
-    bottom: []
+    bottom:
+    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+      turn: 0
     left:
     - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
       turn: 2

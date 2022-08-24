@@ -176,7 +176,9 @@ public class CoreEnemy : MonoBehaviour
 
     private void Update()
     {
-        if (PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing) return;
+        bool isPaused = PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing;
+        agent.isStopped = isPaused;
+        if (isPaused) return;
 
 
         stateMachine.UpdateCurrentState();

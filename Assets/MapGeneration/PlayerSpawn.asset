@@ -14,11 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1624381696014623087, guid: 3691b7d97d557fc4aaec0a3ea8ed2749, type: 3}
   weight: 1
-  socket:
-    top: 1
-    right: 1
-    front: 2
-    bottom: 1
-    left: 1
-    back: 1
   turnInstances: 1
+  whitelist:
+    top:
+    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+      turn: 0
+    right:
+    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+      turn: 0
+    front:
+    - segment: {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
+      turn: 1
+    - segment: {fileID: 11400000, guid: 58398bda41fa9b34a856ac9374040641, type: 2}
+      turn: 3
+    bottom:
+    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+      turn: 0
+    left:
+    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+      turn: 0
+    back:
+    - segment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+      turn: 0

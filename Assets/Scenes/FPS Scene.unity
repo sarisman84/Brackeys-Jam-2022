@@ -2419,6 +2419,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ---Managers---
       objectReference: {fileID: 0}
+    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
+      propertyPath: createOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8340831860555673196, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
       propertyPath: startingCanvas
       value: 
