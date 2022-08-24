@@ -14,7 +14,7 @@ public partial class MapGenerator : MonoBehaviour
 
     [Space]
 
-    public MapSegment borderSegment;
+    public MapSegment empty;
     public MapSegment[] segments;
 
     [Space]
@@ -131,7 +131,7 @@ public partial class MapGenerator : MonoBehaviour
     void GenerateMap(ref TurnSegment[] segments, float weightSum)
     {
         grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
-        for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum, ref segments);//fill the grid
+        for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum);//fill the grid
 
         SetupGrid(ref grid);
 
@@ -151,7 +151,7 @@ public partial class MapGenerator : MonoBehaviour
 
     void SetupGrid(ref Array3D<GridBox> grid)
     {
-        TurnSegment emptySegment = new TurnSegment(borderSegment, 0);
+        TurnSegment emptySegment = new TurnSegment(empty, 0);
 
         void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z)
         {
@@ -248,7 +248,7 @@ public partial class MapGenerator : MonoBehaviour
     }
 
     void PropergateCollapse(ref Array3D<GridBox> grid, int init)
-    {//TODO: also propergergate a change of possibilities if it didint collapse to only one possibility
+    {
         Stack<int> toPropergate = new Stack<int>();
         toPropergate.Push(init);
 
@@ -257,23 +257,22 @@ public partial class MapGenerator : MonoBehaviour
         {//ONLY FOR DEBUGGING
             if (toPropergate.Count <= 0) break;
 
-            int i = toPropergate.Pop();
-            Vector3Int pos = grid.GetPos(i);
+            int selfI = toPropergate.Pop();
+            Vector3Int pos = grid.GetPos(selfI);
 
             for (int d = 0; d < DirExt.directions.Length; d++)
             {
                 Vector3Int neighbour = pos + DirExt.directions[d];
                 if (!grid.InBounds(neighbour)) continue;
 
-                int _i = grid.GetIndex(neighbour);
-                //if (grid[_i].possibilities.Count <= 1) continue;
+                int nbI = grid.GetIndex(neighbour);
+                //if (grid[neighbourIndex].possibilities.Count <= 1) continue;
 
-                //only allow tiles that can connect to the possible tiles on the other side
-                List<TurnSegment> allowedNeighbours = grid[i].possibleNeighbours[d];
-                int changeCount = grid[_i].OnlyAllow(allowedNeighbours, (Direction)DirExt.InvertDir(d));
+                //only allow tiles on neighbour that can connect to the possible tiles on this side
+                int changeCount = grid[nbI].OnlyAllow(grid[selfI].possibilities, (Direction)DirExt.InvertDir(d));
 
-                if (changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
-                    toPropergate.Push(_i);//propergate this change
+                if (changeCount > 0 && !toPropergate.Contains(nbI))//if grid[_i] has a change in possibilities
+                    toPropergate.Push(nbI);//propergate this change
             }
         }
 

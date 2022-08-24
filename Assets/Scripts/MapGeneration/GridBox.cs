@@ -8,28 +8,27 @@ public partial class MapGenerator
     {
         public List<TurnSegment> possibilities;
         public float weightSum;
-        public List<TurnSegment>[] possibleNeighbours;
-        public bool PossibilitiesAllow(int dir, TurnSegment[] oneOfThese)
+        public bool ArePossibleNeighboursAllowed(int dir, List<TurnSegment> possibleNeighbours)
         {
-            for (int pn = 0; pn < possibleNeighbours[dir].Count; pn++)
+            for (int p = 0; p < possibilities.Count; p++)
             {
-                for (int i = 0; i < oneOfThese.Length; i++)
-                {
-                    if (possibleNeighbours[dir][pn].Equals(oneOfThese[i]))
-                        return true;
+                for(int n = 0; n < possibilities[p].GetNeighbours(dir).Length; n++) {
+                    TurnSegment turnSegment = possibilities[p].GetNeighbours(dir)[n];
+                    for (int pn = 0; pn < possibleNeighbours.Count; pn++) {
+                        //if the current focused neighbour in this loop is actually part of our neighbour -> pieces fit together (returns true)
+                        if (turnSegment.Equals(possibleNeighbours[pn]))
+                            return true;
+                    }
                 }
+                
             }
             return false;
         }
 
-        public GridBox(ref TurnSegment[] segments, float weightSum, ref TurnSegment[] allSegments)
-        { //Socket[] possibleSockets) {
+        public GridBox(ref TurnSegment[] segments, float weightSum)
+        {
             possibilities = new List<TurnSegment>(segments);
             this.weightSum = weightSum;
-
-            possibleNeighbours = new List<TurnSegment>[6];
-            for (int d = 0; d < 6; d++)
-                possibleNeighbours[d] = new List<TurnSegment>(allSegments);
         }
 
         public bool SetResult(TurnSegment segment)
@@ -43,42 +42,50 @@ public partial class MapGenerator
         {
             possibilities.Clear();
             possibilities.Add(segment);
-
-            //set the only possibility -> the possible neighbours are going to be also from that possibility
-            for (int d = 0; d < 6; d++)
-                possibleNeighbours[d] = new List<TurnSegment>(segment.GetNeighbours(d));
         }
 
+        //What we know:
+        /*
+         >We start with every possibility
+         >We have a weight sum
+         */
+
+
         //Return true if the box was fully collapsed
-        public int OnlyAllow(List<TurnSegment> allowedNeighbours, Direction dir)//only allow these neighbours in this direction
+        public int OnlyAllow(List<TurnSegment> neighbourPossibilities, Direction dir)//these neighbourPossibilities are in this direction
         {
             int d = (int)dir;
 
+            /*
             //---------- REMOVE POSSIBILITIES -----------------
             //remove every tile in this direction that doesnt fit with one of the given tiles
             for (int n = 0; n < possibleNeighbours[d].Count; n++)
             {
+                //if(!allowedNeighbours.Contains(possibleNeighbours[n][d]))
+                //      possibleNeighbours[d].RemoveAt(n);
+
+
                 //Apparently Contains check fails (cant find allowedNeighbours), using a mega scuffed comparision check instead - Spyro
                 //Nvm still doesnt work... something is wrong here - Spyro
-
                 if (allowedNeighbours.Find(t => possibleNeighbours[d][n].segment && t.segment.GetInstanceID() == possibleNeighbours[d][n].segment.GetInstanceID() && t.turn == possibleNeighbours[d][n].turn).segment == null)
                 {
                     Debug.Log($"Removing Possibile Neighbour ({possibleNeighbours[d][n].segment.prefab.gameObject.name})");
                     possibleNeighbours[d].RemoveAt(n);
                 }
+            }*/
 
-            }
 
+            //collapse this cell, so that every possibility works with the given neighbours
 
             //---------- REMOVE TILES ------------------
             int removeCount = 0;
             for (int p = possibilities.Count - 1; p >= 0; p--)
             {
-                if (!PossibilitiesAllow(d, possibilities[p].GetNeighbours(d)))
+                if (!ArePossibleNeighboursAllowed(d, neighbourPossibilities))
                 {//if the possible tiles dont have this tile -> remove possibility
                     weightSum -= possibilities[p].GetWeight();//update weight to make still correct calculations
 
-                    Debug.Log($"Removing Possibility ({possibilities[p].segment.prefab.gameObject.name})");
+                    Debug.Log($"Removing Invalid Possibility ({possibilities[p].segment.prefab.gameObject.name})");
                     possibilities.RemoveAt(p);
 
                     removeCount++;
