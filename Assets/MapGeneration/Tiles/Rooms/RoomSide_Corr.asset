@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: RoomSide_Corr
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1719501173172419046, guid: c1e01282889f3a14f97fcaac87c3ae44, type: 3}
+  prefab: {fileID: 3218626457171154484, guid: 7852e26da9902f7449d7f57418c143d9, type: 3}
   weight: 0.8
   socket:
     sockets:
