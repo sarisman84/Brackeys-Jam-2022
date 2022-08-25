@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
+  m_Name: PlayerSpawn
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1624381696014623087, guid: 3691b7d97d557fc4aaec0a3ea8ed2749, type: 3}
+  weight: 1
+  socket:
+    top: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    right: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    front: {fileID: 11400000, guid: ce472356ba43b344c865052010ec23a5, type: 2}
+    bottom: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    left: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    back: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+  turnInstances: 1

@@ -5,6 +5,8 @@ public partial class MapGenerator : MonoBehaviour
 {
     public Vector3Int mapSize = new Vector3Int(5, 1, 5);
     public Vector3 tileSize = Vector3.one;
+    public Vector3Int GetGridPos(Vector3 pos) { return Vector3Int.FloorToInt(pos.CompDiv(tileSize)); }
+
 
     [Space]
     [Header("Segments")]
@@ -21,6 +23,7 @@ public partial class MapGenerator : MonoBehaviour
     [Header("Debug")]
     public bool createOnAwake = true;
     public int generateSeed = 0;
+    public bool randomSeed = true;
 
     public Array3D<TurnSegment> map;
     private Array3D<GridBox> grid;//FOR DEBUGGING ONLY
@@ -30,63 +33,20 @@ public partial class MapGenerator : MonoBehaviour
 
     private Transform tileParent;
 
-    public Vector3Int GetGridPos(Vector3 pos) {
-        pos.x /= tileSize.x;
-        pos.y /= tileSize.y;
-        pos.z /= tileSize.z;
-        return Vector3Int.FloorToInt(pos);
+
+    TurnSegment FindFittingSegment(Socket3D socket) {
+        for (int s = 0; s < turnSegments.Length; s++) {
+            if (turnSegments[s].Fits(socket))
+                return turnSegments[s];
+        }
+        Debug.LogError($"No fitting segment found for {socket}");
+        return null;
     }
 
-    public void LoadProcedualMap()
-    {
-        Debug.Log("Start Procedural Map Generation");
 
-        if (generateSeed >= 0)
-            Random.InitState(generateSeed);
 
-        //generate TurnSegments from the mapSegment
-        float weightSum = 0;
-        {
-            List<TurnSegment> turned = new List<TurnSegment>();
-            for (int i = 0; i < segments.Length; i++) {
-                int turns = (int)segments[i].turnInstances;
-                float weightMul = 4.0f / turns;
-                for (int t = 0; t < turns; t++) {
-                    turned.Add(new TurnSegment(segments[i], t, weightMul));
-                    weightSum += weightMul * segments[i].weight;
-                }
-            }
-            turnSegments = turned.ToArray();
-        }
 
-        bool generation = false;
-        int gen;
-        int genCount = 10;
-        for (gen = 0; gen < genCount; gen++) {//THIS LOOP IS FOR FIXING THE FAILIURE OF THE MAP GENERATION
-            try {
-                GenerateMap(ref turnSegments, weightSum);
-                generation = true;
-                break;
-            } catch {
-                Debug.LogWarning("Map Generation went wrong - trying again");
-            }
-        }
-        if (!generation) {
-            Debug.LogError($"Map could not be generated after {genCount} tries");
-            return;
-        }
-
-        sections = new MapSections();
-        sections.GenerateSections(ref map);
-        sections.ConnectSections(ref map);
-
-        InstantiateMap();
-
-        Debug.Log($"Generated Map after {gen} tries");
-    }
-
-    void Start()
-    {
+    void Start() {
         PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
         {
             switch (state) {
@@ -106,34 +66,65 @@ public partial class MapGenerator : MonoBehaviour
             LoadProcedualMap();
     }
 
-    TurnSegment FindFittingSegment(Socket3D socket)
+    public void LoadProcedualMap()
     {
-        for (int s = 0; s < turnSegments.Length; s++)
+        int seed = generateSeed;
+        if (randomSeed)
+            seed = Random.Range(int.MinValue, int.MaxValue);
+
+
+        Random.InitState(seed);
+        Debug.Log("Start Procedural Map Generation with the Seed " + seed);
+
+        //generate TurnSegments from the mapSegment
+        float weightSum = 0;
         {
-            if (turnSegments[s].Fits(socket))
-                return turnSegments[s];
+            List<TurnSegment> turned = new List<TurnSegment>();
+            for (int i = 0; i < segments.Length; i++) {
+                int turns = (int)segments[i].turnInstances;
+                float weightMul = 4.0f / turns;
+                for (int t = 0; t < turns; t++) {
+                    turned.Add(new TurnSegment(segments[i], t, weightMul));
+                    weightSum += weightMul * segments[i].weight;
+                }
+            }
+            turnSegments = turned.ToArray();
         }
-        Debug.LogError($"No fitting segment found for {socket}");
-        return null;
+
+        GenerateMap(ref turnSegments, weightSum);
+
+        sections = new MapSections();
+        sections.GenerateSections(ref map);
+        sections.ConnectSections(ref map);
+
+        InstantiateMap();
     }
 
     #region MapGeneration
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
     void GenerateMap(ref TurnSegment[] segments, float weightSum)
     {
-        Socket[] basePossibilities = new Socket[6];
-        for(int s = 0; s < segments.Length; s++) {
-            for(int d = 0; d < 6; d++)
-                basePossibilities[d] |= segments[s].GetSocket(d);
+        //------------- FIND ALL POSSIBLE SOCKETS -------------------------------
+        //go through all tiles and find which sockets they have and add them
+        List<Socket>[] basePossibilities = new List<Socket>[6];
+        for (int d = 0; d < 6; d++) {
+            basePossibilities[d] = new List<Socket>();
+            for (int s = 0; s < segments.Length; s++) {
+                if (!basePossibilities[d].Contains(segments[s].GetSocket(d)))
+                    basePossibilities[d].Add(segments[s].GetSocket(d));
+            }
         }
 
+        //INITIALIZE GRID
         grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
         for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum, basePossibilities);//fill the grid
 
         SetupGrid(ref grid);
 
+
+        //----------- WAVE FUNCTION COLLAPSE --------------------
         int iterLimit = grid.Length;
-        //int iterLimit = 0;
+        //int iterLimit = 20;
         for (int iter = 0; iter < iterLimit; iter++)
         {
             if (!LowestEntropyCollapse(ref grid))
@@ -143,14 +134,17 @@ public partial class MapGenerator : MonoBehaviour
             }
         }
 
+
         FillMap(ref grid);
     }
+
 
     void SetupGrid(ref Array3D<GridBox> grid)
     {
         TurnSegment emptySegment = new TurnSegment(borderSegment, 0);
 
-        void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z)
+        #region Setup Helper Functions
+        void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z)//Add the possibility for empty tiles
         {
             Vector3Int vec = Vector3Int.zero;
             for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
@@ -162,7 +156,7 @@ public partial class MapGenerator : MonoBehaviour
                     grid[vec].possibilities.Add(emptySegment);
                 }
         }
-        void EmptyPlane(ref Array3D<GridBox> grid, int x, int y, int z)
+        void EmptyPlane(ref Array3D<GridBox> grid, int x, int y, int z)//collpse grids on empty tiles
         {
             Vector3Int vec = Vector3Int.zero;
             for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
@@ -174,27 +168,29 @@ public partial class MapGenerator : MonoBehaviour
                     Collapse(ref grid, grid.GetIndex(vec), emptySegment);
                 }
         }
+
+        void AddStartAndEnd(ref Array3D<GridBox> grid) {
+            Vector3Int startPos = new Vector3Int(1, grid.size.y - 2, 0);
+            Vector3Int endPos = new Vector3Int(grid.size.x - 2, 1, grid.size.z - 1);
+
+            ForceCollapse(ref grid, grid.GetIndex(startPos), new TurnSegment(startSegment, 0));
+            ForceCollapse(ref grid, grid.GetIndex(endPos), new TurnSegment(endSegment, 0));
+        }
+        #endregion
 
         EmptyPlanePossible(ref grid, 0, 1, 2);
         EmptyPlanePossible(ref grid, 1, 2, 0);
         EmptyPlanePossible(ref grid, 2, 0, 1);
 
-        //do a collapse change in here (change wont be overridden due to a soft collapse)
-        AddStartAndEnd(ref grid);
+        //do collapse changes in here (change wont be overridden due to a soft collapse for the empty planes)
+        AddStartAndEnd(ref grid);//collapse start and end points
 
         EmptyPlane(ref grid, 0, 1, 2);
         EmptyPlane(ref grid, 1, 2, 0);
         EmptyPlane(ref grid, 2, 0, 1);
     }
 
-    void AddStartAndEnd(ref Array3D<GridBox> grid)
-    {
-        Vector3Int startPos = new Vector3Int(1, grid.size.y - 2, 0);
-        Vector3Int endPos = new Vector3Int(grid.size.x - 2, 1, grid.size.z - 1);
 
-        ForceCollapse(ref grid, grid.GetIndex(startPos), new TurnSegment(startSegment, 0));
-        ForceCollapse(ref grid, grid.GetIndex(endPos), new TurnSegment(endSegment, 0));
-    }
 
     bool LowestEntropyCollapse(ref Array3D<GridBox> grid)
     {//collapse the box with the smallest number of possibilities
@@ -217,7 +213,7 @@ public partial class MapGenerator : MonoBehaviour
         if (min == turnSegments.Length + 1 || minGrids.Count == 0)//if everything is already collapsed
             return false;
 
-        int toCollapse = minGrids[GetRndm(minGrids.Count)];
+        int toCollapse = minGrids[UnityExtensions.GetRndm(minGrids.Count)];
         bool collapseSuccess = CollapseRndm(ref grid, toCollapse);
         if (!collapseSuccess)
             Debug.Log("Collapse error");
@@ -244,7 +240,8 @@ public partial class MapGenerator : MonoBehaviour
         PropergateCollapse(ref grid, toCollapse);
     }
 
-    void PropergateCollapse(ref Array3D<GridBox> grid, int init) {//TODO: also propergergate a change of possibilities if it didint collapse to only one possibility
+
+    void PropergateCollapse(ref Array3D<GridBox> grid, int init) {
         Stack<int> toPropergate = new Stack<int>();
         toPropergate.Push(init);
 
@@ -263,8 +260,8 @@ public partial class MapGenerator : MonoBehaviour
                 //if (grid[_i].possibilities.Count <= 1) continue;
 
                 //only allow sockets that can connect to the possible sockets on the other side
-                Socket socket = grid[i].possibleSockets[d];
-                int changeCount = grid[_i].OnlyAllow(socket, (Direction)DirExt.InvertDir(d));
+                HashSet<Socket> sockets = grid[i].possibleSockets[d];
+                int changeCount = grid[_i].OnlyAllow(sockets, (Direction)DirExt.InvertDir(d));
 
                 if(changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
                     toPropergate.Push(_i);//propergate this change
@@ -274,6 +271,8 @@ public partial class MapGenerator : MonoBehaviour
         if (toPropergate.Count > 0)
             Debug.LogError("Propergation took to many iterations");
     }
+
+
 
     void FillMap(ref Array3D<GridBox> grid)
     {//Use the grid to pick segments to put into the map array
@@ -302,6 +301,8 @@ public partial class MapGenerator : MonoBehaviour
         }
     }
 
+
+    #region Gizmos for Debugging
     private void OnDrawGizmos()
     {
         if (map != null)
@@ -313,6 +314,7 @@ public partial class MapGenerator : MonoBehaviour
 
                 //if (IsEmpty(map[i])) continue;//skip empty
 
+                //DrawGizmosSegmentPSockets(pos + Vector3.up, 0.5f, grid[i]);
                 for (int j = 0; j < grid[i].possibilities.Count; j++)
                 {
                     DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j]);
@@ -324,14 +326,23 @@ public partial class MapGenerator : MonoBehaviour
     {
         for (int d = 0; d < DirExt.directions.Length; d++)
         {
-            Gizmos.color = new Color[] { Color.gray, Color.green, Color.blue, Color.red }[(int)Mathf.Log((float)segment.GetSocket(d), 2.0f)];
+            Gizmos.color = segment.GetSocket(d).color;
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
     }
-
-
-    public static int GetRndm(int length)
-    {
-        return UnityEngine.Random.Range(0, length);
+    private void DrawGizmosSegmentPSockets(Vector3 pos, float size, GridBox cell) {
+        for (int d = 0; d < DirExt.directions.Length; d++) {
+            float segSize = size / cell.possibleSockets[d].Count;
+            int i = 0;
+            foreach(Socket s in cell.possibleSockets[d]) {
+                float t1 = (float)i / cell.possibleSockets[d].Count;
+                Vector3 p1 = pos + Vector3.Lerp(Vector3.zero, DirExt.directions[d], t1);
+                Vector3 p2 = p1 + (Vector3)DirExt.directions[d] * segSize;
+                Gizmos.color = s.color;
+                Gizmos.DrawLine(p1, p2);
+                i++;
+            }
+        }
     }
+    #endregion
 }

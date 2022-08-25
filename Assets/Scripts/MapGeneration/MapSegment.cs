@@ -1,90 +1,45 @@
 using UnityEngine;
 
 [System.Serializable]
-public struct Socket3D {
-    public Socket top;
-    public Socket right;
-    public Socket front;
-    public Socket bottom;
-    public Socket left;
-    public Socket back;
-
+public class Socket3D {
 
     //length 6
     //order: Top, Right, Front, Bottom, Left, Back
-    public Socket GetSocket(int i) {
-        switch (i) {
-            case 0:
-                return top;
-            case 1:
-                return right;
-            case 2:
-                return front;
-            case 3:
-                return bottom;
-            case 4:
-                return left;
-            case 5:
-                return back;
-            default:
-                return Socket.Wall;
-        }
+    public Socket[] sockets { get; set; }
+    public Socket3D() {
+        sockets = new Socket[6];
     }
 
-    public void SetSocket(int i, Socket s) {
-        switch (i) {
-            case 0:
-                top = s;
-                return;
-            case 1:
-                right = s;
-                return;
-            case 2:
-                front = s;
-                return;
-            case 3:
-                bottom = s;
-                return;
-            case 4:
-                left = s;
-                return;
-            case 5:
-                back = s;
-                return;
-        }
-    }
+    public Socket GetSocket(int i) { return sockets[i]; }
+    public void SetSocket(int i, Socket s) { sockets[i] = s; }
 
     public Socket3D Clone() {
         Socket3D s = new Socket3D();
-        s.top = top;
-        s.right = right;
-        s.front = front;
-        s.bottom = bottom;
-        s.left = left;
-        s.back = back;
+        s.sockets = new Socket[6];
+        for (int d = 0; d < 6; d++)
+            s.sockets[d] = sockets[6];
         return s;
     }
 
     public bool Equals(Socket3D other) {
-        return top   == other.top   &&
-               right == other.right &&
-               front == other.front &&
-               bottom== other.bottom&&
-               left  == other.left  &&
-               back  == other.back;
+        for (int d = 0; d < 6; d++)
+            if (sockets[d] != other.sockets[d])
+                return false;
+        return true;
     }
 
     public bool IsCollisionOnly() {
-        return top.IsCollision() &&
-               right.IsCollision() &&
-               front.IsCollision() &&
-               bottom.IsCollision() &&
-               left.IsCollision() &&
-               back.IsCollision();
+        for (int d = 0; d < 6; d++)
+            if (!sockets[d].isCollision)
+                return false;
+        return true;
     }
 
     public override string ToString() {
-        return "{ Top:"+top + "; Right:"+right+ "; Front:" + front + "; Bottom:" + bottom + "; Left:" + left + "; Back:" + back + " }";
+        string str = "{";
+        for (int d = 0; d < 6; d++)
+            str += $" {(Direction)d}: {sockets[d]} ;";
+        return str + "}";
     }
 }
 
@@ -130,22 +85,16 @@ public class TurnSegment{
     }
 
     public bool Fits(Socket3D other) {
-        return GetSocket(Direction.Top)    == other.top    &&
-               GetSocket(Direction.Right)  == other.right  &&
-               GetSocket(Direction.Front)  == other.front  &&
-               GetSocket(Direction.Bottom) == other.bottom &&
-               GetSocket(Direction.Left)   == other.left   &&
-               GetSocket(Direction.Back)   == other.back;
+        for (int d = 0; d < 6; d++)
+            if (!GetSocket(d).Matches(other.sockets[d]))
+                return false;
+        return true;
     }
 
     public Socket3D GetTurnedSocket3D() {
         Socket3D socket = new Socket3D();
-        socket.top = GetSocket(Direction.Top);
-        socket.right = GetSocket(Direction.Right);
-        socket.front = GetSocket(Direction.Front);
-        socket.bottom = GetSocket(Direction.Bottom);
-        socket.left = GetSocket(Direction.Left);
-        socket.back = GetSocket(Direction.Back);
+        for (int d = 0; d < 6; d++)
+            socket.sockets[d] = GetSocket(d);
         return socket;
     }
 

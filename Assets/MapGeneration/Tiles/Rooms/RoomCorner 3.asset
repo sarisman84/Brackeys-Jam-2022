@@ -10,15 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
-  m_Name: T-Cross
+  m_Name: RoomCorner 3
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2540063585349164304, guid: 24cecf0411356474f807ffd3f6cd8865, type: 3}
-  weight: 0.2
-  socket:
-    top: 1
-    right: 2
-    front: 1
-    bottom: 1
-    left: 2
-    back: 2
+  prefab: {fileID: 6633217934712089789, guid: f2572a7737e26cf49a869643e4e45306, type: 3}
+  weight: 0.8
   turnInstances: 4

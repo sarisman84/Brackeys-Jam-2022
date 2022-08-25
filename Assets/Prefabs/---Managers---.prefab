@@ -426,6 +426,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 716042615814420201, guid: 2949577ffead51c4d9b32258cdea3bc3, type: 3}
+      propertyPath: connectionSocket
+      value: 
+      objectReference: {fileID: 11400000, guid: ce472356ba43b344c865052010ec23a5, type: 2}
+    - target: {fileID: 716042615814420201, guid: 2949577ffead51c4d9b32258cdea3bc3, type: 3}
       propertyPath: segments.Array.size
       value: 12
       objectReference: {fileID: 0}

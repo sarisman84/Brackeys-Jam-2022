@@ -108,5 +108,17 @@ public static class UnityExtensions
         return path;
     }
 
+
+
+    public static int GetRndm(int length) {
+        return UnityEngine.Random.Range(0, length);
+    }
+
+    public static Vector3 CompMul(this Vector3 vec1, Vector3 vec2) {
+        return new Vector3(vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z);
+    }
+    public static Vector3 CompDiv(this Vector3 vec1, Vector3 vec2) {
+        return new Vector3(vec1.x / vec2.x, vec1.y / vec2.y, vec1.z / vec2.z);
+    }
 }
 

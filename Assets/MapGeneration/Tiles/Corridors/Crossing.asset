@@ -10,15 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
-  m_Name: RoomSide_Corr
+  m_Name: Crossing
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1719501173172419046, guid: c1e01282889f3a14f97fcaac87c3ae44, type: 3}
-  weight: 0.3
-  socket:
-    top: 1
-    right: 4
-    front: 2
-    bottom: 1
-    left: 4
-    back: 4
-  turnInstances: 4
+  prefab: {fileID: 2278892343228216779, guid: 2c96bbca2f7359349b06302cc0a55e23, type: 3}
+  weight: 0.2
+  turnInstances: 1

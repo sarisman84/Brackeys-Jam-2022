@@ -48,7 +48,7 @@ MonoBehaviour:
   tileSize: {x: 7.5, y: 7.5, z: 7.5}
   startSegment: {fileID: 11400000, guid: 4ad1e2148cc42e849b8bd50075b47d82, type: 2}
   endSegment: {fileID: 11400000, guid: 59ff07f42d1cafe48a0f6afb4fbb7b7e, type: 2}
-  empty: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
+  borderSegment: {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
   segments:
   - {fileID: 11400000, guid: efc5af2eb10a5be48afff414a6cb5ae0, type: 2}
   - {fileID: 11400000, guid: cff42f02eccf2b64197a7cc8d68c4131, type: 2}
@@ -61,4 +61,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 38874be908dff9d4e8b1897bd03c66b3, type: 2}
   - {fileID: 11400000, guid: 760158957d4abbc48bfbe63d4eff3e70, type: 2}
   - {fileID: 11400000, guid: 9440890770644554fbb6de5fc16966b7, type: 2}
+  - {fileID: 11400000, guid: 33838f9442534df40b54f6b95a3e08fe, type: 2}
   createOnAwake: 1
+  generateSeed: -1
+  connectionSocket: {fileID: 11400000, guid: ce472356ba43b344c865052010ec23a5, type: 2}

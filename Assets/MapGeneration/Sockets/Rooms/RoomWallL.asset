@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b2a085c7dceeb04a8d125d88f024089, type: 3}
+  m_Name: RoomWallL
+  m_EditorClassIdentifier: 
+  color: {r: 0.32858673, g: 0.65869784, b: 0.9811321, a: 1}
+  isCollision: 0
+  connectionSockets:
+  - {fileID: 11400000, guid: 8b0c30a7ced2bd64a97582bd0a1e2c4d, type: 2}
+  - {fileID: 11400000, guid: f39347a8007258b4c941d00cb53c1066, type: 2}

@@ -10,15 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
-  m_Name: Turn
+  m_Name: RoomCorner 2
   m_EditorClassIdentifier: 
-  prefab: {fileID: 3479635299609434533, guid: 33578c52f99578948816ce544f742401, type: 3}
-  weight: 1
-  socket:
-    top: 1
-    right: 1
-    front: 1
-    bottom: 1
-    left: 2
-    back: 2
+  prefab: {fileID: 1195239199415267465, guid: 655b235390f7e9a4499fc22b1e46381e, type: 3}
+  weight: 0.8
   turnInstances: 4
