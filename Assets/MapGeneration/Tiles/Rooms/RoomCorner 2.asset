@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: RoomCorner 2
   m_EditorClassIdentifier: 
   prefab: {fileID: 1195239199415267465, guid: 655b235390f7e9a4499fc22b1e46381e, type: 3}
-  weight: 0.2
+  weight: 0.4
   turnInstances: 4
