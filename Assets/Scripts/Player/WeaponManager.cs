@@ -19,181 +19,67 @@ public class WeaponManager : MonoBehaviour
 
     public bool isAimingDownSights { get; private set; }
 
-    private BaseGun currentGun;
-    private float currentFireRate;
-    private int currentAmmo;
-    private GameObject currentGunModel;
-    private Transform currentGunBarrel;
-    private Transform currentADSPOV;
+    private Gun currentGun;
 
-    //Recoil logic
-    private Vector3 currentRotation;
-    private Vector3 targetRotation;
-    private CinemachineVirtualCamera cameraController;
-    private CinemachineRecoil rotOffset;
-    private float adsAnimCurveCounter;
-    private void Start()
-    {
-        cameraController = PollingStation.Instance.cameraController;
-        rotOffset = cameraController.GetComponentInChildren<CinemachineRecoil>();
-    }
+
+
+
+
 
     private void Update()
     {
         if (PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing) return;
 
-        ResetRecoil();
-        if (!currentGun) return;
+        if (currentGun == null) return;
 
         isAimingDownSights = adsInput.action.ReadValue<float>() > 0;
-        currentFireRate += Time.deltaTime;
+        currentGun.UseADS(isAimingDownSights, new Vector3(XAXis_ADSOffset, YAxis_ADSOffset, ZAxis_ADSOffset), adsTransitionRate);
 
-        if (currentFireRate >= currentGun.fireRate && fireInput.action.ReadValue<float>() > 0)
+        if (fireInput.action.ReadValue<float>() > 0)
         {
-            currentGun.OnWeaponFire(this, currentGunBarrel, this);
+            currentGun.Fire();
 
-            currentAmmo--;
-            currentFireRate = 0;
 
-            if (currentAmmo <= 0)
-            {
-                DiscardCurrentGun();
-            }
         }
 
-
-        if (isAimingDownSights)
+        if (currentGun.CurrentAmmo <= 0)
         {
-            ADS();
+            currentGun.DeleteGun();
+            currentGun = null;
         }
-        else
-        {
-            Hipfire();
-        }
-
-    }
-
-
-    private void ADS()
-    {
-        if (!currentGunModel) return;
-        Vector3 offsetLocal = new Vector3(XAXis_ADSOffset, YAxis_ADSOffset, -(ZAxis_ADSOffset + currentADSPOV.localPosition.z));
-
-
-
-        adsAnimCurveCounter += Time.deltaTime;
-        adsAnimCurveCounter = Mathf.Clamp(adsAnimCurveCounter, 0, 1);
-        currentGunModel.transform.localPosition = Vector3.Lerp(currentGunModel.transform.localPosition, offsetLocal, adsTransitionRate.Evaluate(adsAnimCurveCounter));
-
-
-    }
-
-
-    private void Hipfire()
-    {
-        if (!currentGunModel) return;
-        currentGunModel.transform.localPosition = Vector3.Lerp(currentGunModel.transform.localPosition, Vector3.zero, adsTransitionRate.Evaluate(adsAnimCurveCounter));
-        adsAnimCurveCounter -= Time.deltaTime;
-        adsAnimCurveCounter = Mathf.Clamp(adsAnimCurveCounter, 0, 1);
-    }
-
-
-
-    public void ApplyRecoil(Vector3 recoilForce)
-    {
-        var recoil = recoilForce;
-        targetRotation += new Vector3(recoil.x, Random.Range(-recoil.y, recoil.y), Random.Range(-recoil.z, recoil.z));
-    }
-
-    private void ResetRecoil()
-    {
-        float returnSpeed = currentGun ? currentGun.returnSpeed : 2.0f;
-        float snappiness = currentGun ? currentGun.snappiness : 6.0f;
-
-
-        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.fixedDeltaTime);
-        rotOffset.m_RecoilAmount = currentRotation;
-
-
     }
 
 
 
     public void RefreshAmmunition(BaseGun aNewGun)
     {
-        currentAmmo = aNewGun.ammunitionAmm / 2;
+        currentGun.RefillCurrentAmmo(aNewGun.ammunitionAmm / 2);
     }
 
 
     public void EquiptNewWeapon(BaseGun aNewGun)
     {
-        if (currentGun == aNewGun)
+        if (currentGun != null)
         {
-            RefreshAmmunition(aNewGun);
-            return;
-        }
-        currentGun = aNewGun;
-        currentFireRate = 0;
-        currentAmmo = aNewGun.ammunitionAmm;
-        VisualiseGun(aNewGun);
-
-        currentGunBarrel = null;
-        currentADSPOV = null;
-
-        for (int i = 0; i < currentGunModel.transform.childCount; i++)
-        {
-            if (currentADSPOV && currentGunBarrel) break;
-
-            Transform child = currentGunModel.transform.GetChild(i);
-            if (child.tag.ToLower().Equals("barrel"))
+            if (currentGun == aNewGun)
             {
-                currentGunBarrel = child;
-
-            }
-            if (child.tag.ToLower().Equals("ads"))
-            {
-                currentADSPOV = child;
+                RefreshAmmunition(aNewGun);
+                return;
             }
         }
-    }
-
-
-    public void DiscardCurrentGun()
-    {
-        currentGun = null;
-        ClearVisualisation();
-    }
-
-
-
-    void DisplayAmmoCount()
-    {
-
-    }
-
-
-
-    void ClearVisualisation()
-    {
-        if (currentGunModel)
-        {
-            Destroy(currentGunModel);
-            currentGunModel = null;
-        }
-    }
-
-    void VisualiseGun(BaseGun gun)
-    {
-        ClearVisualisation();
-
-
-        currentGunModel = Instantiate(gun.gunPrefab, gunPosition);
-        currentGunModel.transform.localPosition = Vector3.zero;
-        currentGunModel.transform.localRotation = Quaternion.identity;
+        else
+            currentGun = aNewGun.Initialize(this, gunPosition, LayerMask.NameToLayer("FPSWeapon"));
 
 
     }
+
+
+
+
+
+
+
+
 
 
 

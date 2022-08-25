@@ -24,6 +24,12 @@ public class CoreEnemy : MonoBehaviour
     public float visionRadius = 4.0f, visionAngleDeg = 30.0f;
     public float trackRate = 8.0f, searchRate = 5.0f;
     public int searchAttempt = 1;
+
+    [Header("Move Speed Settings")]
+    public float moveSpeed;
+    public float trackMoveSpeed, searchMoveSpeed, chaseMoveSpeed;
+
+
     [Header("Debug")]
     public CE_Behaviour currentBehaviour;
     public float currentAngle;
@@ -61,9 +67,12 @@ public class CoreEnemy : MonoBehaviour
 
         Debug.Log($"{gameObject.name}: Chasing Player!");
 
+
+
         bool lostSight = !TryGetTargetInSight(out var pos);
         if (!lostSight)
         {
+            agent.speed = moveSpeed + chaseMoveSpeed;
             lastKnownPositionOfTarget = pos;
             agent.SetDestination(target.transform.position);
             transform.rotation = Quaternion.LookRotation((target.transform.position - transform.position).normalized);
@@ -81,7 +90,7 @@ public class CoreEnemy : MonoBehaviour
         if (currentState != StateMachine<CE_Behaviour>.State.Running) return;
 
         Debug.Log($"{gameObject.name}: Tracking Player's Wearabouts!");
-
+        agent.speed = moveSpeed + trackMoveSpeed;
 
         currentTrackRate += Time.deltaTime;
         if (currentTrackRate >= trackRate)
@@ -111,6 +120,8 @@ public class CoreEnemy : MonoBehaviour
         }
 
         if (currentState != StateMachine<CE_Behaviour>.State.Running) return;
+
+        agent.speed = moveSpeed + searchMoveSpeed;
 
         if (agent.desiredVelocity.magnitude > 0.01f)
             transform.rotation = Quaternion.LookRotation(agent.desiredVelocity);
@@ -157,7 +168,7 @@ public class CoreEnemy : MonoBehaviour
         }
 
 
-        if (!mapGen.map[newGridPos].IsEmpty())
+        if (mapGen.map.InBounds(newGridPos) && !mapGen.map[newGridPos].IsEmpty())
         {
             //Walk to either the center of the tile(easy) or some random valid position on the tile(hard, define valid position)
             result = new Vector3(

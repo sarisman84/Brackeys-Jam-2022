@@ -13,13 +13,13 @@ public class DefaultGun : BaseGun
 
 
     private Vector3 targetPos;
-    protected override IEnumerator BulletDefinition(WeaponManager weaponManager, Transform barrel)
+    protected override IEnumerator BulletDefinition(Gun gun)
     {
-        if (barrel == null) yield break;
+        if (gun.gunBarrel == null) yield break;
 
         GameObject obj = Instantiate(bulletEffect);
-        obj.transform.position = barrel.position;
-        obj.transform.forward = barrel.forward;
+        obj.transform.position = gun.gunBarrel.position;
+        obj.transform.forward = gun.gunBarrel.forward;
 
 
         LineRenderer line = obj.GetComponentInChildren<LineRenderer>();
@@ -27,7 +27,7 @@ public class DefaultGun : BaseGun
         if (!line) yield break;
 
 
-        line.SetPosition(0, barrel.position);
+        line.SetPosition(0, gun.gunBarrel.position);
         line.SetPosition(1, targetPos);
 
 
@@ -46,17 +46,19 @@ public class DefaultGun : BaseGun
         Destroy(obj);
     }
 
-    protected override void Fire(WeaponManager weaponManager, Transform barrel)
+    protected override void Fire(Gun gun)
     {
 
         //weaponManager.recoilCM.GenerateImpulse(Camera.main.transform.forward.normalized * recoilForce);
 
         LayerMask mask = LayerMask.NameToLayer("Default");
 
-        Vector3 spread = Random.insideUnitSphere * (weaponManager.isAimingDownSights ? spreadAmm / 2.0f : spreadAmm);
+        Vector3 spread = Random.insideUnitSphere * (gun.isAimingDownTheSights ? spreadAmm / 2.0f : spreadAmm);
         spread.z = 0;
 
-        bool intersecting = InteractionUtilities.IntersectFromCamera(Camera.main, spread, maxHitRange, mask, out var hitInfo);
+        Ray firingDirection = FiringDirection(gun);
+
+        bool intersecting = InteractionUtilities.Raycast(firingDirection, spread, maxHitRange, mask, out var hitInfo);
 
         if (intersecting && hitInfo.collider.GetComponent<IDamageable>() is IDamageable damageable)
         {
@@ -65,14 +67,15 @@ public class DefaultGun : BaseGun
         }
         else
         {
-            targetPos = barrel.position + (barrel.forward.normalized + spread) * maxHitRange;
+            targetPos = gun.gunBarrel.position + (gun.gunBarrel.forward.normalized + spread) * maxHitRange;
         }
     }
 
-    protected override IEnumerator MuzzleDefinition(WeaponManager weaponManager, Transform barrel)
+    protected override IEnumerator MuzzleDefinition(Gun gun)
     {
-        if (barrel == null || !muzzleEffect) yield break;
-        GameObject obj = Instantiate(muzzleEffect, barrel);
+
+        if (gun.gunBarrel == null || !muzzleEffect) yield break;
+        GameObject obj = Instantiate(muzzleEffect, gun.gunBarrel);
         obj.transform.localPosition = Vector3.zero;
         obj.transform.localRotation = Quaternion.identity;
 

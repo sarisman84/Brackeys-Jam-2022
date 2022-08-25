@@ -24,5 +24,14 @@ public static class InteractionUtilities
         return intersect;
     }
 
+
+    public static bool Raycast(Ray ray, Vector3 addedDirection, float maxRange, LayerMask mask, out RaycastHit hitInfo)
+    {
+        ray.direction += addedDirection;
+        bool intersect = Physics.Raycast(ray, out hitInfo, maxRange, mask);
+
+        return intersect;
+    }
+
 }
 

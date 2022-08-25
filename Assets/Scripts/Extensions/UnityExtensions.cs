@@ -49,6 +49,29 @@ public static class UnityExtensions
     }
 
 
+    public static void SetLayer(this GameObject obj, string layer)
+    {
+        obj.layer = LayerMask.NameToLayer(layer);
+
+        for (int i = 0; i < obj.transform.childCount; i++)
+        {
+            Transform child = obj.transform.GetChild(i);
+            child.gameObject.SetLayer(layer);
+        }
+    }
+
+    public static void SetLayer(this GameObject obj, LayerMask layer)
+    {
+        obj.layer = layer;
+
+        for (int i = 0; i < obj.transform.childCount; i++)
+        {
+            Transform child = obj.transform.GetChild(i);
+            child.gameObject.SetLayer(layer);
+        }
+    }
+
+
 
     public static T LoadAssetFromUniqueAssetPath<T>(string aAssetPath) where T : UnityEngine.Object
     {
