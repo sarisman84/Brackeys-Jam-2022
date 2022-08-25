@@ -36,6 +36,9 @@ public class FPSController : MonoBehaviour
 
     private float defaultColHeight;
 
+    private Vector3 HeadBoxPos { get => transform.position + Vector3.up * ((defaultColHeight / 2.0f) + 0.2f); }
+    private Vector3 HeadBoxSize { get => new Vector3(capsCollider.bounds.extents.x, isCrouching ? 0.5f : 0.1f, capsCollider.bounds.extents.z); }
+    private bool isCollidingCeiling { get; set; }
     private void Awake()
     {
         charController = GetComponent<CharacterController>();
@@ -92,13 +95,13 @@ public class FPSController : MonoBehaviour
 
 
 
-
-        if (crouchReference.action.ReadValue<float>() > 0)
+        isCollidingCeiling = Physics.OverlapBox(HeadBoxPos, HeadBoxSize).Length > 0;
+        if (crouchReference.action.ReadValue<float>() > 0 || isCollidingCeiling)
         {
             if (!isCrouching && grounded)
                 Crouch();
         }
-        else if (isCrouching)
+        else if (isCrouching && !isCollidingCeiling)
         {
             ResetCrouch();
         }
@@ -108,10 +111,11 @@ public class FPSController : MonoBehaviour
             verticalVelocity += Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        bool isHeadColliding = Physics.OverlapBox(transform.position + Vector3.up * capsCollider.bounds.size.y / 2.0f, new Vector3(capsCollider.bounds.extents.x, 0.1f, capsCollider.bounds.extents.z)).Length > 0;
-        if (isHeadColliding)
+
+        if (isCollidingCeiling && !grounded)
         {
-            verticalVelocity = 0;
+            verticalVelocity = gravity * Time.deltaTime;
+            Debug.Log("Hitting ceiling");
         }
 
         verticalVelocity += gravity * Time.deltaTime;
@@ -156,5 +160,11 @@ public class FPSController : MonoBehaviour
         movementReference.action.Disable();
         jumpReference.action.Disable();
         crouchReference.action.Disable();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = isCollidingCeiling ? Color.green : Color.red;
+        Gizmos.DrawCube(HeadBoxPos, HeadBoxSize);
     }
 }
