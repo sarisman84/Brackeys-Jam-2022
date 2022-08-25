@@ -49,7 +49,7 @@ public class MapSegmentEditor : Editor
     {
         EditorGUI.LabelField(rect, new GUIContent("Sockets"));
         rect.x += 50;
-        rect.width = 70;
+        rect.width = 100;
         if (GUI.Button(rect, new GUIContent("Clear Selection")))
         {
             socketList.Deselect(selected);
