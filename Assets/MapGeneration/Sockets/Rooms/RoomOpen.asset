@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
-  m_Name: RoomCorner 1
+  m_Script: {fileID: 11500000, guid: 7b2a085c7dceeb04a8d125d88f024089, type: 3}
+  m_Name: RoomOpen
   m_EditorClassIdentifier: 
-  prefab: {fileID: 3949437350371019240, guid: 947991e644c006b418e96d99578e58ad, type: 3}
-  weight: 0.8
-  turnInstances: 4
+  color: {r: 0, g: 0.50549936, b: 1, a: 1}
+  isCollision: 0
+  connectionSockets:
+  - {fileID: 11400000}

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b2a085c7dceeb04a8d125d88f024089, type: 3}
-  m_Name: Path
+  m_Name: RoomWallL
   m_EditorClassIdentifier: 
-  color: {r: 0.17938554, g: 1, b: 0, a: 1}
+  color: {r: 0.32858673, g: 0.65869784, b: 0.9811321, a: 1}
   isCollision: 0
   connectionSockets:
-  - {fileID: 11400000}
-  - {fileID: 11400000, guid: 216e854bfb2556e4ca748701ff5d30b5, type: 2}
+  - {fileID: 11400000, guid: 8b0c30a7ced2bd64a97582bd0a1e2c4d, type: 2}
+  - {fileID: 11400000, guid: f39347a8007258b4c941d00cb53c1066, type: 2}

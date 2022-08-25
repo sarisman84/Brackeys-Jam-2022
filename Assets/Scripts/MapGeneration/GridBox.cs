@@ -39,7 +39,7 @@ public partial class MapGenerator
 
             //---------- REMOVE SOCKETS ----------------
             //remove every socket in this direction that doesnt fit with one of the given "sockets"
-            possibleSockets[d].RemoveWhere(s => !sockets.Contains(s));
+            possibleSockets[d].RemoveWhere(s => !s.MatchesToOneOf(sockets));
 
 
             //---------- REMOVE TILES ------------------

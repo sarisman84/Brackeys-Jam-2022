@@ -86,7 +86,7 @@ public class TurnSegment{
 
     public bool Fits(Socket3D other) {
         for (int d = 0; d < 6; d++)
-            if (GetSocket(d) != other.sockets[d])
+            if (!GetSocket(d).Matches(other.sockets[d]))
                 return false;
         return true;
     }

@@ -150,8 +150,8 @@ public partial class MapGenerator
                 }
 
                 Direction A_ConDir = DirExt.ToDir(A_ConVec);
-                socketA.SetSocket((int)A_ConDir, PollingStation.Instance.mapGenerator.connectionSocket);
-                socketB.SetSocket((int)A_ConDir.InvertDir(), PollingStation.Instance.mapGenerator.connectionSocket);
+                socketA.SetSocket((int)A_ConDir,             PollingStation.Instance.mapGenerator.connectionSocket);
+                socketB.SetSocket((int)A_ConDir.InvertDir(), PollingStation.Instance.mapGenerator.connectionSocket.connectionSockets[0]);
 
 
                 //Find a new fitting segment with the correct sockets

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: RoomCenter
   m_EditorClassIdentifier: 
   prefab: {fileID: 8832429630048250798, guid: 1ca04ce45db147d4ca43ce563fab9d50, type: 3}
-  weight: 0.1
+  weight: 0
   turnInstances: 1

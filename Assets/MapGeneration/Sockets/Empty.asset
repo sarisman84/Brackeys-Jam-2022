@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 0.433, g: 0.433, b: 0.433, a: 1}
   isCollision: 1
+  connectionSockets:
+  - {fileID: 11400000}
