@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cinemachine;
 
@@ -31,6 +29,7 @@ public class PollingStation
     public WeaponManager weaponManager { get; private set; }
     public RuntimeManager runtimeManager { get; private set; }
     public MapGenerator mapGenerator { get; private set; }
+    public GameManager gameManager { get; private set; }
 
     public CinemachineVirtualCamera cameraController { get; private set; }
 
@@ -84,16 +83,25 @@ public class PollingStation
                         if (debugMode)
                             Debug.Log("[Log]<PollingStation>: Found Map Generator");
                         mapGenerator = mg;
-
                     }
+
                     break;
+
+                case GameManager gm:
+                    if (!gameManager) {
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found Game Manager");
+                        gameManager = gm;
+                    }
+
+                    break;
+
                 case OptionsManager om:
                     if (!optionsManager)
                     {
                         if (debugMode)
                             Debug.Log("[Log]<PollingStation>: Found Options Manager");
                         optionsManager = om;
-
                     }
 
                     break;
@@ -104,7 +112,6 @@ public class PollingStation
                         if (debugMode)
                             Debug.Log("[Log]<PollingStation>: Found FPSController");
                         fpsController = fpsC;
-
                     }
 
                     break;
