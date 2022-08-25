@@ -95,7 +95,7 @@ public class MapSegmentEditor : Editor
 
         EditorGUI.PropertyField(rect, sockets.GetArrayElementAtIndex(index), socketNames[index]);
 
-        socketColors[index] = sockets.GetArrayElementAtIndex(index) is SerializedProperty element ? (element.objectReferenceValue as Socket).color : Color.clear;
+        socketColors[index] = sockets.GetArrayElementAtIndex(index) is SerializedProperty element && element.objectReferenceValue != null ? (element.objectReferenceValue as Socket).color : Color.clear;
     }
 
     private void OnDisable()
