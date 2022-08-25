@@ -43,25 +43,10 @@ public partial class MapGenerator : MonoBehaviour
         return null;
     }
 
-
+    public void DestroyMap() { if (tileParent) Destroy(tileParent.gameObject); }
 
 
     void Start() {
-        PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
-        {
-            switch (state) {
-                case RuntimeManager.RuntimeState.MainMenu: //Delete map on main menu transition
-                    if (tileParent)
-                        Destroy(tileParent.gameObject);
-                    break;
-                case RuntimeManager.RuntimeState.Playing:
-                    if (previousState == RuntimeManager.RuntimeState.MainMenu)//Generate map on starting the game from the main menu.
-                        LoadProcedualMap();
-                    break;
-            }
-        };
-
-
         if (createOnAwake)
             LoadProcedualMap();
     }

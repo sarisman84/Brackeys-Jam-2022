@@ -15,10 +15,11 @@ MonoBehaviour:
   prefab: {fileID: 0}
   weight: 0
   socket:
-    top: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
-    right: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
-    front: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
-    bottom: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
-    left: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
-    back: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    sockets:
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
   turnInstances: 1

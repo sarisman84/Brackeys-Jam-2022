@@ -14,4 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 3949437350371019240, guid: 947991e644c006b418e96d99578e58ad, type: 3}
   weight: 0.8
+  socket:
+    sockets:
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: f3f704b4df1a1c1478731c97a78a7288, type: 2}
+    - {fileID: 11400000, guid: 216e854bfb2556e4ca748701ff5d30b5, type: 2}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 8b0c30a7ced2bd64a97582bd0a1e2c4d, type: 2}
   turnInstances: 4

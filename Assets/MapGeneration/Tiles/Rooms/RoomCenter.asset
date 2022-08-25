@@ -16,10 +16,10 @@ MonoBehaviour:
   weight: 0
   socket:
     sockets:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
+    - {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
+    - {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    - {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
+    - {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
   turnInstances: 1
