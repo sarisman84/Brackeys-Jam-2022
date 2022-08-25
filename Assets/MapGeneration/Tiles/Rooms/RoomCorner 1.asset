@@ -13,12 +13,5 @@ MonoBehaviour:
   m_Name: RoomCorner 1
   m_EditorClassIdentifier: 
   prefab: {fileID: 3949437350371019240, guid: 947991e644c006b418e96d99578e58ad, type: 3}
-  weight: 0.3
-  socket:
-    top: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
-    right: {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
-    front: {fileID: 11400000, guid: ce472356ba43b344c865052010ec23a5, type: 2}
-    bottom: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
-    left: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
-    back: {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
+  weight: 0.2
   turnInstances: 4

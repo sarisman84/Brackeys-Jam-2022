@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.HableCurve;
 
 public partial class MapGenerator : MonoBehaviour
 {
@@ -22,6 +21,7 @@ public partial class MapGenerator : MonoBehaviour
     [Header("Debug")]
     public bool createOnAwake = true;
     public int generateSeed = 0;
+    public bool randomSeed = true;
 
     public Array3D<TurnSegment> map;
     private Array3D<GridBox> grid;//FOR DEBUGGING ONLY
@@ -40,10 +40,13 @@ public partial class MapGenerator : MonoBehaviour
 
     public void LoadProcedualMap()
     {
-        Debug.Log("Start Procedural Map Generation");
+        int seed = generateSeed;
+        if (randomSeed)
+            seed = Random.Range(int.MinValue, int.MaxValue);
 
-        if (generateSeed >= 0)
-            Random.InitState(generateSeed);
+
+        Random.InitState(seed);
+        Debug.Log("Start Procedural Map Generation with the Seed " + seed);
 
         //generate TurnSegments from the mapSegment
         float weightSum = 0;
@@ -60,26 +63,6 @@ public partial class MapGenerator : MonoBehaviour
             turnSegments = turned.ToArray();
         }
 
-        /*
-        bool generation = false;
-        int gen;
-        int genCount = 1;
-        //Debug.Log("Seed: " + Random.seed);
-        for (gen = 0; gen < genCount; gen++) {//THIS LOOP IS FOR FIXING THE FAILIURE OF THE MAP GENERATION
-            try {
-                GenerateMap(ref turnSegments, weightSum);
-                generation = true;
-                break;
-            } catch (System.Exception e){
-                Debug.LogWarning("Map Generation went wrong");
-                Debug.LogException(e);
-            }
-        }
-        if (!generation) {
-            Debug.LogError($"Map could not be generated after {genCount} tries");
-            return;
-        }*/
-
         GenerateMap(ref turnSegments, weightSum);
 
         sections = new MapSections();
@@ -87,8 +70,6 @@ public partial class MapGenerator : MonoBehaviour
         sections.ConnectSections(ref map);
 
         InstantiateMap();
-
-        //Debug.Log($"Generated Map after {gen} tries");
     }
 
     void Start()
