@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditorInternal;
+using System;
 
 [CustomEditor(typeof(MapSegment)), CanEditMultipleObjects]
 public class MapSegmentEditor : Editor
@@ -7,52 +9,161 @@ public class MapSegmentEditor : Editor
     int selected = -1;
     private static Color selectionColor { get; } = Color.yellow;
 
-    public override void OnInspectorGUI() {
-        base.OnInspectorGUI();
+    SerializedProperty sockets;
+    SerializedProperty socketBase;
 
-        MapSegment mapSegment = (MapSegment)target;
-        if(mapSegment.socket.sockets == null)
-            mapSegment.socket.sockets = new Socket[6];
-        else if (mapSegment.socket.sockets.Length != 6)
-            mapSegment.socket.sockets = new Socket[6];
+    ReorderableList socketList;
 
-        for (int d = 0; d < 6; d++) {
-            EditorGUILayout.BeginHorizontal();
 
-            Direction dir = (Direction)d;
-            GUIStyle style = new GUIStyle(GUI.skin.button);
-            style.normal.textColor = selected == d ? selectionColor : GUI.skin.button.normal.textColor;
-            style.hover.textColor = selected == d ? selectionColor : GUI.skin.button.hover.textColor;
-            if (GUILayout.Button(dir.ToString(), style, GUILayout.Width(70))) {
-                selected = d;
-                SceneView.RepaintAll();
-            }
+    private GUIContent[] socketNames;
+    private Color[] socketColors;
 
-            Socket old = mapSegment.socket.sockets[d];
-            mapSegment.socket.sockets[d] = (Socket)EditorGUILayout.ObjectField(mapSegment.socket.sockets[d], typeof(Socket), false);
-            if (mapSegment.socket.sockets[d] != old)
-                SceneView.RepaintAll();
+    private void OnEnable()
+    {
 
-            EditorGUILayout.EndHorizontal();
+        SceneView.duringSceneGui += OnSceneGUI;
+
+        socketBase = serializedObject.FindProperty("socket");
+
+        //var socketObj = new SerializedObject(socket.objectReferenceValue);
+        sockets = socketBase.FindPropertyRelative("sockets");
+        if (sockets == null) Debug.Log($"Couldnt find sockets. Found: {socketBase.CountInProperty()}");
+
+        InitializeList();
+
+        socketList = new ReorderableList(serializedObject, sockets, false, true, false, false);
+
+        socketList.drawElementCallback += OnElementDrawn;
+        socketList.onSelectCallback += OnSelectElement;
+        socketList.drawHeaderCallback += HeaderDef;
+
+
+
+    }
+
+    private void HeaderDef(Rect rect)
+    {
+        EditorGUI.LabelField(rect, new GUIContent("Sockets"));
+    }
+
+    private void InitializeList()
+    {
+        if (sockets.arraySize != 6)
+        {
+            sockets.arraySize = 6;
+        }
+        socketNames = new GUIContent[6];
+        socketColors = new Color[6];
+
+        for (int i = 0; i < socketNames.Length; i++)
+        {
+            socketNames[i] = new GUIContent(DirectionToName(i));
+
+
+        }
+    }
+
+    private string DirectionToName(int direction)
+    {
+        switch (direction)
+        {
+            case 0:
+                return "Top";
+            case 1:
+                return "Right";
+            case 2:
+                return "Front";
+            case 3:
+                return "Bottom";
+            case 4:
+                return "Left";
+            case 5:
+                return "Back";
+            default:
+                return "Unknown";
+        }
+    }
+
+    private void OnSelectElement(ReorderableList list)
+    {
+        selected = list.index;
+        SceneView.RepaintAll();
+    }
+
+    private void OnElementDrawn(Rect rect, int index, bool isActive, bool isFocused)
+    {
+
+        EditorGUI.PropertyField(rect, sockets.GetArrayElementAtIndex(index), socketNames[index]);
+
+        socketColors[index] = sockets.GetArrayElementAtIndex(index) is SerializedProperty element ? (element.objectReferenceValue as Socket).color : Color.clear;
+    }
+
+    private void OnDisable()
+    {
+        SceneView.duringSceneGui -= OnSceneGUI;
+    }
+
+    public void SocketField(SerializedProperty property)
+    {
+
+    }
+
+    public override void OnInspectorGUI()
+    {
+        SerializedProperty p = serializedObject.GetIterator();
+        p.NextVisible(true);
+        while (p.NextVisible(false))
+        {
+
+            if (p.propertyPath == socketBase.propertyPath) continue;
+            EditorGUILayout.PropertyField(p);
         }
 
-        if(GUILayout.Button("Clear Select")) {
-            selected = -1;
-            SceneView.RepaintAll();
-        }
+
+        socketList?.DoLayoutList();
+
+        serializedObject.ApplyModifiedProperties();
+
+
+
+
+        //MapSegment mapSegment = (MapSegment)target;
+        //if(mapSegment.socket.sockets == null)
+        //    mapSegment.socket.sockets = new Socket[6];
+        //else if (mapSegment.socket.sockets.Length != 6)
+        //    mapSegment.socket.sockets = new Socket[6];
+
+        //for (int d = 0; d < 6; d++) {
+        //    EditorGUILayout.BeginHorizontal();
+
+        //    Direction dir = (Direction)d;
+        //    GUIStyle style = new GUIStyle(GUI.skin.button);
+        //    style.normal.textColor = selected == d ? selectionColor : GUI.skin.button.normal.textColor;
+        //    style.hover.textColor = selected == d ? selectionColor : GUI.skin.button.hover.textColor;
+        //    if (GUILayout.Button(dir.ToString(), style, GUILayout.Width(70))) {
+        //        selected = d;
+        //        SceneView.RepaintAll();
+        //    }
+
+        //    Socket old = mapSegment.socket.sockets[d];
+        //    mapSegment.socket.sockets[d] = (Socket)EditorGUILayout.ObjectField(mapSegment.socket.sockets[d], typeof(Socket), false);
+        //    if (mapSegment.socket.sockets[d] != old)
+        //        SceneView.RepaintAll();
+
+        //    EditorGUILayout.EndHorizontal();
+        //}
+
+        //if(GUILayout.Button("Clear Select")) {
+        //    selected = -1;
+        //    SceneView.RepaintAll();
+        //}
     }
 
 
     #region Scene Preview
-    private void OnEnable() {
-        SceneView.duringSceneGui += OnSceneGUI;
-    }
 
-    private void OnDisable() {
-        SceneView.duringSceneGui -= OnSceneGUI;
-    }
-
-    private void OnSceneGUI(SceneView view) {
+    private void OnSceneGUI(SceneView view)
+    {
         MapSegment segment = target as MapSegment;
         MapGenerator mapGen = PollingStation.Instance.mapGenerator;
 
@@ -60,10 +171,12 @@ public class MapSegmentEditor : Editor
 
         TileInfo info = new TileInfo(segment, 0);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++)
+        {
             Vector3 modelPos = Vector3.zero;
             Vector3 dir = new Vector3();
-            switch (i) {
+            switch (i)
+            {
                 case 0: dir = Vector3.up * 9; break;
                 case 1: dir = Vector3.right * 9; break;
                 case 2: dir = Vector3.forward * 9; break;
@@ -91,7 +204,7 @@ public class MapSegmentEditor : Editor
                     subInfo.RenderTile(offset2, dir, Color.yellow);
                 }*/
 
-            OnDrawGizmos();
+            DrawSegmentDirection();
         }
     }
 
@@ -111,31 +224,36 @@ public class MapSegmentEditor : Editor
     }
     */
 
-    struct TileInfo {
-        public TileInfo(MapSegment segment, int turn) {
+    struct TileInfo
+    {
+        int turn;
+        Transform[] transformInfo;
+        Mesh[] currentMeshes;
+        Material[] materials;
+        Vector3 prefabScale;
+
+        public TileInfo(MapSegment segment, int turn)
+        {
             currentMeshes = new Mesh[0];
-            localPos = new Vector3[0];
+            transformInfo = new Transform[0];
             materials = new Material[0];
-            localSizes = new Vector3[0];
-            localRots = new Quaternion[0];
+
             prefabScale = Vector3.one;
-            m_turn = turn;
+            this.turn = turn;
             if (!segment) return;
             var prefab = segment.prefab;
             if (!prefab) return;
             var meshFilters = prefab.GetComponentsInChildren<MeshFilter>();
             currentMeshes = new Mesh[meshFilters.Length];
-            localPos = new Vector3[meshFilters.Length];
+
             materials = new Material[meshFilters.Length];
-            localSizes = new Vector3[meshFilters.Length];
-            localRots = new Quaternion[meshFilters.Length];
-            m_turn = turn;
+            transformInfo = new Transform[meshFilters.Length];
+            this.turn = turn;
             prefabScale = prefab.transform.localScale;
-            for (int i = 0; i < meshFilters.Length; i++) {
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
                 currentMeshes[i] = meshFilters[i].sharedMesh;
-                localPos[i] = meshFilters[i].transform.position;
-                localSizes[i] = meshFilters[i].transform.localScale;
-                localRots[i] = meshFilters[i].transform.rotation;
+                transformInfo[i] = meshFilters[i].transform;
 
                 var render = meshFilters[i].GetComponent<MeshRenderer>();
                 materials[i] = render.sharedMaterial;
@@ -144,18 +262,14 @@ public class MapSegmentEditor : Editor
 
         }
 
-        Vector3[] localSizes;
-        Vector3[] localPos;
-        Mesh[] currentMeshes;
-        Material[] materials;
-        Quaternion[] localRots;
-        Vector3 prefabScale;
-        int m_turn;
 
 
-        public void RenderTile(Vector3 aPos, Vector3 anOffset, Color renderColor) {
+
+        public void RenderTile(Vector3 aPos, Vector3 anOffset, Color renderColor)
+        {
             Graphics.ClearRandomWriteTargets();
-            if (currentMeshes.Length == 0) {
+            if (currentMeshes.Length == 0)
+            {
                 Mesh builtinCubeMesh = UnityExtensions.LoadAssetFromUniqueAssetPath<Mesh>("Library/unity default resources::Cube");
                 Material defaultMat = new Material(Shader.Find("Diffuse"));
                 Matrix4x4 m = Matrix4x4.TRS(aPos + anOffset, Quaternion.identity, Vector3.one * 9);
@@ -164,15 +278,17 @@ public class MapSegmentEditor : Editor
                 return;
             }
 
-            var turnRot = Quaternion.Euler(0, m_turn * 90, 0);
+            var turnRot = Quaternion.Euler(0, turn * 90, 0);
 
-            for (int i = 0; i < currentMeshes.Length; i++) {
+            for (int i = 0; i < currentMeshes.Length; i++)
+            {
                 Vector3 scale = new Vector3(
-                    prefabScale.x * localSizes[i].x,
-                    prefabScale.y * localSizes[i].y,
-                    prefabScale.z * localSizes[i].z);
-                Vector3 pos = m_turn != 0 ? (turnRot * localPos[i] + aPos) + anOffset : localPos[i] + aPos + anOffset;
-                Quaternion rot = m_turn != 0 ? localRots[i] * turnRot : localRots[i];
+                    prefabScale.x * transformInfo[i].localScale.x,
+                    prefabScale.y * transformInfo[i].localScale.y,
+                    prefabScale.z * transformInfo[i].localScale.z);
+
+                Vector3 pos = turn != 0 ? (turnRot * transformInfo[i].position + aPos) + anOffset : transformInfo[i].position + aPos + anOffset;
+                Quaternion rot = turn != 0 ? transformInfo[i].rotation * turnRot : transformInfo[i].rotation;
 
                 Matrix4x4 m = Matrix4x4.TRS(pos, rot, scale);
                 Graphics.DrawMesh(currentMeshes[i], m, materials[i], 0, SceneView.currentDrawingSceneView.camera);
@@ -182,15 +298,27 @@ public class MapSegmentEditor : Editor
     }
 
 
-    private void OnDrawGizmos() {
-        MapSegment segment = (MapSegment)target;
+    private void DrawSegmentDirection()
+    {
 
-        for (int d = 0; d < DirExt.directions.Length; d++) {
-            if(selected == d) {
+
+        for (int d = 0; d < DirExt.directions.Length; d++)
+        {
+            var element = sockets.GetArrayElementAtIndex(d);
+
+
+
+
+
+
+
+            if (selected == d)
+            {
                 Handles.color = selectionColor;
             }
-            else if (segment.socket.GetSocket(d)) {
-                Handles.color = segment.socket.GetSocket(d).color;
+            else if (element != null)
+            {
+                Handles.color = socketColors[d];
             }
             else
                 Handles.color = Color.clear;

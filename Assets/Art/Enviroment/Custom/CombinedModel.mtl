@@ -1,0 +1,243 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 01.09.2020 12:30:32
+
+newmtl White
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl Piping
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Piping\Piping_02_Pieces\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Piping\Piping_02_Pieces\Material _2_Base_Color.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Piping\Piping_02_Pieces\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Piping\Piping_02_Pieces\Material _2_Normal_DirectX.png
+
+newmtl PillarsGeneric
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Pillars\Pillar_03_Standards\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Pillars\Pillar_03_Standards\Material _2_Base_Color.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Pillars\Pillar_03_Standards\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Pillars\Pillar_03_Standards\Material _2_Normal_DirectX.png
+
+newmtl Walls_General
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_06_Plain\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_06_Plain\Material _2_Base_Color.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_06_Plain\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_06_Plain\Material _2_Normal_DirectX.png
+
+newmtl Door_1
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_00_SlideVertically\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_00_SlideVertically\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_00_SlideVertically\Material _2_Emissive.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_00_SlideVertically\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_00_SlideVertically\Material _2_Normal_DirectX.png
+
+newmtl Door2
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_01_SlideHorizontally\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_01_SlideHorizontally\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_01_SlideHorizontally\Material _2_Emissive.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_01_SlideHorizontally\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doors\Door_01_SlideHorizontally\Material _2_Normal_DirectX.png
+
+newmtl Doorway
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_00_Entrance\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_00_Entrance\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_00_Entrance\Material _2_Emissive.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_00_Entrance\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_00_Entrance\Material _2_Normal_DirectX.png
+
+newmtl Doorway2
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_01_Hallway\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_01_Hallway\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_01_Hallway\Material _2_Emissive.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_01_Hallway\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_01_Hallway\Material _2_Normal_DirectX.png
+
+newmtl Doorway3
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_02_HallwayWalls\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_02_HallwayWalls\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_02_HallwayWalls\Material _2_Emissive.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_02_HallwayWalls\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Doorways\Doorway_02_HallwayWalls\Material _2_Normal_DirectX.png
+
+newmtl CombinedModel_Elevator
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Elevator\Elevator_00_Single\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Elevator\Elevator_00_Single\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Elevator\Elevator_00_Single\Material _2_Emissive.png
+
+newmtl CombinedModel_Pillar_1
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Pillars\Pillar_00_SinglePiping\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Pillars\Pillar_00_SinglePiping\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Pillars\Pillar_00_SinglePiping\Material _2_Emissive.png
+
+newmtl Ramps
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Ramps\Ramp_00_Sidelines\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Ramps\Ramp_00_Sidelines\Material _2_Base_Color.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Ramps\Ramp_00_Sidelines\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Ramps\Ramp_00_Sidelines\Material _2_Normal_DirectX.png
+
+newmtl Stairs_00_Sideline
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_00_Sideline\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_00_Sideline\Material _2_Base_Color.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_00_Sideline\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_00_Sideline\Material _2_Normal_DirectX.png
+
+newmtl Stairs_00_LitSideline
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_02_LitSidelines\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_02_LitSidelines\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_02_LitSidelines\Material _2_Emissive.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_02_LitSidelines\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Stairs\Stairs_02_LitSidelines\Material _2_Normal_DirectX.png
+
+newmtl Wall2
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_01_Piping.fbm\Material _2_Base_Color.png
+	map_Kd C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_01_Piping.fbm\Material _2_Base_Color.png
+	map_Ke C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_01_Piping.fbm\Material _2_Emissive.png
+	map_bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_01_Piping.fbm\Material _2_Normal_DirectX.png
+	bump C:\Users\noahm\Desktop\external drive\WorkingOnStuff\GameAssets\SciFi_Asset_Pack\Exports\Optimized_Unwrapped\Walls\Wall_01_Piping.fbm\Material _2_Normal_DirectX.png

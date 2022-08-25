@@ -5,7 +5,7 @@ public class Socket3D {
 
     //length 6
     //order: Top, Right, Front, Bottom, Left, Back
-    public Socket[] sockets { get; set; }
+    public Socket[] sockets;
     public Socket3D() {
         sockets = new Socket[6];
     }

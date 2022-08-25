@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: RoomCenter
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8832429630048250798, guid: 1ca04ce45db147d4ca43ce563fab9d50, type: 3}
+  prefab: {fileID: 8815261841644875891, guid: 31c2d0534705e344dac706e5914c465f, type: 3}
   weight: 0
+  socket:
+    sockets:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   turnInstances: 1
