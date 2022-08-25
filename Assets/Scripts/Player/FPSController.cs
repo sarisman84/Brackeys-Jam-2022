@@ -46,10 +46,11 @@ public class FPSController : MonoBehaviour
 
         defaultColHeight = capsCollider.height;
 
-       
+
     }
 
-    private void Start() {
+    private void Start()
+    {
         cameraController = PollingStation.Instance.cameraController;
         povHandler = cameraController.GetCinemachineComponent<CinemachinePOV>();
 
@@ -88,6 +89,10 @@ public class FPSController : MonoBehaviour
         charController.Move(move * Time.deltaTime * finalSpeed);
 
 
+
+
+
+
         if (crouchReference.action.ReadValue<float>() > 0)
         {
             if (!isCrouching && grounded)
@@ -101,6 +106,12 @@ public class FPSController : MonoBehaviour
         if (jumpReference.action.ReadValue<float>() > 0 && grounded)
         {
             verticalVelocity += Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+
+        bool isHeadColliding = Physics.OverlapBox(transform.position + Vector3.up * capsCollider.bounds.size.y / 2.0f, new Vector3(capsCollider.bounds.extents.x, 0.1f, capsCollider.bounds.extents.z)).Length > 0;
+        if (isHeadColliding)
+        {
+            verticalVelocity = 0;
         }
 
         verticalVelocity += gravity * Time.deltaTime;
