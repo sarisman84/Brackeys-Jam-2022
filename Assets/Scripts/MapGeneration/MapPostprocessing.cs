@@ -160,9 +160,10 @@ public partial class MapGenerator
             }
         }
         #endregion
-        
-        
-        
+
+
+
+        //tries to find the section a given tile [i] is in
         public int GetSection(int i) {
             for(int s = 0; s < sections.Count; s++) {
                 if (sections[s].Contains(i))

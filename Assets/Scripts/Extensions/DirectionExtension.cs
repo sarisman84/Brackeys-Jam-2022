@@ -1,11 +1,10 @@
-using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 public enum Direction { Top, Right, Front, Bottom, Left, Back }
 public static class DirExt
 {
-
     public static Vector3Int[] directions = {Vector3Int.up, Vector3Int.right, Vector3Int.forward, Vector3Int.down, Vector3Int.left, Vector3Int.back };
     public static int InvertDir(int d) { return (d + 3) % 6; }
     public static Direction InvertDir(this Direction d) { return (Direction)InvertDir((int)d); }

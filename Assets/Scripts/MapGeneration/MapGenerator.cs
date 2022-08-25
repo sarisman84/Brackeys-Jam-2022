@@ -5,6 +5,8 @@ public partial class MapGenerator : MonoBehaviour
 {
     public Vector3Int mapSize = new Vector3Int(5, 1, 5);
     public Vector3 tileSize = Vector3.one;
+    public Vector3Int GetGridPos(Vector3 pos) { return Vector3Int.FloorToInt(pos.CompDiv(tileSize)); }
+
 
     [Space]
     [Header("Segments")]
@@ -31,11 +33,37 @@ public partial class MapGenerator : MonoBehaviour
 
     private Transform tileParent;
 
-    public Vector3Int GetGridPos(Vector3 pos) {
-        pos.x /= tileSize.x;
-        pos.y /= tileSize.y;
-        pos.z /= tileSize.z;
-        return Vector3Int.FloorToInt(pos);
+
+    TurnSegment FindFittingSegment(Socket3D socket) {
+        for (int s = 0; s < turnSegments.Length; s++) {
+            if (turnSegments[s].Fits(socket))
+                return turnSegments[s];
+        }
+        Debug.LogError($"No fitting segment found for {socket}");
+        return null;
+    }
+
+
+
+
+    void Start() {
+        PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
+        {
+            switch (state) {
+                case RuntimeManager.RuntimeState.MainMenu: //Delete map on main menu transition
+                    if (tileParent)
+                        Destroy(tileParent.gameObject);
+                    break;
+                case RuntimeManager.RuntimeState.Playing:
+                    if (previousState == RuntimeManager.RuntimeState.MainMenu)//Generate map on starting the game from the main menu.
+                        LoadProcedualMap();
+                    break;
+            }
+        };
+
+
+        if (createOnAwake)
+            LoadProcedualMap();
     }
 
     public void LoadProcedualMap()
@@ -72,42 +100,12 @@ public partial class MapGenerator : MonoBehaviour
         InstantiateMap();
     }
 
-    void Start()
-    {
-        PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
-        {
-            switch (state) {
-                case RuntimeManager.RuntimeState.MainMenu: //Delete map on main menu transition
-                    if (tileParent)
-                        Destroy(tileParent.gameObject);
-                    break;
-                case RuntimeManager.RuntimeState.Playing:
-                    if (previousState == RuntimeManager.RuntimeState.MainMenu)//Generate map on starting the game from the main menu.
-                        LoadProcedualMap();
-                    break;
-            }
-        };
-
-
-        if (createOnAwake)
-            LoadProcedualMap();
-    }
-
-    TurnSegment FindFittingSegment(Socket3D socket)
-    {
-        for (int s = 0; s < turnSegments.Length; s++)
-        {
-            if (turnSegments[s].Fits(socket))
-                return turnSegments[s];
-        }
-        Debug.LogError($"No fitting segment found for {socket}");
-        return null;
-    }
-
     #region MapGeneration
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
     void GenerateMap(ref TurnSegment[] segments, float weightSum)
     {
+        //------------- FIND ALL POSSIBLE SOCKETS -------------------------------
+        //go through all tiles and find which sockets they have and add them
         List<Socket>[] basePossibilities = new List<Socket>[6];
         for (int d = 0; d < 6; d++) {
             basePossibilities[d] = new List<Socket>();
@@ -117,11 +115,14 @@ public partial class MapGenerator : MonoBehaviour
             }
         }
 
+        //INITIALIZE GRID
         grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
         for (int i = 0; i < grid.Length; i++) grid[i] = new GridBox(ref segments, weightSum, basePossibilities);//fill the grid
 
         SetupGrid(ref grid);
 
+
+        //----------- WAVE FUNCTION COLLAPSE --------------------
         int iterLimit = grid.Length;
         //int iterLimit = 20;
         for (int iter = 0; iter < iterLimit; iter++)
@@ -133,14 +134,17 @@ public partial class MapGenerator : MonoBehaviour
             }
         }
 
+
         FillMap(ref grid);
     }
+
 
     void SetupGrid(ref Array3D<GridBox> grid)
     {
         TurnSegment emptySegment = new TurnSegment(borderSegment, 0);
 
-        void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z)
+        #region Setup Helper Functions
+        void EmptyPlanePossible(ref Array3D<GridBox> grid, int x, int y, int z)//Add the possibility for empty tiles
         {
             Vector3Int vec = Vector3Int.zero;
             for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
@@ -152,7 +156,7 @@ public partial class MapGenerator : MonoBehaviour
                     grid[vec].possibilities.Add(emptySegment);
                 }
         }
-        void EmptyPlane(ref Array3D<GridBox> grid, int x, int y, int z)
+        void EmptyPlane(ref Array3D<GridBox> grid, int x, int y, int z)//collpse grids on empty tiles
         {
             Vector3Int vec = Vector3Int.zero;
             for (vec[x] = 0; vec[x] < grid.size[x]; vec[x]++)
@@ -164,27 +168,29 @@ public partial class MapGenerator : MonoBehaviour
                     Collapse(ref grid, grid.GetIndex(vec), emptySegment);
                 }
         }
+
+        void AddStartAndEnd(ref Array3D<GridBox> grid) {
+            Vector3Int startPos = new Vector3Int(1, grid.size.y - 2, 0);
+            Vector3Int endPos = new Vector3Int(grid.size.x - 2, 1, grid.size.z - 1);
+
+            ForceCollapse(ref grid, grid.GetIndex(startPos), new TurnSegment(startSegment, 0));
+            ForceCollapse(ref grid, grid.GetIndex(endPos), new TurnSegment(endSegment, 0));
+        }
+        #endregion
 
         EmptyPlanePossible(ref grid, 0, 1, 2);
         EmptyPlanePossible(ref grid, 1, 2, 0);
         EmptyPlanePossible(ref grid, 2, 0, 1);
 
-        //do a collapse change in here (change wont be overridden due to a soft collapse)
-        AddStartAndEnd(ref grid);
+        //do collapse changes in here (change wont be overridden due to a soft collapse for the empty planes)
+        AddStartAndEnd(ref grid);//collapse start and end points
 
         EmptyPlane(ref grid, 0, 1, 2);
         EmptyPlane(ref grid, 1, 2, 0);
         EmptyPlane(ref grid, 2, 0, 1);
     }
 
-    void AddStartAndEnd(ref Array3D<GridBox> grid)
-    {
-        Vector3Int startPos = new Vector3Int(1, grid.size.y - 2, 0);
-        Vector3Int endPos = new Vector3Int(grid.size.x - 2, 1, grid.size.z - 1);
 
-        ForceCollapse(ref grid, grid.GetIndex(startPos), new TurnSegment(startSegment, 0));
-        ForceCollapse(ref grid, grid.GetIndex(endPos), new TurnSegment(endSegment, 0));
-    }
 
     bool LowestEntropyCollapse(ref Array3D<GridBox> grid)
     {//collapse the box with the smallest number of possibilities
@@ -207,7 +213,7 @@ public partial class MapGenerator : MonoBehaviour
         if (min == turnSegments.Length + 1 || minGrids.Count == 0)//if everything is already collapsed
             return false;
 
-        int toCollapse = minGrids[GetRndm(minGrids.Count)];
+        int toCollapse = minGrids[UnityExtensions.GetRndm(minGrids.Count)];
         bool collapseSuccess = CollapseRndm(ref grid, toCollapse);
         if (!collapseSuccess)
             Debug.Log("Collapse error");
@@ -234,7 +240,8 @@ public partial class MapGenerator : MonoBehaviour
         PropergateCollapse(ref grid, toCollapse);
     }
 
-    void PropergateCollapse(ref Array3D<GridBox> grid, int init) {//TODO: also propergergate a change of possibilities if it didint collapse to only one possibility
+
+    void PropergateCollapse(ref Array3D<GridBox> grid, int init) {
         Stack<int> toPropergate = new Stack<int>();
         toPropergate.Push(init);
 
@@ -265,6 +272,8 @@ public partial class MapGenerator : MonoBehaviour
             Debug.LogError("Propergation took to many iterations");
     }
 
+
+
     void FillMap(ref Array3D<GridBox> grid)
     {//Use the grid to pick segments to put into the map array
         map = new Array3D<TurnSegment>(grid.size);//NOTE: dont save the empty outermost layer
@@ -292,6 +301,8 @@ public partial class MapGenerator : MonoBehaviour
         }
     }
 
+
+    #region Gizmos for Debugging
     private void OnDrawGizmos()
     {
         if (map != null)
@@ -333,11 +344,5 @@ public partial class MapGenerator : MonoBehaviour
             }
         }
     }
-
-
-
-    public static int GetRndm(int length)
-    {
-        return UnityEngine.Random.Range(0, length);
-    }
+    #endregion
 }

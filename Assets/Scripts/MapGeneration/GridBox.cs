@@ -17,6 +17,7 @@ public partial class MapGenerator
                 this.possibleSockets[d] = new HashSet<Socket>(possibleSockets[d]);
         }
 
+
         public bool SetResult(TurnSegment socket) {
             if (!possibilities.Contains(socket)) return false;//dont collapse on an impossible state
 
@@ -27,11 +28,9 @@ public partial class MapGenerator
             possibilities.Clear();
             possibilities.Add(socket);
 
-            for (int d = 0; d < 6; d++) {
-                possibleSockets[d].Clear();
-                possibleSockets[d].Add(socket.GetSocket(d));
-            }
+            ReloadPossibleSockets();
         }
+
 
         //Return true if the box was fully collapsed
         public int OnlyAllow(HashSet<Socket> sockets, Direction dir)
@@ -64,6 +63,7 @@ public partial class MapGenerator
             return removeCount;
         }
 
+
         public void ReloadPossibleSockets() {
             for (int d = 0; d < 6; d++) {
                 possibleSockets[d].Clear();
@@ -71,8 +71,7 @@ public partial class MapGenerator
                     if (!possibleSockets[d].Contains(possibilities[p].GetSocket(d)))
                          possibleSockets[d].Add(     possibilities[p].GetSocket(d));
                 }
-            }
-                
+            }  
         }
 
 
