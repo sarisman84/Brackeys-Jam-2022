@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.Linq;
-using UnityEngine.Rendering;
+using static UnityEditor.PlayerSettings;
+using static UnityEngine.Rendering.HableCurve;
 
 [CustomEditor(typeof(MapSegment))]
 public class MapSegmentEditor : Editor
@@ -147,6 +145,8 @@ public class MapSegmentEditor : Editor
             }
         }
     }
+    */
+
 
     #region Scene Preview
     private void OnEnable() {
@@ -157,26 +157,18 @@ public class MapSegmentEditor : Editor
         SceneView.duringSceneGui -= OnSceneGUI;
     }
 
-    private void OnSceneGUI(SceneView view)
-    {
+    private void OnSceneGUI(SceneView view) {
         MapSegment segment = target as MapSegment;
         MapGenerator mapGen = PollingStation.Instance.mapGenerator;
 
         var curCam = SceneView.currentDrawingSceneView.camera;
 
-
-
         TileInfo info = new TileInfo(segment, 0);
 
-
-
-
-        for (int i = 0; i < 6; i++)
-        {
+        for (int i = 0; i < 6; i++) {
             Vector3 modelPos = Vector3.zero;
             Vector3 dir = new Vector3();
-            switch (i)
-            {
+            switch (i) {
                 case 0: dir = Vector3.up * 9; break;
                 case 1: dir = Vector3.right * 9; break;
                 case 2: dir = Vector3.forward * 9; break;
@@ -186,6 +178,9 @@ public class MapSegmentEditor : Editor
                 default: break;
             }
 
+            info.RenderTile(modelPos, Vector3.zero, Color.green);
+
+            /*
             Vector3 offset = modelPos + Vector3.right * (mapGen.tileSize.x * 3) * i;
             Handles.Label(offset + Vector3.up * 3, new GUIContent(text: GetName(segment, i)));
 
@@ -193,19 +188,19 @@ public class MapSegmentEditor : Editor
 
             var wMapSeg = segment.whitelist.GetNeighbours(i);
             if (wMapSeg != null)
-                for (int map = 0; map < wMapSeg.Length; map++)
-                {
+                for (int map = 0; map < wMapSeg.Length; map++) {
                     TurnSegment seg = wMapSeg[map];
                     Vector3 offset2 = offset + new Vector3(0, 0, ((mapGen.tileSize.z * 3) * map));
                     info.RenderTile(offset2, Vector3.zero, Color.green);
                     TileInfo subInfo = new TileInfo(seg.segment, seg.turn);
                     subInfo.RenderTile(offset2, dir, Color.yellow);
-                }
+                }*/
+
+            OnDrawGizmos();
         }
-
-
     }
 
+    /*
     private string GetName(MapSegment segment, int i)
     {
         switch (i)
@@ -219,13 +214,10 @@ public class MapSegmentEditor : Editor
             default: return null;
         }
     }
+    */
 
-    struct TileInfo
-    {
-        public TileInfo(MapSegment segment, int turn)
-        {
-
-
+    struct TileInfo {
+        public TileInfo(MapSegment segment, int turn) {
             currentMeshes = new Mesh[0];
             localPos = new Vector3[0];
             materials = new Material[0];
@@ -244,8 +236,7 @@ public class MapSegmentEditor : Editor
             localRots = new Quaternion[meshFilters.Length];
             m_turn = turn;
             prefabScale = prefab.transform.localScale;
-            for (int i = 0; i < meshFilters.Length; i++)
-            {
+            for (int i = 0; i < meshFilters.Length; i++) {
                 currentMeshes[i] = meshFilters[i].sharedMesh;
                 localPos[i] = meshFilters[i].transform.position;
                 localSizes[i] = meshFilters[i].transform.localScale;
@@ -267,11 +258,9 @@ public class MapSegmentEditor : Editor
         int m_turn;
 
 
-        public void RenderTile(Vector3 aPos, Vector3 anOffset, Color renderColor)
-        {
+        public void RenderTile(Vector3 aPos, Vector3 anOffset, Color renderColor) {
             Graphics.ClearRandomWriteTargets();
-            if (currentMeshes.Length == 0)
-            {
+            if (currentMeshes.Length == 0) {
                 Mesh builtinCubeMesh = UnityExtensions.LoadAssetFromUniqueAssetPath<Mesh>("Library/unity default resources::Cube");
                 Material defaultMat = new Material(Shader.Find("Diffuse"));
                 Matrix4x4 m = Matrix4x4.TRS(aPos + anOffset, Quaternion.identity, Vector3.one * 9);
@@ -280,14 +269,9 @@ public class MapSegmentEditor : Editor
                 return;
             }
 
-
-
             var turnRot = Quaternion.Euler(0, m_turn * 90, 0);
 
-
-
-            for (int i = 0; i < currentMeshes.Length; i++)
-            {
+            for (int i = 0; i < currentMeshes.Length; i++) {
                 Vector3 scale = new Vector3(
                     prefabScale.x * localSizes[i].x,
                     prefabScale.y * localSizes[i].y,
@@ -299,13 +283,21 @@ public class MapSegmentEditor : Editor
                 Graphics.DrawMesh(currentMeshes[i], m, materials[i], 0, SceneView.currentDrawingSceneView.camera);
 
             }
-
-
-
-
         }
-
     }
     #endregion
-    */
+
+
+    private void OnDrawGizmos() {
+        MapSegment segment = (MapSegment)target;
+
+        for (int d = 0; d < DirExt.directions.Length; d++) {
+            if (segment.socket.GetSocket(d)) {
+                Handles.color = segment.socket.GetSocket(d).color;
+            }
+            else
+                Handles.color = Color.clear;
+            Handles.DrawLine(Vector3.zero, (Vector3)DirExt.directions[d] * 9);
+        }
+    }
 }

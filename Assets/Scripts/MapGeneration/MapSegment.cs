@@ -27,7 +27,7 @@ public struct Socket3D {
             case 5:
                 return back;
             default:
-                return Socket.Wall;
+                return null;
         }
     }
 
@@ -75,12 +75,12 @@ public struct Socket3D {
     }
 
     public bool IsCollisionOnly() {
-        return top.IsCollision() &&
-               right.IsCollision() &&
-               front.IsCollision() &&
-               bottom.IsCollision() &&
-               left.IsCollision() &&
-               back.IsCollision();
+        return top.isCollision &&
+               right.isCollision &&
+               front.isCollision &&
+               bottom.isCollision &&
+               left.isCollision &&
+               back.isCollision;
     }
 
     public override string ToString() {

@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public partial class MapGenerator
 {
+    [Header("Post Processing")]
+    public Socket connectionSocket;
+
     private struct MapSections {
         public List<List<int>> sections;
 
@@ -53,7 +55,7 @@ public partial class MapGenerator
                     Vector3Int neighbour = pos + DirExt.directions[d];
                     if (!map.InBounds(neighbour)) continue;
 
-                    if (map[i].GetSocket(d).IsCollision()) continue;//only add connected
+                    if (map[i].GetSocket(d).isCollision) continue;//only add connected
 
                     int _i = map.GetIndex(neighbour);
                     if (visited.Contains(_i)) continue;//only add not visited
@@ -148,8 +150,8 @@ public partial class MapGenerator
                 }
 
                 Direction A_ConDir = DirExt.ToDir(A_ConVec);
-                socketA.SetSocket((int)A_ConDir, Socket.Path);
-                socketB.SetSocket((int)A_ConDir.InvertDir(), Socket.Path);
+                socketA.SetSocket((int)A_ConDir, PollingStation.Instance.mapGenerator.connectionSocket);
+                socketB.SetSocket((int)A_ConDir.InvertDir(), PollingStation.Instance.mapGenerator.connectionSocket);
 
 
                 //Find a new fitting segment with the correct sockets

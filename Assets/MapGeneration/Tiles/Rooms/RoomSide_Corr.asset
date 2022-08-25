@@ -15,10 +15,10 @@ MonoBehaviour:
   prefab: {fileID: 1719501173172419046, guid: c1e01282889f3a14f97fcaac87c3ae44, type: 3}
   weight: 0.3
   socket:
-    top: 1
-    right: 4
-    front: 2
-    bottom: 1
-    left: 4
-    back: 4
+    top: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    right: {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
+    front: {fileID: 11400000, guid: ce472356ba43b344c865052010ec23a5, type: 2}
+    bottom: {fileID: 11400000, guid: 78552396fc6ea1341b2b5198529a220f, type: 2}
+    left: {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
+    back: {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
   turnInstances: 4

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.HableCurve;
 
 public partial class MapGenerator : MonoBehaviour
 {
@@ -59,22 +60,27 @@ public partial class MapGenerator : MonoBehaviour
             turnSegments = turned.ToArray();
         }
 
+        /*
         bool generation = false;
         int gen;
-        int genCount = 10;
+        int genCount = 1;
+        //Debug.Log("Seed: " + Random.seed);
         for (gen = 0; gen < genCount; gen++) {//THIS LOOP IS FOR FIXING THE FAILIURE OF THE MAP GENERATION
             try {
                 GenerateMap(ref turnSegments, weightSum);
                 generation = true;
                 break;
-            } catch {
-                Debug.LogWarning("Map Generation went wrong - trying again");
+            } catch (System.Exception e){
+                Debug.LogWarning("Map Generation went wrong");
+                Debug.LogException(e);
             }
         }
         if (!generation) {
             Debug.LogError($"Map could not be generated after {genCount} tries");
             return;
-        }
+        }*/
+
+        GenerateMap(ref turnSegments, weightSum);
 
         sections = new MapSections();
         sections.GenerateSections(ref map);
@@ -82,7 +88,7 @@ public partial class MapGenerator : MonoBehaviour
 
         InstantiateMap();
 
-        Debug.Log($"Generated Map after {gen} tries");
+        //Debug.Log($"Generated Map after {gen} tries");
     }
 
     void Start()
@@ -121,10 +127,13 @@ public partial class MapGenerator : MonoBehaviour
     //Generate fitting sockets to fill the map by usings the Wave Function Collapse Algorithm
     void GenerateMap(ref TurnSegment[] segments, float weightSum)
     {
-        Socket[] basePossibilities = new Socket[6];
-        for(int s = 0; s < segments.Length; s++) {
-            for(int d = 0; d < 6; d++)
-                basePossibilities[d] |= segments[s].GetSocket(d);
+        List<Socket>[] basePossibilities = new List<Socket>[6];
+        for (int d = 0; d < 6; d++) {
+            basePossibilities[d] = new List<Socket>();
+            for (int s = 0; s < segments.Length; s++) {
+                if (!basePossibilities[d].Contains(segments[s].GetSocket(d)))
+                    basePossibilities[d].Add(segments[s].GetSocket(d));
+            }
         }
 
         grid = new Array3D<GridBox>(mapSize + Vector3Int.one * 2);//make grid bigger -> 2 tiles empty for no dead ends
@@ -133,7 +142,7 @@ public partial class MapGenerator : MonoBehaviour
         SetupGrid(ref grid);
 
         int iterLimit = grid.Length;
-        //int iterLimit = 0;
+        //int iterLimit = 20;
         for (int iter = 0; iter < iterLimit; iter++)
         {
             if (!LowestEntropyCollapse(ref grid))
@@ -263,8 +272,8 @@ public partial class MapGenerator : MonoBehaviour
                 //if (grid[_i].possibilities.Count <= 1) continue;
 
                 //only allow sockets that can connect to the possible sockets on the other side
-                Socket socket = grid[i].possibleSockets[d];
-                int changeCount = grid[_i].OnlyAllow(socket, (Direction)DirExt.InvertDir(d));
+                HashSet<Socket> sockets = grid[i].possibleSockets[d];
+                int changeCount = grid[_i].OnlyAllow(sockets, (Direction)DirExt.InvertDir(d));
 
                 if(changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
                     toPropergate.Push(_i);//propergate this change
@@ -313,6 +322,7 @@ public partial class MapGenerator : MonoBehaviour
 
                 //if (IsEmpty(map[i])) continue;//skip empty
 
+                //DrawGizmosSegmentPSockets(pos + Vector3.up, 0.5f, grid[i]);
                 for (int j = 0; j < grid[i].possibilities.Count; j++)
                 {
                     DrawGizmosSegment(pos + Vector3.down * j, 0.5f, grid[i].possibilities[j]);
@@ -324,10 +334,25 @@ public partial class MapGenerator : MonoBehaviour
     {
         for (int d = 0; d < DirExt.directions.Length; d++)
         {
-            Gizmos.color = new Color[] { Color.gray, Color.green, Color.blue, Color.red }[(int)Mathf.Log((float)segment.GetSocket(d), 2.0f)];
+            Gizmos.color = segment.GetSocket(d).color;
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
     }
+    private void DrawGizmosSegmentPSockets(Vector3 pos, float size, GridBox cell) {
+        for (int d = 0; d < DirExt.directions.Length; d++) {
+            float segSize = size / cell.possibleSockets[d].Count;
+            int i = 0;
+            foreach(Socket s in cell.possibleSockets[d]) {
+                float t1 = (float)i / cell.possibleSockets[d].Count;
+                Vector3 p1 = pos + Vector3.Lerp(Vector3.zero, DirExt.directions[d], t1);
+                Vector3 p2 = p1 + (Vector3)DirExt.directions[d] * segSize;
+                Gizmos.color = s.color;
+                Gizmos.DrawLine(p1, p2);
+                i++;
+            }
+        }
+    }
+
 
 
     public static int GetRndm(int length)

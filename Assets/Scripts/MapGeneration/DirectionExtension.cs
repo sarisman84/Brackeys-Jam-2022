@@ -1,11 +1,5 @@
+using JetBrains.Annotations;
 using UnityEngine;
-
-[System.Flags]
-public enum Socket { 
-    Wall = 1, 
-    Path = 2, 
-    Room = 4
-}
 
 
 public enum Direction { Top, Right, Front, Bottom, Left, Back }
@@ -16,14 +10,14 @@ public static class DirExt
     public static int InvertDir(int d) { return (d + 3) % 6; }
     public static Direction InvertDir(this Direction d) { return (Direction)InvertDir((int)d); }
 
-    public static Direction Turn(this Direction d, int turn) {
+    public static Direction Turn(this Direction d, int turn) {//clockwise
         turn = turn % 4;
         if (d == Direction.Top || d == Direction.Bottom)
             return d;
         
         int d_ = (int)d;
         d_ = (d_ + (d_ % 3) * (turn % 2) + 3 * (turn / 2)) % 6;//s += mod3 if s=1 or 3     s += 3 if s>1 (inverse)
-        return (Direction)d_;
+        return (Direction)d_;//right -> front -> left -> back
     }
 
     public static Direction ToDir(Vector3Int dir) {
@@ -33,9 +27,5 @@ public static class DirExt
         }
         Debug.LogError("Vector could not be converted to Direction");
         return Direction.Top;
-    }
-
-    public static bool IsCollision(this Socket s) {
-        return s == Socket.Wall;
     }
 }
