@@ -18,6 +18,7 @@ public class MapSegmentEditor : Editor
     private GUIContent[] socketNames;
     private Color[] socketColors;
 
+
     private void OnEnable()
     {
 
@@ -39,11 +40,22 @@ public class MapSegmentEditor : Editor
 
 
 
+
     }
+
+
 
     private void HeaderDef(Rect rect)
     {
         EditorGUI.LabelField(rect, new GUIContent("Sockets"));
+        rect.x += 50;
+        rect.width = 70;
+        if (GUI.Button(rect, new GUIContent("Clear Selection")))
+        {
+            socketList.Deselect(selected);
+            selected = -1;
+            SceneView.RepaintAll();
+        }
     }
 
     private void InitializeList()
@@ -54,6 +66,7 @@ public class MapSegmentEditor : Editor
         }
         socketNames = new GUIContent[6];
         socketColors = new Color[6];
+
 
         for (int i = 0; i < socketNames.Length; i++)
         {
@@ -86,6 +99,7 @@ public class MapSegmentEditor : Editor
 
     private void OnSelectElement(ReorderableList list)
     {
+
         selected = list.index;
         SceneView.RepaintAll();
     }
@@ -118,6 +132,7 @@ public class MapSegmentEditor : Editor
             if (p.propertyPath == socketBase.propertyPath) continue;
             EditorGUILayout.PropertyField(p);
         }
+
 
 
         socketList?.DoLayoutList();
@@ -307,11 +322,6 @@ public class MapSegmentEditor : Editor
             var element = sockets.GetArrayElementAtIndex(d);
 
 
-
-
-
-
-
             if (selected == d)
             {
                 Handles.color = selectionColor;
@@ -322,6 +332,9 @@ public class MapSegmentEditor : Editor
             }
             else
                 Handles.color = Color.clear;
+
+
+            Handles.Label((Vector3)DirExt.directions[d] * 9, socketNames[d]);
             Handles.DrawLine(Vector3.zero, (Vector3)DirExt.directions[d] * 9);
         }
     }
