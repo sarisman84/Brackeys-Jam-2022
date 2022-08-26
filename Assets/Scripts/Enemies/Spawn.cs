@@ -46,7 +46,7 @@ public class Spawn : MonoBehaviour
         if (spawned) yield break;
         spawned = true;
 
-        yield return new WaitForSeconds(delay);
+        yield return new PausableWaitForSeconds(delay);
 
         //Vector3 pos = transform.localToWorldMatrix * spawnArea.GetRndm();
         Vector3 pos = transform.TransformPoint(spawnArea.GetRndm());
