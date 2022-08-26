@@ -126,5 +126,9 @@ public static class UnityExtensions
     public static Vector3 CompDiv(this Vector3 vec1, Vector3 vec2) {
         return new Vector3(vec1.x / vec2.x, vec1.y / vec2.y, vec1.z / vec2.z);
     }
+
+    public static Vector3 GetOrtho(this Vector3 vec) {
+        return Vector3.ProjectOnPlane(vec + Vector3.one, vec);//procetc the vec + 1 to an orthogonal plane (vec+1 is not equal to the vector -> doesnt lead to the null vector)
+    }
 }
 

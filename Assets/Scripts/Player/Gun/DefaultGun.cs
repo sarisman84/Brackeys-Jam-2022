@@ -66,11 +66,16 @@ public class DefaultGun : BaseGun
 
 
 
-        if (intersecting && hitInfo.collider.GetComponent<IDamageable>() is IDamageable damageable)
+        if (intersecting)
         {
-            printOut += $"Dealing Damage ({damage})!";
-            targetPos = hitInfo.point;
-            damageable.OnDamageTaken(damage);
+            if(hitInfo.collider.GetComponent<IDamageable>() is IDamageable damageable) {
+                printOut += $"Dealing Damage ({damage})!";
+                targetPos = hitInfo.point;
+                damageable.OnDamageTaken(damage);
+            }
+            else {
+                CreateImpactDecal(hitInfo);//create bullet hole for not damagable objects
+            }
         }
         else
         {
