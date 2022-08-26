@@ -25,10 +25,13 @@ public static class InteractionUtilities
     }
 
 
-    public static bool Raycast(Ray ray, Vector3 addedDirection, float maxRange, LayerMask mask, out RaycastHit hitInfo)
+    public static bool Raycast(Ray ray, Vector3 addedDirection, float maxRange, LayerMask mask, out RaycastHit hitInfo, bool showRay = false)
     {
         ray.direction += addedDirection;
         bool intersect = Physics.Raycast(ray, out hitInfo, maxRange, mask);
+
+        if (showRay)
+            Debug.DrawRay(ray.origin, ray.direction * maxRange, hitInfo.collider ? Color.green : Color.red);
 
         return intersect;
     }

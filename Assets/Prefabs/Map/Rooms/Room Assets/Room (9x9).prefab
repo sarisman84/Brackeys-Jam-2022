@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8745251728310770591}
   - component: {fileID: 6794143532821466581}
+  - component: {fileID: 348243979236851635}
   m_Layer: 0
   m_Name: EnemySpawn
   m_TagString: Untagged
@@ -136,6 +137,23 @@ MonoBehaviour:
   probability: 0.5
   spawnType: 1
   playerProximity: 20
+--- !u!114 &348243979236851635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6119124199137989110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b96e25f10a790418faa5f8d7b8b7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  probabilityToNotSpawnAnything: 0.2
+  tileDecorations:
+  - {fileID: 7649565650639738852, guid: 62d464a29209b4f41b7c98412cbdfd41, type: 3}
+  - {fileID: 116311966005144938, guid: b50bc12c7870e104c86cf9861abd8905, type: 3}
+  - {fileID: 7296189190623826869, guid: 75860b3b15a340f4087550256b58cca7, type: 3}
 --- !u!1001 &4474277784351899059
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -399,9 +417,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6499824609070768501}
     m_Modifications:
+    - target: {fileID: 2269990408422457999, guid: 4cebbccb42f11974183606deabbc44c8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598205836389642579, guid: 4cebbccb42f11974183606deabbc44c8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.02
+      objectReference: {fileID: 0}
     - target: {fileID: 4653818919942123729, guid: 4cebbccb42f11974183606deabbc44c8, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5466946678845352555, guid: 4cebbccb42f11974183606deabbc44c8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6057521851740034523, guid: 4cebbccb42f11974183606deabbc44c8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140345157815165652, guid: 4cebbccb42f11974183606deabbc44c8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.02
       objectReference: {fileID: 0}
     - target: {fileID: 6208523092875495736, guid: 4cebbccb42f11974183606deabbc44c8, type: 3}
       propertyPath: m_Name

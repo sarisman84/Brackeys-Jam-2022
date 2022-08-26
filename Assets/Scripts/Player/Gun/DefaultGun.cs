@@ -51,24 +51,34 @@ public class DefaultGun : BaseGun
 
         //weaponManager.recoilCM.GenerateImpulse(Camera.main.transform.forward.normalized * recoilForce);
 
-        LayerMask mask = LayerMask.NameToLayer("Default");
+        string printOut = $"[Log]<DefaultGun/{gun.gunBarrel.parent.name}>: Firing weapon ";
+
+
+
+        printOut += $" on layer <{LayerMask.LayerToName(hitMask)}>. [Result]: ";
 
         Vector3 spread = Random.insideUnitSphere * (gun.isAimingDownTheSights ? spreadAmm / 2.0f : spreadAmm);
         spread.z = 0;
 
         Ray firingDirection = FiringDirection(gun);
 
-        bool intersecting = InteractionUtilities.Raycast(firingDirection, spread, maxHitRange, mask, out var hitInfo);
+        bool intersecting = InteractionUtilities.Raycast(firingDirection, spread, maxHitRange, hitMask, out var hitInfo, true);
+
+
 
         if (intersecting && hitInfo.collider.GetComponent<IDamageable>() is IDamageable damageable)
         {
+            printOut += $"Dealing Damage ({damage})!";
             targetPos = hitInfo.point;
             damageable.OnDamageTaken(damage);
         }
         else
         {
+            printOut += "Missed!";
             targetPos = gun.gunBarrel.position + (gun.gunBarrel.forward.normalized + spread) * maxHitRange;
         }
+
+        Debug.Log(printOut);
     }
 
     protected override IEnumerator MuzzleDefinition(Gun gun)
