@@ -134,6 +134,8 @@ MonoBehaviour:
     m_Extent: {x: 3, y: 1, z: 3}
   timeDelay: 0
   probability: 0.5
+  spawnType: 1
+  playerProximity: 20
 --- !u!1001 &4474277784351899059
 PrefabInstance:
   m_ObjectHideFlags: 0
