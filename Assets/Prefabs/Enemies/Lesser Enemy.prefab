@@ -189,6 +189,8 @@ GameObject:
   - component: {fileID: 6533064507683787627}
   - component: {fileID: 6533064507683787629}
   - component: {fileID: 6533064507683787628}
+  - component: {fileID: 1937457613795986588}
+  - component: {fileID: 1810785682501039249}
   m_Layer: 0
   m_Name: Lesser Enemy
   m_TagString: Untagged
@@ -232,7 +234,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 1
+  m_BaseOffset: 1.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &6533064507683787628
@@ -249,7 +251,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3.5
   attackRange: 5
-  weapon: {fileID: 11400000, guid: 5878464d099a63c4381b34b72d96a979, type: 2}
+  weapon: {fileID: 11400000, guid: 773d2439097b30e4eac46296e4689746, type: 2}
   head: {fileID: 6533064506343941976}
   gunHolder: {fileID: 6533064507467706518}
   travelDestination: {x: -15, y: 0, z: 0}
+--- !u!114 &1937457613795986588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6533064507683787626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b8971ec0b3e1524f903db7134111361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  onEntityDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6533064507683787626}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!136 &1810785682501039249
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6533064507683787626}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

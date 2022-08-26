@@ -36,7 +36,8 @@ public partial class MapGenerator : MonoBehaviour
     public void DestroyMap() { if (tileParent) Destroy(tileParent.gameObject); }
 
 
-    void Start() {
+    void Start()
+    {
         if (createOnAwake)
             LoadProcedualMap();
     }
@@ -55,10 +56,12 @@ public partial class MapGenerator : MonoBehaviour
         float weightSum = 0;
         {
             List<TurnSegment> turned = new List<TurnSegment>();
-            for (int i = 0; i < segments.Length; i++) {
+            for (int i = 0; i < segments.Length; i++)
+            {
                 int turns = (int)segments[i].turnInstances;
                 float weightMul = 4.0f / turns;
-                for (int t = 0; t < turns; t++) {
+                for (int t = 0; t < turns; t++)
+                {
                     turned.Add(new TurnSegment(segments[i], t, weightMul));
                     weightSum += weightMul * segments[i].weight;
                 }
@@ -69,8 +72,10 @@ public partial class MapGenerator : MonoBehaviour
 
         int maxGen = 50;
         int gen;
-        for (gen = 0; gen < maxGen; gen++) {
-            try {
+        for (gen = 0; gen < maxGen; gen++)
+        {
+            try
+            {
                 GenerateMap(ref turnSegments, weightSum);
 
                 sections = new MapSections();
@@ -79,14 +84,15 @@ public partial class MapGenerator : MonoBehaviour
 
                 break;
             }
-            catch (System.Exception e) {
+            catch (System.Exception e)
+            {
                 Debug.LogException(e);
                 Debug.LogError("Failed to Generate Map");
             }
         }
 
         InstantiateMap();
-        Debug.Log($"Map Generated after {gen+1} tries");
+        Debug.Log($"Map Generated after {gen + 1} tries");
     }
 
     #region MapGeneration
@@ -96,9 +102,11 @@ public partial class MapGenerator : MonoBehaviour
         //------------- FIND ALL POSSIBLE SOCKETS -------------------------------
         //go through all tiles and find which sockets they have and add them
         List<Socket>[] basePossibilities = new List<Socket>[6];
-        for (int d = 0; d < 6; d++) {
+        for (int d = 0; d < 6; d++)
+        {
             basePossibilities[d] = new List<Socket>();
-            for (int s = 0; s < segments.Length; s++) {
+            for (int s = 0; s < segments.Length; s++)
+            {
                 if (!basePossibilities[d].Contains(segments[s].GetSocket(d)))
                     basePossibilities[d].Add(segments[s].GetSocket(d));
             }
@@ -158,7 +166,8 @@ public partial class MapGenerator : MonoBehaviour
                 }
         }
 
-        void AddStartAndEnd(ref Array3D<GridBox> grid) {
+        void AddStartAndEnd(ref Array3D<GridBox> grid)
+        {
             Vector3Int startPos = new Vector3Int(1, grid.size.y - 2, 0);
             Vector3Int endPos = new Vector3Int(grid.size.x - 2, 1, grid.size.z - 1);
 
@@ -230,18 +239,21 @@ public partial class MapGenerator : MonoBehaviour
     }
 
 
-    void PropergateCollapse(ref Array3D<GridBox> grid, int init) {
+    void PropergateCollapse(ref Array3D<GridBox> grid, int init)
+    {
         Stack<int> toPropergate = new Stack<int>();
         toPropergate.Push(init);
 
         //while (toPropergate.Count > 0) {
-        for(int iter = 0; iter < 6*grid.Length; iter++) {//ONLY FOR DEBUGGING
+        for (int iter = 0; iter < 6 * grid.Length; iter++)
+        {//ONLY FOR DEBUGGING
             if (toPropergate.Count <= 0) break;
 
             int i = toPropergate.Pop();
             Vector3Int pos = grid.GetPos(i);
 
-            for (int d = 0; d < DirExt.directions.Length; d++) {
+            for (int d = 0; d < DirExt.directions.Length; d++)
+            {
                 Vector3Int neighbour = pos + DirExt.directions[d];
                 if (!grid.InBounds(neighbour)) continue;
 
@@ -252,7 +264,7 @@ public partial class MapGenerator : MonoBehaviour
                 HashSet<Socket> sockets = grid[i].possibleSockets[d];
                 int changeCount = grid[_i].OnlyAllow(sockets, (Direction)DirExt.InvertDir(d));
 
-                if(changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
+                if (changeCount > 0 && !toPropergate.Contains(_i))//if grid[_i] has a change in possibilities
                     toPropergate.Push(_i);//propergate this change
             }
         }
@@ -286,7 +298,16 @@ public partial class MapGenerator : MonoBehaviour
             pos.z *= tileSize.z;
 
             if (map[i].segment.prefab != null)
-                Instantiate(map[i].segment.prefab, pos, map[i].GetRot(), tileParent);
+            {
+                var obj = Instantiate(map[i].segment.prefab, pos, map[i].GetRot(), tileParent);
+
+                if (obj.tag.Equals("Exit"))
+                {
+                    Debug.Log("[Log]<MapGen>: Generated Exit! Caching!");
+                    PollingStation.Instance.gameManager.exitRoom = obj;
+                }
+            }
+
         }
         tileParent.transform.position = transform.position;//put the map origion to the position of the MapGenerator
     }
@@ -320,11 +341,14 @@ public partial class MapGenerator : MonoBehaviour
             Gizmos.DrawLine(pos, pos + (Vector3)DirExt.directions[d] * size);
         }
     }
-    private void DrawGizmosSegmentPSockets(Vector3 pos, float size, GridBox cell) {
-        for (int d = 0; d < DirExt.directions.Length; d++) {
+    private void DrawGizmosSegmentPSockets(Vector3 pos, float size, GridBox cell)
+    {
+        for (int d = 0; d < DirExt.directions.Length; d++)
+        {
             float segSize = size / cell.possibleSockets[d].Count;
             int i = 0;
-            foreach(Socket s in cell.possibleSockets[d]) {
+            foreach (Socket s in cell.possibleSockets[d])
+            {
                 float t1 = (float)i / cell.possibleSockets[d].Count;
                 Vector3 p1 = pos + Vector3.Lerp(Vector3.zero, DirExt.directions[d], t1);
                 Vector3 p2 = p1 + (Vector3)DirExt.directions[d] * segSize;

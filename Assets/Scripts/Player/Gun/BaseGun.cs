@@ -216,6 +216,7 @@ public abstract class BaseGun : ScriptableObject
     public int ammunitionAmm;
     public float fireRate;
     public float damage;
+    public LayerMask hitMask;
 
     [Header("Recoil Settings")]
     public Vector3 recoilForce = new Vector3(-2, 2, 0.35f);
@@ -225,6 +226,8 @@ public abstract class BaseGun : ScriptableObject
     public GameObject gunPrefab;
     public GameObject muzzleEffect;
     public GameObject bulletEffect;
+
+
 
     public Gun Initialize<T>(T coroutineInitiator, Transform gunPosition, LayerMask renderingLayer, bool applyRecoil = true) where T : MonoBehaviour
     {

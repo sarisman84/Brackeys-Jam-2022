@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d33e972f4b35e4bb15e171c7974730, type: 3}
+  m_Name: Lesser_Enemy_Gun
+  m_EditorClassIdentifier: 
+  ammunitionAmm: 50
+  fireRate: 0.1
+  damage: 1
+  recoilForce: {x: -2, y: 2, z: 0.35}
+  snappiness: 6
+  returnSpeed: 2
+  gunPrefab: {fileID: 7600655882056762739, guid: 0e2ad8d0c1ab8f54aa1ec48acb03d6a2, type: 3}
+  muzzleEffect: {fileID: 0}
+  bulletEffect: {fileID: 1303403015775871255, guid: ebf13860d302c5d4bbed69657ff5ab69, type: 3}
+  spreadAmm: 0.0025
+  maxHitRange: 10
