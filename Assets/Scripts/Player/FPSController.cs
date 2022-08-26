@@ -36,8 +36,8 @@ public class FPSController : MonoBehaviour
 
     private float defaultColHeight;
 
-    private Vector3 HeadBoxPos { get => transform.position + Vector3.up * ((defaultColHeight / 2.0f) + 0.2f); }
-    private Vector3 HeadBoxSize { get => new Vector3(capsCollider.bounds.extents.x, isCrouching ? 0.5f : 0.1f, capsCollider.bounds.extents.z); }
+    private Vector3 HeadBoxPos { get => transform.position + Vector3.up * (isCrouching ? defaultColHeight - defaultColHeight / 8.0f : (defaultColHeight / 2.0f) + 0.2f); }
+    private Vector3 HeadBoxSize { get => new Vector3(capsCollider.bounds.extents.x, 0.2f, capsCollider.bounds.extents.z); }
     private bool isCollidingCeiling { get; set; }
     private void Awake()
     {
