@@ -36,7 +36,9 @@ public class FPSController : MonoBehaviour
 
     private float defaultColHeight;
 
-    private Vector3 HeadBoxPos { get => transform.position + Vector3.up * (isCrouching ? defaultColHeight - defaultColHeight / 8.0f : (defaultColHeight / 2.0f) + 0.2f); }
+    private LayerMask headOverlapBox;
+    private Vector3 HeadBoxPos { get => transform.position + Vector3.up * ((defaultColHeight * 0.5f) + 0.2f); }//not moving
+    //private Vector3 HeadBoxPos { get => transform.position + Vector3.up * (((defaultColHeight * 0.5f) + 0.2f) + (isCrouching ? defaultColHeight*0.25f : 0.0f)); }//follow the player
     private Vector3 HeadBoxSize { get => new Vector3(capsCollider.bounds.extents.x, 0.2f, capsCollider.bounds.extents.z); }
     private bool isCollidingCeiling { get; set; }
     private void Awake()
@@ -49,7 +51,7 @@ public class FPSController : MonoBehaviour
 
         defaultColHeight = capsCollider.height;
 
-
+        headOverlapBox = ~LayerMask.GetMask("Player");
     }
 
     private void Start()
@@ -95,7 +97,7 @@ public class FPSController : MonoBehaviour
 
 
 
-        isCollidingCeiling = Physics.OverlapBox(HeadBoxPos, HeadBoxSize).Length > 0;
+        isCollidingCeiling = Physics.OverlapBox(HeadBoxPos, HeadBoxSize, Quaternion.identity, headOverlapBox).Length > 0;
         if (crouchReference.action.ReadValue<float>() > 0 || isCollidingCeiling)
         {
             if (!isCrouching && grounded)
