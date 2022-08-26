@@ -115,7 +115,7 @@ public class FPSController : MonoBehaviour
         if (isCollidingCeiling && !grounded)
         {
             verticalVelocity = gravity * Time.deltaTime;
-            Debug.Log("Hitting ceiling");
+            //Debug.Log("Hitting ceiling");
         }
 
         verticalVelocity += gravity * Time.deltaTime;
