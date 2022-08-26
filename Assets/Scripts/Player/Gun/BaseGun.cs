@@ -276,7 +276,6 @@ public abstract class BaseGun : ScriptableObject
     protected void CreateImpactDecal(RaycastHit hitInfo) {
         Vector3 tangent = hitInfo.normal.GetOrtho();
         Quaternion rot = Quaternion.LookRotation(-hitInfo.normal, tangent);
-        Vector3 pos = hitInfo.point + hitInfo.normal * impactDecal.GetComponent<DecalProjector>().size.z*0.5f;//move decal back by half its size
-        Instantiate(impactDecal, pos, rot, PollingStation.Instance.gameManager.GetEntityParent());
+        Instantiate(impactDecal, hitInfo.point, rot, PollingStation.Instance.gameManager.GetEntityParent());
     }
 }

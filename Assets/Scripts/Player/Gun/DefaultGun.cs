@@ -55,7 +55,7 @@ public class DefaultGun : BaseGun
 
 
 
-        printOut += $" on layer <{LayerMask.LayerToName(hitMask)}>. [Result]: ";
+        printOut += $" on layer <*no one knows*>. [Result]: ";
 
         Vector3 spread = Random.insideUnitSphere * (gun.isAimingDownTheSights ? spreadAmm / 2.0f : spreadAmm);
         spread.z = 0;
