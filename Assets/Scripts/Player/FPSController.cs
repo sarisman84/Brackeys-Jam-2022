@@ -164,6 +164,8 @@ public class FPSController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (!capsCollider) capsCollider = GetComponent<CapsuleCollider>();
+
         Gizmos.color = isCollidingCeiling ? Color.green : Color.red;
         Gizmos.DrawCube(HeadBoxPos, HeadBoxSize);
     }
