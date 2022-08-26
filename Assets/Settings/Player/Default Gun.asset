@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammunitionAmm: 50
   fireRate: 0.1
-  damage: 1
+  damage: 2
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
   recoilForce: {x: -2, y: 2, z: 0.35}
   snappiness: 6
   returnSpeed: 2

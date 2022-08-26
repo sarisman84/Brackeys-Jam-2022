@@ -126,10 +126,10 @@ MonoBehaviour:
   trackRate: 8
   searchRate: 2
   searchAttempt: 3
-  moveSpeed: 3.5
+  moveSpeed: 4.5
   trackMoveSpeed: 0
   searchMoveSpeed: 1
-  chaseMoveSpeed: 2
+  chaseMoveSpeed: 3
   currentBehaviour: 0
   currentAngle: 0
 --- !u!82 &1860658988276928693

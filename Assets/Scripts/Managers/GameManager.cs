@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     }
     private void OnTransitionToPlaying()
     {
+        var _ = new PopupEffect(this, "Escape", 1.5f);
         PollingStation.Instance.mapGenerator.LoadProcedualMap();//Generate map on starting the game from the main menu.
         SetEnemyGoal();
     }
@@ -76,7 +77,7 @@ public class GameManager : MonoBehaviour
 
     public void OnCoreEnemySpawn(GameObject coreEnemy)
     {
-        Debug.Log("Core Enemy Spawned!");
+        var _ = new PopupEffect(this, "You are not alone", 1.5f);
         this.coreEnemy = coreEnemy;
     }
 

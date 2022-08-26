@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d33e972f4b35e4bb15e171c7974730, type: 3}
   m_Name: Lesser_Enemy_Gun
   m_EditorClassIdentifier: 
-  ammunitionAmm: 50
-  fireRate: 0.1
+  ammunitionAmm: -1
+  fireRate: 0.25
   damage: 1
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
   recoilForce: {x: -2, y: 2, z: 0.35}
   snappiness: 6
   returnSpeed: 2

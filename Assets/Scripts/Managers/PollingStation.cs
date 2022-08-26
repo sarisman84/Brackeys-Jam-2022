@@ -30,7 +30,7 @@ public class PollingStation
     public RuntimeManager runtimeManager { get; private set; }
     public MapGenerator mapGenerator { get; private set; }
     public GameManager gameManager { get; private set; }
-
+    public UIManager uiManager { get; private set; }
     public CinemachineVirtualCamera cameraController { get; private set; }
 
 
@@ -38,6 +38,7 @@ public class PollingStation
     #endregion
 
     public bool debugMode { private get; set; } = false;
+
 
     public PollingStation(bool showDebug = false)
     {
@@ -88,7 +89,8 @@ public class PollingStation
                     break;
 
                 case GameManager gm:
-                    if (!gameManager) {
+                    if (!gameManager)
+                    {
                         if (debugMode)
                             Debug.Log("[Log]<PollingStation>: Found Game Manager");
                         gameManager = gm;
@@ -152,7 +154,14 @@ public class PollingStation
                         menuManager = mm;
                     }
                     break;
-
+                case UIManager um:
+                    if (!uiManager)
+                    {
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found UI Manager");
+                        uiManager = um;
+                    }
+                    break;
                 default:
                     break;
 
