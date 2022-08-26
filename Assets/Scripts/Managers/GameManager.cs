@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager : MonoBehaviour {
+    public GameObject coreEnemy { get; set; }
+
+
     private void Start() {
         PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
         {
@@ -52,8 +54,16 @@ public class GameManager : MonoBehaviour
                 spawn[s].OnSpawn += (GameObject go) => { 
                     go.GetComponent<LesserEnemy>().travelDestination = goal; 
                 };
+
+            }else if (spawn[s].prefab.GetComponent<CoreEnemy>()) {
+                spawn[s].OnSpawn += OnCoreEnemySpawn;
             }
         }
+    }
+
+    public void OnCoreEnemySpawn(GameObject coreEnemy) {
+        Debug.Log("Core Enemy Spawned!");
+        this.coreEnemy = coreEnemy;
     }
 
 
