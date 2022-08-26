@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: End
   m_EditorClassIdentifier: 
-  prefab: {fileID: 7219211094339897568, guid: b60db71dbce03cd4d899b0aee81deae8, type: 3}
+  prefab: {fileID: 7835264976250936927, guid: fe2e6152bba53194d8478972cab7b09a, type: 3}
   weight: 1
   socket:
     sockets:

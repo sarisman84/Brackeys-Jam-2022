@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529d25a0e1856d6449024757c682de3d, type: 3}
   m_Name: PlayerSpawn
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1624381696014623087, guid: 3691b7d97d557fc4aaec0a3ea8ed2749, type: 3}
+  prefab: {fileID: 122555611600457194, guid: f1a5afe35a23fa348b6f8966f50f37bd, type: 3}
   weight: 1
   socket:
     sockets:
