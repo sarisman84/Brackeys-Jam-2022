@@ -4,7 +4,7 @@ using UnityEngine;
 public partial class MapGenerator
 {
     [Header("Post Processing")]
-    public Socket connectionSocket;
+    public Socket[] connectionSockets;
 
     private struct MapSections {
         public List<List<int>> sections;
@@ -140,23 +140,31 @@ public partial class MapGenerator
             //------------------ CONNECT SECTIONS ----------------------
             for (int c = 0; c < connections.Count; c++) {
                 (int a, int b) = connections[c];
-                Socket3D socketA = map[a].GetTurnedSocket3D();
-                Socket3D socketB = map[b].GetTurnedSocket3D();
+                Vector3Int vecA = map.GetPos(a);
+                Vector3Int vecB = map.GetPos(b);
 
-                Vector3Int A_ConVec = map.GetPos(b) - map.GetPos(a);
+                //Specify the sockets INCOMING from the surounding tiles
+                Socket3D suroundingA = PollingStation.Instance.mapGenerator.GetSuroundingSockets(ref map, vecA);
+                Socket3D suroundingB = PollingStation.Instance.mapGenerator.GetSuroundingSockets(ref map, vecB);
+
+                Vector3Int A_ConVec = vecB - vecA;
                 if(A_ConVec.sqrMagnitude != 1) {
                     Debug.LogError("Connectiondistance is too big");
                     continue;
                 }
 
                 Direction A_ConDir = DirExt.ToDir(A_ConVec);
-                socketA.SetSocket((int)A_ConDir,             PollingStation.Instance.mapGenerator.connectionSocket);
-                socketB.SetSocket((int)A_ConDir.InvertDir(), PollingStation.Instance.mapGenerator.connectionSocket.connectionSockets[0]);
 
 
-                //Find a new fitting segment with the correct sockets
-                map[a] = PollingStation.Instance.mapGenerator.FindFittingSegment(socketA);
-                map[b] = PollingStation.Instance.mapGenerator.FindFittingSegment(socketB);
+                //Find a tile, which sockets fit to the specified sockets while making sure that the connection socket is a connection
+
+                //First go through all sockets and find one that fits for A
+                Socket[] noColSockets = PollingStation.Instance.mapGenerator.connectionSockets;
+                map[a] = PollingStation.Instance.mapGenerator.FindFittingSegment(ref suroundingA, (int)A_ConDir, noColSockets, out Socket B_Socket);
+
+                //then use that socket to find one for B as well
+                suroundingB.SetSocket((int)A_ConDir.InvertDir(), B_Socket);
+                map[b] = PollingStation.Instance.mapGenerator.FindFittingSegment(ref suroundingB);
             }
         }
         #endregion
@@ -172,5 +180,42 @@ public partial class MapGenerator
             Debug.LogWarning($"Section for index {i} not found");
             return 0;
         }
+
+    }
+
+    private Socket3D GetSuroundingSockets(ref Array3D<TurnSegment> map, Vector3Int pos) {
+        Socket3D s3d = new Socket3D();
+        for(int d = 0; d < DirExt.directions.Length; d++) {
+            Vector3Int nPos = pos + DirExt.directions[d];
+            Direction connectionDir = ((Direction)d).InvertDir();//direction facing to this tile from the other tile
+            s3d.SetSocket(d, map[nPos].GetSocket(connectionDir));
+        }
+        return s3d;
+    }
+
+
+    private TurnSegment FindFittingSegment(ref Socket3D surounding, int d, Socket[] possibleConnections, out Socket connector) {
+        for (int c = 0; c < possibleConnections.Length; c++) {
+            connector = possibleConnections[c];
+            surounding.SetSocket(d, connector);
+            for (int seg = 0; seg < turnSegments.Length; seg++) {
+                if (turnSegments[seg].SocketFits(surounding))
+                    return turnSegments[seg];
+            }
+        }
+
+        connector = null;
+        //Debug.LogError($"No fitting segment found for {surounding} with all possible connection Sockets");
+        throw new System.Exception($"No fitting segment found for {surounding} with all possible connection Sockets");
+        //return null;
+    }
+    private TurnSegment FindFittingSegment(ref Socket3D surounding) {
+        for (int s = 0; s < turnSegments.Length; s++) {
+            if (turnSegments[s].SocketFits(surounding))
+                return turnSegments[s];
+        }
+        //Debug.LogError($"No fitting segment found for {surounding}");
+        //return null;
+        throw new System.Exception($"No fitting segment found for {surounding}");
     }
 }

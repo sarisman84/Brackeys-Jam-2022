@@ -33,16 +33,6 @@ public partial class MapGenerator : MonoBehaviour
 
     private Transform tileParent;
 
-
-    TurnSegment FindFittingSegment(Socket3D socket) {
-        for (int s = 0; s < turnSegments.Length; s++) {
-            if (turnSegments[s].Fits(socket))
-                return turnSegments[s];
-        }
-        Debug.LogError($"No fitting segment found for {socket}");
-        return null;
-    }
-
     public void DestroyMap() { if (tileParent) Destroy(tileParent.gameObject); }
 
 
@@ -76,13 +66,27 @@ public partial class MapGenerator : MonoBehaviour
             turnSegments = turned.ToArray();
         }
 
-        GenerateMap(ref turnSegments, weightSum);
 
-        sections = new MapSections();
-        sections.GenerateSections(ref map);
-        sections.ConnectSections(ref map);
+        int maxGen = 50;
+        int gen;
+        for (gen = 0; gen < maxGen; gen++) {
+            try {
+                GenerateMap(ref turnSegments, weightSum);
+
+                sections = new MapSections();
+                sections.GenerateSections(ref map);
+                sections.ConnectSections(ref map);
+
+                break;
+            }
+            catch (System.Exception e) {
+                Debug.LogError("Failed to Generate Map");
+                Debug.LogException(e);
+            }
+        }
 
         InstantiateMap();
+        Debug.Log($"Map Generated after {gen+1} tries");
     }
 
     #region MapGeneration

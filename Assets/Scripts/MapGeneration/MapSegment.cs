@@ -84,9 +84,15 @@ public class TurnSegment{
         return segment.socket.GetSocket((int)DirExt.Turn(dir, turn));
     }
 
-    public bool Fits(Socket3D other) {
+    public bool SocketEquals(Socket3D other) {
         for (int d = 0; d < 6; d++)
-            if (!GetSocket(d).Matches(other.sockets[d]))
+            if (GetSocket(d) != other.sockets[d])
+                return false;
+        return true;
+    }
+    public bool SocketFits(Socket3D incoming) {
+        for (int d = 0; d < 6; d++)
+            if (GetSocket(d).Matches(incoming.sockets[d]))
                 return false;
         return true;
     }
