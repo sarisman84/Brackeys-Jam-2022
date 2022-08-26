@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -20,7 +19,6 @@ public class Gun : IEquatable<BaseGun>
     //private float m_snappiness, m_returnSpeed;
 
     //private Vector3 m_recoilForce;
-    private BaseGun template;
     private float currentFireRate;
     private float adsAnimCurveCounter;
     private MonoBehaviour coroutine;
@@ -28,6 +26,7 @@ public class Gun : IEquatable<BaseGun>
 
 
 
+    public BaseGun template { get; private set; }
     public int CurrentAmmo { get; private set; }
     public Transform gunBarrel { get; private set; }
     public Transform adsPOV { get; private set; }
