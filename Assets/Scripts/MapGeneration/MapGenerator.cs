@@ -288,6 +288,7 @@ public partial class MapGenerator : MonoBehaviour
             if (map[i].segment.prefab != null)
                 Instantiate(map[i].segment.prefab, pos, map[i].GetRot(), tileParent);
         }
+        tileParent.transform.position = transform.position;//put the map origion to the position of the MapGenerator
     }
 
 
