@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Spawn : MonoBehaviour
 {
@@ -9,10 +10,12 @@ public class Spawn : MonoBehaviour
 
     public float probability = 0.5f;
 
-    private void Start()
-    {
 
-        if (Random.value >= probability)
+    public event Action<GameObject> OnSpawn;
+
+    private void Awake()
+    {
+        if (UnityEngine.Random.value >= probability)
         {
             return;
         }
@@ -25,7 +28,8 @@ public class Spawn : MonoBehaviour
         yield return new WaitForSeconds(delay);
         //Vector3 pos = transform.localToWorldMatrix * spawnArea.GetRndm();
         Vector3 pos = transform.TransformPoint(spawnArea.GetRndm());
-        Instantiate(prefab, pos, Quaternion.identity, PollingStation.Instance.gameManager.GetEntityParent());
+        GameObject GO = Instantiate(prefab, pos, Quaternion.identity, PollingStation.Instance.gameManager.GetEntityParent());
+        OnSpawn?.Invoke(GO);
     }
 
     private void OnDrawGizmosSelected()

@@ -457,8 +457,8 @@ GameObject:
   - component: {fileID: 8767491313592962765}
   - component: {fileID: 7049846243475588757}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: ExitTrigger
+  m_TagString: Exit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -80,8 +80,8 @@ public partial class MapGenerator : MonoBehaviour
                 break;
             }
             catch (System.Exception e) {
-                Debug.LogError("Failed to Generate Map");
                 Debug.LogException(e);
+                Debug.LogError("Failed to Generate Map");
             }
         }
 
