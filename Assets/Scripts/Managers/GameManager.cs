@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager : MonoBehaviour {
     public GameObject coreEnemy { get; set; }
     public GameObject exitRoom { private get; set; }
 
@@ -24,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     private void OnTransitionToMainMenu()
     {//on main menu transition
+        PollingStation.Instance.audioManager.Play("MainMenu", true);
         PollingStation.Instance.mapGenerator.DestroyMap();//Delete map
         if (entityParent) Destroy(entityParent.gameObject);//Delete all entities 
 
@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     }
     private void OnTransitionToPlaying()
     {
+        PollingStation.Instance.audioManager.Play("Before_CE_Spawn", true);
         var _ = new PopupEffect(this, "Escape", 1.5f);
         PollingStation.Instance.mapGenerator.LoadProcedualMap();//Generate map on starting the game from the main menu.
         SetEnemyGoal();
@@ -63,23 +64,27 @@ public class GameManager : MonoBehaviour
         Spawn[] spawn = FindObjectsOfType<Spawn>();
         for (int s = 0; s < spawn.Length; s++)
         {
-            if (spawn[s].spawnOptions[0].prefab.GetComponent<LesserEnemy>())
-            {
-                spawn[s].OnSpawn += (GameObject go) =>
+            if (spawn[s].spawnOptions.Length > 0)
+                if (spawn[s].spawnOptions[0].prefab.GetComponent<LesserEnemy>())
                 {
-                    go.GetComponent<LesserEnemy>().travelDestination = goal;
-                };
+                    spawn[s].OnSpawn += (GameObject go) =>
+                    {
+                        go.GetComponent<LesserEnemy>().travelDestination = goal;
+                    };
 
-            }
-            else if (spawn[s].spawnOptions[0].prefab.GetComponent<CoreEnemy>())
-            {
-                spawn[s].OnSpawn += OnCoreEnemySpawn;
-            }
+                }
+                else if (spawn[s].spawnOptions[0].prefab.GetComponent<CoreEnemy>())
+                {
+                    spawn[s].OnSpawn += OnCoreEnemySpawn;
+                }
         }
     }
 
     public void OnCoreEnemySpawn(GameObject coreEnemy)
     {
+
+        PollingStation.Instance.audioManager.Play("CE_Spawn_Intro", true).OnComplete(manager => manager.Play("MainLoop", true));
+        PollingStation.Instance.audioManager.Play("CE_Scream");
         var _ = new PopupEffect(this, "You are not alone", 1.5f);
         this.coreEnemy = coreEnemy;
     }
@@ -91,7 +96,8 @@ public class GameManager : MonoBehaviour
         //TODO: map exit
         Debug.Log("Map Exit");
     }
-    public void ResetPlayer() {
+    public void ResetPlayer()
+    {
         PollingStation.Instance.player.GetComponent<HealthHandler>().ResetHealth();
         PollingStation.Instance.weaponManager.RemoveCurrentGun();
     }

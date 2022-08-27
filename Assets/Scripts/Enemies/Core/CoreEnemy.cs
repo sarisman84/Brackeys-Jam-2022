@@ -46,7 +46,7 @@ public class CoreEnemy : MonoBehaviour
     }
     private void Awake()
     {
-        animationManager?.ExecuteAnimationCommand("EndIdle");
+        animationManager?.ExecuteAnimCommand("EndIdle");
         currentTrackRate = trackRate;
         stateMachine = new StateMachine<CE_Behaviour>();
         agent = GetComponent<NavMeshAgent>();
@@ -75,7 +75,7 @@ public class CoreEnemy : MonoBehaviour
         bool lostSight = !TryGetTargetInSight(out var pos);
         if (!lostSight)
         {
-            animationManager?.ExecuteAnimationCommand("StartAttack");
+            animationManager?.ExecuteAnimCommand("StartAttack");
             agent.speed = moveSpeed + chaseMoveSpeed;
             lastKnownPositionOfTarget = pos;
             agent.SetDestination(target.transform.position);
@@ -84,7 +84,7 @@ public class CoreEnemy : MonoBehaviour
         }
         else
         {
-            animationManager?.ExecuteAnimationCommand("EndAttack");
+            animationManager?.ExecuteAnimCommand("EndAttack");
             stateMachine.ExecuteCommand(CE_Behaviour.Search);
         }
     }
@@ -113,11 +113,11 @@ public class CoreEnemy : MonoBehaviour
 
         if (agent.remainingDistance < 0.1f)
         {
-            animationManager?.ExecuteAnimationCommand("StartIdle");
+            animationManager?.ExecuteAnimCommand("StartIdle");
         }
         else
         {
-            animationManager?.ExecuteAnimationCommand("EndIdle");
+            animationManager?.ExecuteAnimCommand("EndIdle");
         }
 
         if (TryGetTargetInSight(out var pos))
@@ -151,11 +151,11 @@ public class CoreEnemy : MonoBehaviour
         if (agent.remainingDistance <= 0.01f)
         {
             currentSearchRate += Time.deltaTime;
-            animationManager?.ExecuteAnimationCommand("StartIdle");
+            animationManager?.ExecuteAnimCommand("StartIdle");
         }
         else
         {
-            animationManager?.ExecuteAnimationCommand("EndIdle");
+            animationManager?.ExecuteAnimCommand("EndIdle");
         }
 
         if (currentSearchRate >= searchRate)

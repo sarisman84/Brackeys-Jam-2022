@@ -513,51 +513,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3084390330014711870
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6361237442685772276}
-  - component: {fileID: 4219575554930199242}
-  m_Layer: 0
-  m_Name: UI Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6361237442685772276
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3084390330014711870}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6285747117168634012}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4219575554930199242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3084390330014711870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d819fb69d65797246b9a99f582c902cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  workEnviroment: {fileID: 836842331578551151}
 --- !u!1 &4086959220655811008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1690,6 +1645,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1516828195500831894}
     m_Modifications:
+    - target: {fileID: 393760965, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
+      propertyPath: audioClips.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 393760965, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
+      propertyPath: audioClips.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: e0bac9259d774a84b837db67f83dd664, type: 2}
+    - target: {fileID: 393760965, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
+      propertyPath: audioClips.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0475d2d6ac4ed154a90644e33b29717f, type: 2}
+    - target: {fileID: 393760965, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
+      propertyPath: audioClips.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 89a70da776861704b9710912ce0d33c8, type: 2}
     - target: {fileID: 511621876746369590, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
       propertyPath: pauseUIElement
       value: 
@@ -1754,54 +1725,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ---Managers---
       objectReference: {fileID: 0}
-    - target: {fileID: 7410282386384272663, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7410282386384272663, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7410282386384272663, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: createOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: connectionSockets.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: connectionSockets.Array.data[0]
+    - target: {fileID: 4219575554930199242, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
+      propertyPath: workEnviroment
       value: 
-      objectReference: {fileID: 11400000, guid: ce472356ba43b344c865052010ec23a5, type: 2}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: connectionSockets.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 144447e85a19f3d41a9ce8a2cc7ea531, type: 2}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: connectionSockets.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 216e854bfb2556e4ca748701ff5d30b5, type: 2}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: connectionSockets.Array.data[3]
-      value: 
-      objectReference: {fileID: 11400000, guid: c36f07605ec3ea54c9ad005272803cb3, type: 2}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: connectionSockets.Array.data[4]
-      value: 
-      objectReference: {fileID: 11400000, guid: 8b0c30a7ced2bd64a97582bd0a1e2c4d, type: 2}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: connectionSockets.Array.data[5]
-      value: 
-      objectReference: {fileID: 11400000, guid: f3f704b4df1a1c1478731c97a78a7288, type: 2}
-    - target: {fileID: 7410282386384272664, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
-      propertyPath: connectionSockets.Array.data[6]
-      value: 
-      objectReference: {fileID: 11400000, guid: f39347a8007258b4c941d00cb53c1066, type: 2}
+      objectReference: {fileID: 836842331578551151}
     - target: {fileID: 8340831860555673196, guid: afaa38c783b47924f97a4ff8b249e7dd, type: 3}
       propertyPath: gameOverCanvas
       value: 

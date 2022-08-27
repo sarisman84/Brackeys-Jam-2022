@@ -4,10 +4,8 @@ using System;
 using UnityEngine.InputSystem;
 using Cinemachine;
 
-public class RuntimeManager : MonoBehaviour
-{
-    public enum RuntimeState
-    {
+public class RuntimeManager : MonoBehaviour {
+    public enum RuntimeState {
         MainMenu, Paused, Playing, GameOver
     }
 
@@ -26,9 +24,12 @@ public class RuntimeManager : MonoBehaviour
     private MenuManager menuManager;
     private Vector2 inputVals;
 
+    private AudioManager audioManager;
+
     private void Start()
     {
         povHandler = PollingStation.Instance.cameraController.GetCinemachineComponent<CinemachinePOV>();
+        audioManager = PollingStation.Instance.audioManager;
         menuManager = PollingStation.Instance.menuManager;
         optionsM = PollingStation.Instance.optionsManager;
 
@@ -37,6 +38,9 @@ public class RuntimeManager : MonoBehaviour
 
         //end the game if the player dies
         PollingStation.Instance.player.GetComponent<HealthHandler>().onEntityDeath.AddListener(SetStateToGameOver);
+
+        UpdateState();
+
     }
 
     private void OnEnable()
@@ -133,6 +137,7 @@ public class RuntimeManager : MonoBehaviour
             case RuntimeState.Playing:
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
+
                 break;
             default:
                 break;
@@ -164,7 +169,8 @@ public class RuntimeManager : MonoBehaviour
         SetState(RuntimeState.MainMenu);
     }
 
-    public void SetStateToGameOver() {
+    public void SetStateToGameOver()
+    {
         if (menuManager.IsCurrentCanvasOpen())
             menuManager.ExitCurrentCanvas(IsValidCanvas, OnExitingCanvas);
         menuManager.OpenCanvas(menuManager.gameOverCanvas);

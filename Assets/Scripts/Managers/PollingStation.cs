@@ -2,8 +2,7 @@
 using UnityEngine.SceneManagement;
 using Cinemachine;
 
-public class PollingStation
-{
+public class PollingStation {
     static PollingStation m_Ins;
     public static PollingStation Instance
     {
@@ -31,6 +30,7 @@ public class PollingStation
     public MapGenerator mapGenerator { get; private set; }
     public GameManager gameManager { get; private set; }
     public UIManager uiManager { get; private set; }
+    public AudioManager audioManager { get; private set; }
     public CinemachineVirtualCamera cameraController { get; private set; }
 
 
@@ -160,6 +160,16 @@ public class PollingStation
                         if (debugMode)
                             Debug.Log("[Log]<PollingStation>: Found UI Manager");
                         uiManager = um;
+                    }
+                    break;
+
+                case AudioManager mm:
+                    if (!audioManager)
+                    {
+                        if (debugMode)
+                            Debug.Log("[Log]<PollingStation>: Found Audio Manager");
+
+                        audioManager = mm;
                     }
                     break;
                 default:

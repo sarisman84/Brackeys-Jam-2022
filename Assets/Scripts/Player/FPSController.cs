@@ -41,8 +41,10 @@ public class FPSController : MonoBehaviour
     //private Vector3 HeadBoxPos { get => transform.position + Vector3.up * (((defaultColHeight * 0.5f) + 0.2f) + (isCrouching ? defaultColHeight*0.25f : 0.0f)); }//follow the player
     private Vector3 HeadBoxSize { get => new Vector3(capsCollider.bounds.extents.x, 0.2f, capsCollider.bounds.extents.z); }
     private bool isCollidingCeiling { get; set; }
+    private AnimationManager animManager;
     private void Awake()
     {
+        animManager = GetComponent<AnimationManager>();
         charController = GetComponent<CharacterController>();
         mainCam = Camera.main;
 

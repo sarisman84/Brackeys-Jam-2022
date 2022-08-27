@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class LesserEnemy : MonoBehaviour
-{
+public class LesserEnemy : MonoBehaviour {
 
     NavMeshAgent agent;
     Transform playerTarget;
@@ -18,12 +17,13 @@ public class LesserEnemy : MonoBehaviour
     public Transform gunHolder;
     public Vector3 travelDestination;
 
-    private float curFireRate;
     private Gun gunInstance;
+    private AnimationManager animationManager;
     // Start is called before the first frame update
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        animationManager = GetComponent<AnimationManager>();
     }
 
 
@@ -64,10 +64,13 @@ public class LesserEnemy : MonoBehaviour
         if (PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing) return;
         if (agent.isStopped)
         {
+            animationManager?.ExecuteAnimCommand("Movement", AnimationType.AnimTypeDef.Float, 0.0f);
+            animationManager?.ExecuteAnimCommand("Attack", AnimationType.AnimTypeDef.Float, 1.0f);
             if (foundCoreEnemy)
             {
                 head.transform.LookAt(coreEnemy);
                 gunHolder.transform.LookAt(coreEnemy);
+
             }
             else if (foundPlayer)
             {
@@ -79,9 +82,15 @@ public class LesserEnemy : MonoBehaviour
         }
         else
         {
+            float speed = 1.0f;
             if (agent.velocity.magnitude > 0.01f)
+            {
                 gunHolder.transform.rotation = Quaternion.LookRotation(agent.velocity);
-            curFireRate = 0;
+                speed = 0.0f;
+            }
+
+            animationManager?.ExecuteAnimCommand("Movement", AnimationType.AnimTypeDef.Float, speed);
+
             agent.SetDestination(travelDestination);
         }
 

@@ -73,7 +73,7 @@ public class WeaponManager : MonoBehaviour
     }
 
     public void RemoveCurrentGun() {
-        currentGun.DeleteGun();
+        currentGun?.DeleteGun();
         currentGun = null;
     }
 

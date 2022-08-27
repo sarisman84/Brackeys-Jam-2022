@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
-public partial class MapGenerator : MonoBehaviour
-{
+public partial class MapGenerator : MonoBehaviour {
     public Vector3Int mapSize = new Vector3Int(5, 1, 5);
     public Vector3 tileSize = Vector3.one;
     public Vector3Int GetGridPos(Vector3 pos) { return Vector3Int.FloorToInt(pos.CompDiv(tileSize)); }
@@ -32,6 +33,8 @@ public partial class MapGenerator : MonoBehaviour
     private TurnSegment[] turnSegments;
 
     private Transform tileParent;
+
+
 
     public void DestroyMap() { if (tileParent) Destroy(tileParent.gameObject); }
 
@@ -290,12 +293,20 @@ public partial class MapGenerator : MonoBehaviour
     void InstantiateMap()
     {
         tileParent = new GameObject("Tile Parent").transform;
+
+        
+
+
         for (int i = 0; i < map.Length; i++)
         {
+
             Vector3 pos = (Vector3)map.GetPos(i);
+            Vector3 ogPos = pos;
+
             pos.x *= tileSize.x;
             pos.y *= tileSize.y;
             pos.z *= tileSize.z;
+
 
             if (map[i].segment.prefab != null)
             {
@@ -309,6 +320,27 @@ public partial class MapGenerator : MonoBehaviour
             }
 
         }
+
+        //mapSize.y == 1 so we are adding one floor
+        for (int i = 1; i < map.size.y - 1; i++)
+        {
+
+            //Creating plane
+            GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            plane.name = $"Floor [{i}]";
+            plane.transform.SetParent(tileParent);
+            plane.transform.localPosition = new Vector3(map.size.x * tileSize.x / 2.0f, i * tileSize.y, map.size.z * tileSize.z / 2.0f);
+            plane.transform.localScale = new Vector3((map.size.x * 2.0f) * tileSize.x / 10.0f, 1, (map.size.z * 2.0f) * tileSize.z / 10.0f);
+            plane.GetComponent<MeshRenderer>().enabled = false;
+            plane.isStatic = true;
+            NavMeshSurface surface = plane.AddComponent<NavMeshSurface>();
+            surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+            surface.BuildNavMesh();
+
+
+        }
+
+
         tileParent.transform.position = transform.position;//put the map origion to the position of the MapGenerator
     }
 
