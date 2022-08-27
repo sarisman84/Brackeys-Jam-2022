@@ -11,6 +11,42 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: fbc0244f23320ca4b8042522869dd3a7, type: 2}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: ce6945b03ce05a543aafa9e658282fb1, type: 2}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2dbc025aa3dec7949bcbfc520c075f65, type: 2}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 08ad0c08339791b4db8b67b6bcf08919, type: 2}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 070f7f821ce0baa43a0f960b1784c7c5, type: 2}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 070f7f821ce0baa43a0f960b1784c7c5, type: 2}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 070f7f821ce0baa43a0f960b1784c7c5, type: 2}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 070f7f821ce0baa43a0f960b1784c7c5, type: 2}
     - target: {fileID: 2695074681420678926, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
       propertyPath: m_IsActive
       value: 0

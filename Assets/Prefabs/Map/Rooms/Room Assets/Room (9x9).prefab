@@ -95,9 +95,8 @@ GameObject:
   - component: {fileID: 8745251728310770591}
   - component: {fileID: 6794143532821466581}
   - component: {fileID: 348243979236851635}
-  - component: {fileID: 675060461035673510}
   m_Layer: 0
-  m_Name: EnemySpawn
+  m_Name: Spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,12 +129,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58377e314a033bf4bbb2ea8649e7ddb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 6533064507683787626, guid: 7d9e34cca52ada048aa0294d3aa8a840, type: 3}
+  spawnOptions:
+  - {fileID: 11400000, guid: 598f8b67a69241c4480f8241b27b4cac, type: 2}
+  weightOffset: 1
   spawnArea:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 3, y: 1, z: 3}
   timeDelay: 0
-  probability: 0.5
   spawnType: 1
   playerProximity: 20
 --- !u!114 &348243979236851635
@@ -150,28 +150,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b96e25f10a790418faa5f8d7b8b7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  probabilityToNotSpawnAnything: 0.2
   tileDecorations:
-  - {fileID: 7649565650639738852, guid: 62d464a29209b4f41b7c98412cbdfd41, type: 3}
-  - {fileID: 116311966005144938, guid: b50bc12c7870e104c86cf9861abd8905, type: 3}
-  - {fileID: 7296189190623826869, guid: 75860b3b15a340f4087550256b58cca7, type: 3}
---- !u!114 &675060461035673510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6119124199137989110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b96e25f10a790418faa5f8d7b8b7e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  probabilityToNotSpawnAnything: 0.2
-  tileDecorations:
-  - {fileID: 7649565650639738852, guid: 62d464a29209b4f41b7c98412cbdfd41, type: 3}
-  - {fileID: 116311966005144938, guid: b50bc12c7870e104c86cf9861abd8905, type: 3}
-  - {fileID: 7296189190623826869, guid: 75860b3b15a340f4087550256b58cca7, type: 3}
+  - {fileID: 11400000, guid: a18730d5173d77748aea705b414c5f66, type: 2}
+  - {fileID: 11400000, guid: c75ebd37b4aaf84449ad57e85bcaff70, type: 2}
+  - {fileID: 11400000, guid: fbc0244f23320ca4b8042522869dd3a7, type: 2}
+  - {fileID: 11400000, guid: 640ba96d1b672c04383172c6e0da835a, type: 2}
+  weightOffset: 1
+  floorOffset: 1.5
 --- !u!1001 &4474277784351899059
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -63,5 +63,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4791245395305295523, guid: 97ce4cfb99eb5d64a9bb10f73bd8872d, type: 3}
+      propertyPath: tileDecorations.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4791245395305295523, guid: 97ce4cfb99eb5d64a9bb10f73bd8872d, type: 3}
+      propertyPath: tileDecorations.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 08ad0c08339791b4db8b67b6bcf08919, type: 2}
+    - target: {fileID: 4791245395305295523, guid: 97ce4cfb99eb5d64a9bb10f73bd8872d, type: 3}
+      propertyPath: tileDecorations.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 070f7f821ce0baa43a0f960b1784c7c5, type: 2}
+    - target: {fileID: 4791245395305295523, guid: 97ce4cfb99eb5d64a9bb10f73bd8872d, type: 3}
+      propertyPath: tileDecorations.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 070f7f821ce0baa43a0f960b1784c7c5, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97ce4cfb99eb5d64a9bb10f73bd8872d, type: 3}

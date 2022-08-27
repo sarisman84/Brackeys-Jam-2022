@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEditor;
@@ -143,6 +140,21 @@ public static class UnityExtensions
         return path;
     }
 
+
+    public static int GetWeightedRnd<T>(T[] array, Func<T, float> GetWeight, float weightOffset = 0.0f) {
+        float weightSum = weightOffset;
+        for (int i = 0; i < array.Length; i++) weightSum += GetWeight(array[i]);
+
+        float rnd = UnityEngine.Random.Range(0.0f, weightSum);
+
+        float current = 0;
+        for (int i = 0; i < array.Length; i++) {
+            current += GetWeight(array[i]);
+            if (current >= rnd)
+                return i;
+        }
+        return -1;
+    }
 
 
     public static int GetRndm(int length)

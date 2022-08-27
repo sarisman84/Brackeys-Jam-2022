@@ -7,6 +7,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 7296189190623826869, guid: 75860b3b15a340f4087550256b58cca7, type: 3}
+    - target: {fileID: 348243979236851635, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
+      propertyPath: tileDecorations.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 7296189190623826869, guid: 75860b3b15a340f4087550256b58cca7, type: 3}
     - target: {fileID: 2495826606988211362, guid: e4222610cdf234a48bf0dff7ed66b138, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.02

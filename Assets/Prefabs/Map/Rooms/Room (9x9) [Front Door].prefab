@@ -63,5 +63,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6259314006403560021, guid: 20ca433c97b33fe4eafcc53b9310751d, type: 3}
+      propertyPath: tileDecorations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6259314006403560021, guid: 20ca433c97b33fe4eafcc53b9310751d, type: 3}
+      propertyPath: tileDecorations.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: fbc0244f23320ca4b8042522869dd3a7, type: 2}
+    - target: {fileID: 6259314006403560021, guid: 20ca433c97b33fe4eafcc53b9310751d, type: 3}
+      propertyPath: tileDecorations.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 4362249118405724893, guid: e7ab9ebcbd940c84d8f3b969607efc3e, type: 3}
+    - target: {fileID: 6259314006403560021, guid: 20ca433c97b33fe4eafcc53b9310751d, type: 3}
+      propertyPath: tileDecorations.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 4362249118405724893, guid: e7ab9ebcbd940c84d8f3b969607efc3e, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20ca433c97b33fe4eafcc53b9310751d, type: 3}

@@ -234,12 +234,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58377e314a033bf4bbb2ea8649e7ddb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1860658988276928651, guid: 68b0346910832f14cb533f38b09cefad, type: 3}
+  spawnOptions:
+  - {fileID: 11400000, guid: 01dddba7751ce544aad974744ce4be28, type: 2}
+  weightOffset: 0
   spawnArea:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   timeDelay: 10
-  probability: 1
   spawnType: 0
   playerProximity: 0
 --- !u!1001 &5695577241735395504

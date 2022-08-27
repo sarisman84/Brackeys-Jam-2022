@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
         if (entityParent) Destroy(entityParent.gameObject);//Delete all entities 
 
         ResetPlayer();
+        coreEnemy = null;
     }
     private void OnTransitionToPlaying()
     {
@@ -62,7 +63,7 @@ public class GameManager : MonoBehaviour
         Spawn[] spawn = FindObjectsOfType<Spawn>();
         for (int s = 0; s < spawn.Length; s++)
         {
-            if (spawn[s].prefab.GetComponent<LesserEnemy>())
+            if (spawn[s].spawnOptions[0].prefab.GetComponent<LesserEnemy>())
             {
                 spawn[s].OnSpawn += (GameObject go) =>
                 {
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour
                 };
 
             }
-            else if (spawn[s].prefab.GetComponent<CoreEnemy>())
+            else if (spawn[s].spawnOptions[0].prefab.GetComponent<CoreEnemy>())
             {
                 spawn[s].OnSpawn += OnCoreEnemySpawn;
             }

@@ -59,6 +59,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7317027854288069690, guid: f5da95c9de97f67468a3ac83ee1edebb, type: 3}
+      propertyPath: tileDecorations.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7317027854288069690, guid: f5da95c9de97f67468a3ac83ee1edebb, type: 3}
+      propertyPath: tileDecorations.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 08ad0c08339791b4db8b67b6bcf08919, type: 2}
+    - target: {fileID: 7317027854288069690, guid: f5da95c9de97f67468a3ac83ee1edebb, type: 3}
+      propertyPath: tileDecorations.Array.data[1].turn
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7317027854288069690, guid: f5da95c9de97f67468a3ac83ee1edebb, type: 3}
+      propertyPath: tileDecorations.Array.data[2].turn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7317027854288069690, guid: f5da95c9de97f67468a3ac83ee1edebb, type: 3}
+      propertyPath: tileDecorations.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 4362249118405724893, guid: e7ab9ebcbd940c84d8f3b969607efc3e, type: 3}
+    - target: {fileID: 7317027854288069690, guid: f5da95c9de97f67468a3ac83ee1edebb, type: 3}
+      propertyPath: tileDecorations.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 4362249118405724893, guid: e7ab9ebcbd940c84d8f3b969607efc3e, type: 3}
     - target: {fileID: 7344559987346427347, guid: f5da95c9de97f67468a3ac83ee1edebb, type: 3}
       propertyPath: m_IsActive
       value: 0
