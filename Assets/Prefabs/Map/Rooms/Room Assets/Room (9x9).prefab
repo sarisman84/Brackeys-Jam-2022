@@ -43,7 +43,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9, y: 1, z: 9}
+  m_Size: {x: 9, y: 0.25, z: 9}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4873410911020780357
 GameObject:
@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 8745251728310770591}
   - component: {fileID: 6794143532821466581}
   - component: {fileID: 348243979236851635}
+  - component: {fileID: 675060461035673510}
   m_Layer: 0
   m_Name: EnemySpawn
   m_TagString: Untagged
@@ -138,6 +139,23 @@ MonoBehaviour:
   spawnType: 1
   playerProximity: 20
 --- !u!114 &348243979236851635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6119124199137989110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b96e25f10a790418faa5f8d7b8b7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  probabilityToNotSpawnAnything: 0.2
+  tileDecorations:
+  - {fileID: 7649565650639738852, guid: 62d464a29209b4f41b7c98412cbdfd41, type: 3}
+  - {fileID: 116311966005144938, guid: b50bc12c7870e104c86cf9861abd8905, type: 3}
+  - {fileID: 7296189190623826869, guid: 75860b3b15a340f4087550256b58cca7, type: 3}
+--- !u!114 &675060461035673510
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

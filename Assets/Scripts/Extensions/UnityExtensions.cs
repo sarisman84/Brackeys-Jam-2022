@@ -6,6 +6,41 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEditor;
+
+[Serializable]
+public class AnimationType : GenericType
+{
+    public enum AnimTypeDef
+    {
+        Bool = 1, Float, Int, Trigger
+    }
+
+    public AnimTypeDef animTypeDef;
+
+}
+
+
+[Serializable]
+public class GenericType
+{
+    public enum TypeDef
+    {
+        Bool = 1, Float, Int, String
+    }
+
+    public TypeDef typeDef;
+
+    public bool boolValue;
+    public float floatValue;
+    public int intValue;
+    public string stringValue;
+
+}
+
+
+
+
+
 public static class UnityExtensions
 {
     public static NewType Cast<OldType, NewType>(this OldType original)
@@ -110,20 +145,24 @@ public static class UnityExtensions
 
 
 
-    public static int GetRndm(int length) {
+    public static int GetRndm(int length)
+    {
         return UnityEngine.Random.Range(0, length);
     }
-    public static Vector3 GetRndm(Vector3 size) {
+    public static Vector3 GetRndm(Vector3 size)
+    {
         return new Vector3(UnityEngine.Random.Range(0, size.x),
                            UnityEngine.Random.Range(0, size.y),
                            UnityEngine.Random.Range(0, size.z));
     }
     public static Vector3 GetRndm(this Bounds bounds) { return bounds.min + GetRndm(bounds.max - bounds.min); }
 
-    public static Vector3 CompMul(this Vector3 vec1, Vector3 vec2) {
+    public static Vector3 CompMul(this Vector3 vec1, Vector3 vec2)
+    {
         return new Vector3(vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z);
     }
-    public static Vector3 CompDiv(this Vector3 vec1, Vector3 vec2) {
+    public static Vector3 CompDiv(this Vector3 vec1, Vector3 vec2)
+    {
         return new Vector3(vec1.x / vec2.x, vec1.y / vec2.y, vec1.z / vec2.z);
     }
 }

@@ -108,7 +108,7 @@ public class FPSController : MonoBehaviour
             ResetCrouch();
         }
 
-        if (jumpReference.action.ReadValue<float>() > 0 && grounded)
+        if (jumpReference.action.ReadValue<float>() > 0 && grounded && !isCrouching)
         {
             verticalVelocity += Mathf.Sqrt(jumpHeight * -2f * gravity);
         }

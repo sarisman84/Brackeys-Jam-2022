@@ -29,8 +29,11 @@ public class CoreEnemy : MonoBehaviour
     public float moveSpeed;
     public float trackMoveSpeed, searchMoveSpeed, chaseMoveSpeed;
 
+    [Header("Animation")]
+    public AnimationManager animationManager;
 
     [Header("Debug")]
+    public bool showLogs = false;
     public CE_Behaviour currentBehaviour;
     public float currentAngle;
     private float currentTrackRate, currentSearchRate;
@@ -43,7 +46,7 @@ public class CoreEnemy : MonoBehaviour
     }
     private void Awake()
     {
-
+        animationManager?.ExecuteAnimationCommand("EndIdle");
         currentTrackRate = trackRate;
         stateMachine = new StateMachine<CE_Behaviour>();
         agent = GetComponent<NavMeshAgent>();
@@ -64,32 +67,39 @@ public class CoreEnemy : MonoBehaviour
     void ChasingDef(StateMachine<CE_Behaviour>.State currentState)
     {
         if (currentState != StateMachine<CE_Behaviour>.State.Running) return;
-
-        Debug.Log($"{gameObject.name}: Chasing Player!");
+        if (showLogs)
+            Debug.Log($"{gameObject.name}: Chasing Player!");
 
 
 
         bool lostSight = !TryGetTargetInSight(out var pos);
         if (!lostSight)
         {
+            animationManager?.ExecuteAnimationCommand("StartAttack");
             agent.speed = moveSpeed + chaseMoveSpeed;
             lastKnownPositionOfTarget = pos;
             agent.SetDestination(target.transform.position);
-            transform.rotation = Quaternion.LookRotation((target.transform.position - transform.position).normalized);
+            transform.rotation = Quaternion.LookRotation(agent.desiredVelocity);
 
         }
         else
         {
-
+            animationManager?.ExecuteAnimationCommand("EndAttack");
             stateMachine.ExecuteCommand(CE_Behaviour.Search);
         }
     }
 
     void TrackDef(StateMachine<CE_Behaviour>.State currentState)
     {
+        if (currentState == StateMachine<CE_Behaviour>.State.Entering)
+        {
+            currentTrackRate = trackRate;
+        }
+
         if (currentState != StateMachine<CE_Behaviour>.State.Running) return;
 
-        Debug.Log($"{gameObject.name}: Tracking Player's Wearabouts!");
+        if (showLogs)
+            Debug.Log($"{gameObject.name}: Tracking Player's Wearabouts!");
         agent.speed = moveSpeed + trackMoveSpeed;
 
         currentTrackRate += Time.deltaTime;
@@ -100,6 +110,15 @@ public class CoreEnemy : MonoBehaviour
         }
 
         agent.SetDestination(lastKnownPositionOfTarget);
+
+        if (agent.remainingDistance < 0.1f)
+        {
+            animationManager?.ExecuteAnimationCommand("StartIdle");
+        }
+        else
+        {
+            animationManager?.ExecuteAnimationCommand("EndIdle");
+        }
 
         if (TryGetTargetInSight(out var pos))
         {
@@ -117,6 +136,7 @@ public class CoreEnemy : MonoBehaviour
         if (currentState == StateMachine<CE_Behaviour>.State.Entering)
         {
             currSearchAttempt = searchAttempt;
+            currentSearchRate = 0;
         }
 
         if (currentState != StateMachine<CE_Behaviour>.State.Running) return;
@@ -125,11 +145,19 @@ public class CoreEnemy : MonoBehaviour
 
         if (agent.desiredVelocity.magnitude > 0.01f)
             transform.rotation = Quaternion.LookRotation(agent.desiredVelocity);
-
-        Debug.Log($"{gameObject.name}: Searching Player!");
+        if (showLogs)
+            Debug.Log($"{gameObject.name}: Searching Player!");
 
         if (agent.remainingDistance <= 0.01f)
+        {
             currentSearchRate += Time.deltaTime;
+            animationManager?.ExecuteAnimationCommand("StartIdle");
+        }
+        else
+        {
+            animationManager?.ExecuteAnimationCommand("EndIdle");
+        }
+
         if (currentSearchRate >= searchRate)
         {
             Vector3 newSearchPos = SearchInNewArea();
@@ -209,9 +237,9 @@ public class CoreEnemy : MonoBehaviour
         targetPosition = Vector3.zero;
         Ray viewRay = new Ray(transform.position, (target.transform.position - transform.position).normalized);
 
+        LayerMask everything = -1;
 
-
-        bool isTargetInView = Physics.Raycast(viewRay, out var hitInfo, visionRadius * 2.0f) && hitInfo.collider && hitInfo.collider.CompareTag("Player") && IsInVisionCone(viewRay);
+        bool isTargetInView = Physics.Raycast(viewRay, out var hitInfo, visionRadius * 2.0f, everything) && hitInfo.collider && hitInfo.collider.CompareTag("Player") && IsInVisionCone(viewRay);
 
         Debug.DrawRay(viewRay.origin, viewRay.direction * visionRadius, isTargetInView ? Color.green : Color.red);
 

@@ -8,7 +8,8 @@ public class LesserEnemy : MonoBehaviour
 {
 
     NavMeshAgent agent;
-    Transform target;
+    Transform playerTarget;
+    Transform coreEnemy;
 
     public float moveSpeed;
     public float attackRange;
@@ -28,7 +29,7 @@ public class LesserEnemy : MonoBehaviour
 
     private void Start()
     {
-        target = PollingStation.Instance.player.transform;
+        playerTarget = PollingStation.Instance.player.transform;
 
     }
 
@@ -52,12 +53,28 @@ public class LesserEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        agent.isStopped = TryGetTargetInSight(out var pos) || PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing;
+        if (!coreEnemy)
+            coreEnemy = PollingStation.Instance?.gameManager?.coreEnemy?.transform;
+        bool foundPlayer = TryGetTargetInSight(playerTarget, out var pos1);
+        bool foundCoreEnemy = coreEnemy ? TryGetTargetInSight(coreEnemy, out var pos2) : false;
+        bool hasFoundSomeone = foundPlayer || foundCoreEnemy;
+
+
+        agent.isStopped = hasFoundSomeone || PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing;
         if (PollingStation.Instance.runtimeManager.currentState != RuntimeManager.RuntimeState.Playing) return;
         if (agent.isStopped)
         {
-            head.transform.LookAt(target);
-            gunHolder.transform.LookAt(target);
+            if (foundCoreEnemy)
+            {
+                head.transform.LookAt(coreEnemy);
+                gunHolder.transform.LookAt(coreEnemy);
+            }
+            else if (foundPlayer)
+            {
+                head.transform.LookAt(playerTarget);
+                gunHolder.transform.LookAt(playerTarget);
+
+            }
             AttackTarget();
         }
         else
@@ -75,14 +92,14 @@ public class LesserEnemy : MonoBehaviour
     }
 
 
-    bool TryGetTargetInSight(out Vector3 targetPosition)
+    bool TryGetTargetInSight(Transform target, out Vector3 targetPosition)
     {
         targetPosition = Vector3.zero;
-        Ray viewRay = new Ray(transform.position, (target.transform.position - transform.position).normalized);
+        Ray viewRay = new Ray(transform.position, (playerTarget.transform.position - transform.position).normalized);
 
 
 
-        bool isTargetInView = Physics.Raycast(viewRay, out var hitInfo, attackRange * 2.0f) && hitInfo.collider && hitInfo.collider.CompareTag("Player");
+        bool isTargetInView = Physics.Raycast(viewRay, out var hitInfo, attackRange * 2.0f) && hitInfo.collider && hitInfo.collider.transform == target;
 
         Debug.DrawRay(viewRay.origin, viewRay.direction * attackRange, isTargetInView ? Color.green : Color.red);
 
