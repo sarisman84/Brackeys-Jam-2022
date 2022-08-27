@@ -5,7 +5,8 @@ using System;
 public class MenuManager : MonoBehaviour
 {
     public Canvas startingCanvas;
-    public Canvas gameOverCanvas;
+    public Canvas deathCanvas;
+    public Canvas winningCanvas;
 
     private Canvas previousCanvas;
     private Canvas currentCanvas;

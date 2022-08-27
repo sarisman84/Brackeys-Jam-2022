@@ -37,7 +37,10 @@ public class RuntimeManager : MonoBehaviour {
         povHandler.m_VerticalAxis.m_InputAxisValue = optionsM.currentSensitivity;
 
         //end the game if the player dies
-        PollingStation.Instance.player.GetComponent<HealthHandler>().onEntityDeath.AddListener(SetStateToGameOver);
+        PollingStation.Instance.player.GetComponent<HealthHandler>().onEntityDeath.AddListener(() => {
+            menuManager.OpenCanvas(menuManager.deathCanvas);
+            SetStateToGameOver();
+        });
 
         UpdateState();
 
@@ -82,6 +85,9 @@ public class RuntimeManager : MonoBehaviour {
                 UnfreezeCamera();
         }
 
+
+        if (currentState == RuntimeState.GameOver)
+            return;
 
         if (pauseInput.action.ReadValue<float>() > 0 && pauseInput.action.triggered)
         {
@@ -171,9 +177,8 @@ public class RuntimeManager : MonoBehaviour {
 
     public void SetStateToGameOver()
     {
-        if (menuManager.IsCurrentCanvasOpen())
-            menuManager.ExitCurrentCanvas(IsValidCanvas, OnExitingCanvas);
-        menuManager.OpenCanvas(menuManager.gameOverCanvas);
+        //if (menuManager.IsCurrentCanvasOpen())
+            //menuManager.ExitCurrentCanvas(IsValidCanvas, OnExitingCanvas);
 
         SetState(RuntimeState.GameOver);
     }

@@ -1,11 +1,16 @@
-﻿using System.Collections;
-using UnityEngine;
-using TMPro;
-using System;
+﻿using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
     public Canvas workEnviroment;
+
+    public void Start() {
+        PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
+        {
+            if (state == RuntimeManager.RuntimeState.MainMenu)
+                ClearAll();
+        };
+    }
 
     public UIManager Create<T>(out T value) where T : Component
     {
@@ -24,5 +29,10 @@ public class UIManager : MonoBehaviour
     public void Clear<T>(T element) where T: Component
     {
         Destroy(element.gameObject);
+    }
+
+    public void ClearAll() {//Destroy all children of workEnvironment
+        for(int i = workEnviroment.transform.childCount-1; i >= 0; i--)
+            Destroy(workEnviroment.transform.GetChild(i).gameObject);
     }
 }
