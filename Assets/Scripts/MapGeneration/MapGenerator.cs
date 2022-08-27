@@ -6,6 +6,7 @@ public partial class MapGenerator : MonoBehaviour
     public Vector3Int mapSize = new Vector3Int(5, 1, 5);
     public Vector3 tileSize = Vector3.one;
     public Vector3Int GetGridPos(Vector3 pos) { return Vector3Int.FloorToInt(pos.CompDiv(tileSize)); }
+    public Vector3 GetWorldPos(Vector3Int pos) { return ((Vector3)pos).CompMul(tileSize); }
 
 
     [Space]
@@ -293,9 +294,7 @@ public partial class MapGenerator : MonoBehaviour
         for (int i = 0; i < map.Length; i++)
         {
             Vector3 pos = (Vector3)map.GetPos(i);
-            pos.x *= tileSize.x;
-            pos.y *= tileSize.y;
-            pos.z *= tileSize.z;
+            pos = pos.CompMul(tileSize);
 
             if (map[i].segment.prefab != null)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using System.Runtime.CompilerServices;
 
 [RequireComponent(typeof(CharacterController))]
 public class FPSController : MonoBehaviour
@@ -37,9 +38,15 @@ public class FPSController : MonoBehaviour
     private float defaultColHeight;
 
     private LayerMask headOverlapBox;
+    private float sqrtRad = -1;
+    private float GetsqrtRadius() {
+        if (sqrtRad < 0) sqrtRad = Mathf.Sqrt(capsCollider.radius);
+        return sqrtRad; 
+    }
     private Vector3 HeadBoxPos { get => transform.position + Vector3.up * ((defaultColHeight * 0.5f) + 0.2f); }//not moving
+    private Vector3 HeadBoxSize { get => new Vector3(GetsqrtRadius() - 0.01f, 0.2f, GetsqrtRadius() - 0.01f); }//use the sqrt of the radius, so the corner of the box isnt further out than the radius
     //private Vector3 HeadBoxPos { get => transform.position + Vector3.up * (((defaultColHeight * 0.5f) + 0.2f) + (isCrouching ? defaultColHeight*0.25f : 0.0f)); }//follow the player
-    private Vector3 HeadBoxSize { get => new Vector3(capsCollider.bounds.extents.x, 0.2f, capsCollider.bounds.extents.z); }
+    //private Vector3 HeadBoxSize { get => new Vector3(capsCollider.bounds.extents.x, 0.2f, capsCollider.bounds.extents.z); }
     private bool isCollidingCeiling { get; set; }
     private void Awake()
     {
@@ -97,7 +104,7 @@ public class FPSController : MonoBehaviour
 
 
 
-        isCollidingCeiling = Physics.OverlapBox(HeadBoxPos, HeadBoxSize, Quaternion.identity, headOverlapBox).Length > 0;
+        isCollidingCeiling = Physics.OverlapBox(HeadBoxPos, HeadBoxSize*0.5f, Quaternion.identity, headOverlapBox).Length > 0;
         if (crouchReference.action.ReadValue<float>() > 0 || isCollidingCeiling)
         {
             if (!isCrouching && grounded)

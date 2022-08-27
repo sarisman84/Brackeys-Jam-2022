@@ -3,6 +3,7 @@ using System.Linq;
 
 using UnityEngine;
 using UnityEditor;
+using System.Drawing;
 
 [Serializable]
 public class AnimationType : GenericType
@@ -50,16 +51,10 @@ public static class UnityExtensions
                 switch (result)
                 {
                     case Vector3Int sV3Int:
-                        int x = Mathf.FloorToInt(vector3.x);
-                        int y = Mathf.FloorToInt(vector3.y);
-                        int z = Mathf.FloorToInt(vector3.z);
-
-                        result = AssignValue<NewType, Vector3Int>(new Vector3Int(x, y, z));
+                        result = AssignValue<NewType, Vector3Int>(Vector3Int.FloorToInt(vector3));
                         break;
                     case Vector2Int sV2Int:
-                        x = Mathf.FloorToInt(vector3.x);
-                        y = Mathf.FloorToInt(vector3.y);
-                        result = AssignValue<NewType, Vector2Int>(new Vector2Int(x, y));
+                        result = AssignValue<NewType, Vector2Int>(Vector2Int.FloorToInt(vector3));
                         break;
 
                     default:
@@ -180,6 +175,13 @@ public static class UnityExtensions
 
     public static Vector3 GetOrtho(this Vector3 vec) {
         return Vector3.ProjectOnPlane(vec + Vector3.one, vec);//procetc the vec + 1 to an orthogonal plane (vec+1 is not equal to the vector -> doesnt lead to the null vector)
+    }
+
+
+    public static Vector3Int RndmUnitVector() {//returns a Vector3Int with all components either -1, 0 or 1
+        return new Vector3Int(UnityEngine.Random.Range(-1, 2),
+                              UnityEngine.Random.Range(-1, 2),
+                              UnityEngine.Random.Range(-1, 2));
     }
 }
 

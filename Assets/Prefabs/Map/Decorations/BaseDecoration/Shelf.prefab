@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnOptions:
   - {fileID: 11400000, guid: ebca15280c5197c4aa1325195e7872bb, type: 2}
-  weightOffset: 7
+  weightOffset: 3
   spawnArea:
     m_Center: {x: 0, y: 0.25, z: 0}
     m_Extent: {x: 0.65, y: 0, z: 0}
@@ -305,7 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnOptions:
   - {fileID: 11400000, guid: ebca15280c5197c4aa1325195e7872bb, type: 2}
-  weightOffset: 7
+  weightOffset: 3
   spawnArea:
     m_Center: {x: 0, y: 0.25, z: 0}
     m_Extent: {x: 0.05, y: 0, z: 0}
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnOptions:
   - {fileID: 11400000, guid: ebca15280c5197c4aa1325195e7872bb, type: 2}
-  weightOffset: 7
+  weightOffset: 3
   spawnArea:
     m_Center: {x: 0, y: 0.25, z: 0}
     m_Extent: {x: 0.65, y: 0, z: 0}

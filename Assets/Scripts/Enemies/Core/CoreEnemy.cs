@@ -183,33 +183,22 @@ public class CoreEnemy : MonoBehaviour
     private Vector3 SearchInNewArea()
     {
         Vector3 result = new Vector3();
-
-
         Vector3Int currentGridPos = mapGen.GetGridPos(transform.position);
-
-        Vector3Int newGridPos = currentGridPos + UnityEngine.Random.insideUnitSphere.Cast<Vector3, Vector3Int>();
 
         //Check if grid pos is valid (As in, there is a tile there)
         if (mapGen.map == null)
-        {
             return result;
+
+        //there are 27 possible newGridPos -> try a few times
+        for (int iter = 0; iter < 60; iter++) {
+            Vector3Int newGridPos = currentGridPos + UnityExtensions.RndmUnitVector();
+
+            if (mapGen.map.InBounds(newGridPos) && !mapGen.map[newGridPos].IsEmpty()) {
+                //Walk to either the center of the tile(easy) or some random valid position on the tile(hard, define valid position)
+                result = mapGen.GetWorldPos(newGridPos);
+                break;
+            }
         }
-
-
-        if (mapGen.map.InBounds(newGridPos) && !mapGen.map[newGridPos].IsEmpty())
-        {
-            //Walk to either the center of the tile(easy) or some random valid position on the tile(hard, define valid position)
-            result = new Vector3(
-                newGridPos.x * mapGen.tileSize.x + mapGen.mapSize.x / 2.0f,
-                newGridPos.y * mapGen.tileSize.y + mapGen.mapSize.y / 2.0f,
-                newGridPos.z * mapGen.tileSize.z + mapGen.mapSize.z / 2.0f);
-
-
-        }
-
-
-
-
         return result;
     }
 
