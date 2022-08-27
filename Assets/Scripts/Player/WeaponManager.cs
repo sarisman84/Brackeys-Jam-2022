@@ -44,8 +44,7 @@ public class WeaponManager : MonoBehaviour
 
         if (currentGun.CurrentAmmo <= 0)
         {
-            currentGun.DeleteGun();
-            currentGun = null;
+            RemoveCurrentGun();
         }
     }
 
@@ -71,6 +70,11 @@ public class WeaponManager : MonoBehaviour
             currentGun = aNewGun.Initialize(this, gunPosition, LayerMask.NameToLayer("FPSWeapon"));
 
 
+    }
+
+    public void RemoveCurrentGun() {
+        currentGun.DeleteGun();
+        currentGun = null;
     }
 
 

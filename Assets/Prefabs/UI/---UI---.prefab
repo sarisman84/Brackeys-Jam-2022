@@ -107,7 +107,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5224094745333383385}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -409,8 +409,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2810789208399377365}
   - {fileID: 578246572462511044}
+  - {fileID: 2810789208399377365}
   m_Father: {fileID: 6004459841059869156}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -464,7 +464,7 @@ RectTransform:
   - {fileID: 915686572903772134}
   - {fileID: 7583074746350803454}
   m_Father: {fileID: 5224094745333383385}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2890,7 +2890,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -2946,7 +2946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89dcd9b6bae3f064b99e7f24b8f610e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthSegmentParent: {fileID: 578246572462511044}
+  HealthDisplay: {fileID: 0}
   AmmoDisplay: {fileID: 6196836155611686645}
   maxAmmoText: {fileID: 912938945537266078}
   currentAmmoText: {fileID: 2718490830589401832}
@@ -3278,7 +3278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664079508801895782, guid: 4f78482712863714d8b3266ec719dd80, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
-      value: 0
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6723227259860260712, guid: 4f78482712863714d8b3266ec719dd80, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target

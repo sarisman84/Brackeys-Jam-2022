@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     {//on main menu transition
         PollingStation.Instance.mapGenerator.DestroyMap();//Delete map
         if (entityParent) Destroy(entityParent.gameObject);//Delete all entities 
+
+        ResetPlayer();
     }
     private void OnTransitionToPlaying()
     {
@@ -87,5 +89,9 @@ public class GameManager : MonoBehaviour
     {
         //TODO: map exit
         Debug.Log("Map Exit");
+    }
+    public void ResetPlayer() {
+        PollingStation.Instance.player.GetComponent<HealthHandler>().ResetHealth();
+        PollingStation.Instance.weaponManager.RemoveCurrentGun();
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HUDManager : MonoBehaviour
 {
-    public RectTransform healthSegmentParent;
+    public RectTransform HealthDisplay;
     [Space]
     public RectTransform AmmoDisplay;
     public TextMeshProUGUI maxAmmoText;
@@ -17,16 +17,13 @@ public class HUDManager : MonoBehaviour
 
         PollingStation.Instance.runtimeManager.onPostStateChangeCallback += (RuntimeManager.RuntimeState previousState, RuntimeManager.RuntimeState state) =>
         {
-            if(state == RuntimeManager.RuntimeState.Playing) {
-                gameObject.SetActive(true);
-                UpdateHUD();//removes flickering caused by updating too late
+            if(state == RuntimeManager.RuntimeState.Playing || state == RuntimeManager.RuntimeState.GameOver) {
+                SetHUDActive(true);
             }
             else {
-                gameObject.SetActive(false);
+                SetHUDActive(false);
             }
         };
-
-        gameObject.SetActive(false);
     }
 
     private void Update() {
@@ -34,12 +31,17 @@ public class HUDManager : MonoBehaviour
         //Note: Optimization can be done by only fetching the needed info when they change by using a callback
     }
 
+    public void SetHUDActive(bool active) {
+        HealthDisplay.gameObject.SetActive(active);
+        UpdateHUD();
+    }
 
 
     public void SetHealthUI(float healthPercentage) {
+        Transform healthSegmentParent = HealthDisplay.GetChild(0);
         int healthSegmentCount = healthSegmentParent.childCount;
         for(int i = 0; i < healthSegmentCount; i++) {
-            float segmentPosition = (float)i / healthSegmentCount;
+            float segmentPosition = (i + 1.0f) / healthSegmentCount;
             healthSegmentParent.GetChild(i).GetChild(0).gameObject.SetActive(segmentPosition <= healthPercentage);
         }
     }

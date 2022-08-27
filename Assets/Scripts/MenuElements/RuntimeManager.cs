@@ -8,7 +8,7 @@ public class RuntimeManager : MonoBehaviour
 {
     public enum RuntimeState
     {
-        MainMenu, Paused, Playing
+        MainMenu, Paused, Playing, GameOver
     }
 
 
@@ -34,6 +34,9 @@ public class RuntimeManager : MonoBehaviour
 
         povHandler.m_HorizontalAxis.m_InputAxisValue = optionsM.currentSensitivity;
         povHandler.m_VerticalAxis.m_InputAxisValue = optionsM.currentSensitivity;
+
+        //end the game if the player dies
+        PollingStation.Instance.player.GetComponent<HealthHandler>().onEntityDeath.AddListener(SetStateToGameOver);
     }
 
     private void OnEnable()
@@ -123,6 +126,7 @@ public class RuntimeManager : MonoBehaviour
         {
             case RuntimeState.MainMenu:
             case RuntimeState.Paused:
+            case RuntimeState.GameOver:
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 break;
@@ -154,10 +158,19 @@ public class RuntimeManager : MonoBehaviour
 
     public void SetStateToMenu()
     {
+        if (menuManager.startingCanvas)
+            menuManager.HardOpenCanvas(menuManager.startingCanvas);
+
         SetState(RuntimeState.MainMenu);
     }
 
+    public void SetStateToGameOver() {
+        if (menuManager.IsCurrentCanvasOpen())
+            menuManager.ExitCurrentCanvas(IsValidCanvas, OnExitingCanvas);
+        menuManager.OpenCanvas(menuManager.gameOverCanvas);
 
+        SetState(RuntimeState.GameOver);
+    }
 
 
 }

@@ -13,6 +13,10 @@ public class HealthHandler : MonoBehaviour, IDamageable
 
     private void OnEnable()
     {
+        ResetHealth();
+    }
+
+    public void ResetHealth() {
         currentHealth = maxHealth;
     }
 
