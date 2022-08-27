@@ -128,6 +128,7 @@ MonoBehaviour:
   trackRate: 8
   searchRate: 2
   searchAttempt: 3
+  killDistance: 2
   moveSpeed: 4.5
   trackMoveSpeed: 0
   searchMoveSpeed: 1
@@ -282,6 +283,7 @@ MonoBehaviour:
       intValue: 0
       stringValue: 
       animTypeDef: 1
+  showDebug: 0
 --- !u!1 &1860658988782711662
 GameObject:
   m_ObjectHideFlags: 0

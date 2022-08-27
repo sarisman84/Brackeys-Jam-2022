@@ -26,6 +26,7 @@ public class PollingStation {
     public FPSController fpsController { get; private set; }
     public InteractionManager interactionManager { get; private set; }
     public WeaponManager weaponManager { get; private set; }
+    public HealthHandler playerHealthHandler { get; private set; }
     public RuntimeManager runtimeManager { get; private set; }
     public MapGenerator mapGenerator { get; private set; }
     public GameManager gameManager { get; private set; }
@@ -62,6 +63,7 @@ public class PollingStation {
                 break;
             case "Player":
                 player = gameObject;
+                playerHealthHandler = player.GetComponent<HealthHandler>();
                 break;
             default:
                 break;

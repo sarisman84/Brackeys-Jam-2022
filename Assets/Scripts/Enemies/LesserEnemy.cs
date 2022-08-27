@@ -16,6 +16,7 @@ public class LesserEnemy : MonoBehaviour {
     public Transform head;
     public Transform gunHolder;
     public Vector3 travelDestination;
+    public float destinationDespawnRange = 3.0f;
 
     private Gun gunInstance;
     private AnimationManager animationManager;
@@ -95,9 +96,9 @@ public class LesserEnemy : MonoBehaviour {
         }
 
 
-
-
-
+        if(Vector3.Distance(travelDestination, transform.position) <= destinationDespawnRange) {
+            Destroy(gameObject);//despawn on destination reach
+        }
     }
 
 

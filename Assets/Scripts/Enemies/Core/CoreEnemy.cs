@@ -24,6 +24,8 @@ public class CoreEnemy : MonoBehaviour
     public float visionRadius = 4.0f, visionAngleDeg = 30.0f;
     public float trackRate = 8.0f, searchRate = 5.0f;
     public int searchAttempt = 1;
+    [Space]
+    public float killDistance = 1.0f;
 
     [Header("Move Speed Settings")]
     public float moveSpeed;
@@ -81,6 +83,11 @@ public class CoreEnemy : MonoBehaviour
             agent.SetDestination(target.transform.position);
             transform.rotation = Quaternion.LookRotation(agent.desiredVelocity);
 
+            //- Changes by Sytoplis
+            if(Vector3.Distance(target.transform.position, transform.position) <= killDistance) {//Instantly kill the player when coming close enough
+                float killingDamage = PollingStation.Instance.playerHealthHandler.maxHealth * 2.0f;
+                PollingStation.Instance.playerHealthHandler.OnDamageTaken(killingDamage);
+            }
         }
         else
         {

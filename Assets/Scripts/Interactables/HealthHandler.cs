@@ -16,6 +16,11 @@ public class HealthHandler : MonoBehaviour, IDamageable
         ResetHealth();
     }
 
+    public void AddHealth(float addHealth) {
+        currentHealth += addHealth;
+        currentHealth = Mathf.Min(currentHealth, maxHealth);
+    }
+
     public void ResetHealth() {
         currentHealth = maxHealth;
     }
@@ -26,6 +31,7 @@ public class HealthHandler : MonoBehaviour, IDamageable
 
         Debug.Log($"[Log]<HealthHandler/{gameObject.name}>: Taking Damage - {someDamage}");
         currentHealth -= someDamage;
+        currentHealth = Mathf.Max(currentHealth, 0);
 
         if (currentHealth <= 0)
         {

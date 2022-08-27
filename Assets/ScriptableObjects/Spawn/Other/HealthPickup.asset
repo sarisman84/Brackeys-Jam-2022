@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1432b1674b3d73441b8c615ef34a140d, type: 3}
-  m_Name: GunPickup
+  m_Name: HealthPickup
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1216279196649705205, guid: 734ab280e30af474d9e7a927597a1463, type: 3}
-  weight: 2
+  prefab: {fileID: 3447887511042703190, guid: 79bb40a7f98ac2e44ae1b19ef9aed0ea, type: 3}
+  weight: 1
   turn: 0

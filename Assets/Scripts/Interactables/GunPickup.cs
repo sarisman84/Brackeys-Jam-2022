@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Pickup : MonoBehaviour, IInteractable
+public class GunPickup : MonoBehaviour, IInteractable
 {
     public BaseGun assignedGun;
 
