@@ -99,7 +99,7 @@ public static class UnityExtensions
     }
 
 
-
+#if UNITY_EDITOR
     public static T LoadAssetFromUniqueAssetPath<T>(string aAssetPath) where T : UnityEngine.Object
     {
         if (aAssetPath.Contains("::"))
@@ -134,7 +134,7 @@ public static class UnityExtensions
             path += "::" + aObj.GetInstanceID();
         return path;
     }
-
+#endif
 
     public static int GetWeightedRnd<T>(T[] array, Func<T, float> GetWeight, float weightOffset = 0.0f) {
         float weightSum = weightOffset;
