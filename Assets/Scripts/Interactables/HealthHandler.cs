@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(CapsuleCollider))]
 public class HealthHandler : MonoBehaviour, IDamageable
 {
     public float maxHealth;
-    private float currentHealth;
+    public float currentHealth { private set; get; }
 
     public UnityEvent onEntityDeath;
 

@@ -17,12 +17,13 @@ MonoBehaviour:
   damage: 2
   hitMask:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 131
   recoilForce: {x: -2, y: 2, z: 0.35}
   snappiness: 6
   returnSpeed: 2
   gunPrefab: {fileID: 7600655882056762739, guid: 0e2ad8d0c1ab8f54aa1ec48acb03d6a2, type: 3}
   muzzleEffect: {fileID: 0}
   bulletEffect: {fileID: 1303403015775871255, guid: ebf13860d302c5d4bbed69657ff5ab69, type: 3}
+  impactDecal: {fileID: 422351567820728769, guid: 3147d527f2a1e9242b155f5112b8cb66, type: 3}
   spreadAmm: 0.0025
   maxHitRange: 10

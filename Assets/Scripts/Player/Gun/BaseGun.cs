@@ -19,7 +19,6 @@ public class Gun : IEquatable<BaseGun>
     //private float m_snappiness, m_returnSpeed;
 
     //private Vector3 m_recoilForce;
-    private BaseGun template;
     private float currentFireRate;
     private float adsAnimCurveCounter;
     private MonoBehaviour coroutine;
@@ -27,6 +26,7 @@ public class Gun : IEquatable<BaseGun>
 
 
 
+    public BaseGun template { get; private set; }
     public int CurrentAmmo { get; private set; }
     public Transform gunBarrel { get; private set; }
     public Transform adsPOV { get; private set; }
@@ -226,7 +226,7 @@ public abstract class BaseGun : ScriptableObject
     public GameObject gunPrefab;
     public GameObject muzzleEffect;
     public GameObject bulletEffect;
-
+    public GameObject impactDecal;
 
 
     public Gun Initialize<T>(T coroutineInitiator, Transform gunPosition, LayerMask renderingLayer, bool applyRecoil = true) where T : MonoBehaviour
@@ -271,4 +271,10 @@ public abstract class BaseGun : ScriptableObject
     protected abstract IEnumerator MuzzleDefinition(Gun gun);
     protected abstract IEnumerator BulletDefinition(Gun gun);
 
+
+    protected void CreateImpactDecal(RaycastHit hitInfo) {
+        Vector3 tangent = hitInfo.normal.GetOrtho();
+        Quaternion rot = Quaternion.LookRotation(-hitInfo.normal, tangent);
+        Instantiate(impactDecal, hitInfo.point, rot, PollingStation.Instance.gameManager.GetEntityParent());
+    }
 }

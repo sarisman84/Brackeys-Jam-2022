@@ -55,7 +55,7 @@ public class DefaultGun : BaseGun
 
 
 
-        printOut += $" on layer <{LayerMask.LayerToName(hitMask)}>. [Result]: ";
+        printOut += $" on layer <*no one knows*>. [Result]: ";
 
         Vector3 spread = Random.insideUnitSphere * (gun.isAimingDownTheSights ? spreadAmm / 2.0f : spreadAmm);
         spread.z = 0;
@@ -66,11 +66,16 @@ public class DefaultGun : BaseGun
 
 
 
-        if (intersecting && hitInfo.collider.GetComponent<IDamageable>() is IDamageable damageable)
+        if (intersecting)
         {
-            printOut += $"Dealing Damage ({damage})!";
-            targetPos = hitInfo.point;
-            damageable.OnDamageTaken(damage);
+            if(hitInfo.collider.GetComponent<IDamageable>() is IDamageable damageable) {
+                printOut += $"Dealing Damage ({damage})!";
+                targetPos = hitInfo.point;
+                damageable.OnDamageTaken(damage);
+            }
+            else {
+                CreateImpactDecal(hitInfo);//create bullet hole for not damagable objects
+            }
         }
         else
         {

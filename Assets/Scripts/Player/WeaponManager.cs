@@ -19,7 +19,7 @@ public class WeaponManager : MonoBehaviour
 
     public bool isAimingDownSights { get; private set; }
 
-    private Gun currentGun;
+    public Gun currentGun { get; private set; }
 
 
 
