@@ -29,14 +29,7 @@ public class InputRebindButton : Button {
         textMeshProUGUI = GetComponentInChildren<TextMeshProUGUI>();
         if (textMeshProUGUI && inputToRebind)
         {
-            if (rebindComposite)
-            {
-                textMeshProUGUI.text = inputToRebind.action.bindings[0].name;
-            }
-            else
-            {
-                textMeshProUGUI.text = inputToRebind.action.bindings[0].name;
-            }
+            textMeshProUGUI.text = GetInputName();
         }
 
 
@@ -71,7 +64,30 @@ public class InputRebindButton : Button {
 
     int GetBindingIndex()
     {
-        return 0;
+        string name = "";
+
+        switch (componsiteDirection)
+        {
+            case ComponsiteDirection.Left:
+                name = "Left";
+                break;
+            case ComponsiteDirection.Right:
+                name = "Right";
+                break;
+            case ComponsiteDirection.Up:
+                name = "Up";
+                break;
+            case ComponsiteDirection.Down:
+                name = "Down";
+                break;
+            default:
+                break;
+        }
+        int index = inputToRebind.action.bindings.IndexOf(x =>
+        {
+            return x.isPartOfComposite && x.name.ToLower().Contains(name.ToLower());
+        });
+        return index;
     }
 
 
@@ -88,27 +104,7 @@ public class InputRebindButton : Button {
 
         if (rebindComposite)
         {
-            string name = "";
-
-            switch (componsiteDirection)
-            {
-                case ComponsiteDirection.Left:
-                    name = "Left";
-                    break;
-                case ComponsiteDirection.Right:
-                    name = "Right";
-                    break;
-                case ComponsiteDirection.Up:
-                    name = "Up";
-                    break;
-                case ComponsiteDirection.Down:
-                    name = "Down";
-                    break;
-                default:
-                    break;
-            }
-
-            var bindingIndex = inputToRebind.action.bindings.IndexOf(x => x.isPartOfComposite && x.name == name);
+            var bindingIndex = GetBindingIndex();
             rebindingOperation.WithTargetBinding(bindingIndex);
         }
         else if (!rebindMouse)
@@ -124,9 +120,28 @@ public class InputRebindButton : Button {
 
     private void RebindComplete()
     {
-        textMeshProUGUI.text = inputToRebind.action.bindings[0].name;
+        textMeshProUGUI.text = GetInputName();
         rebindingOperation.Dispose();
 
 
+    }
+
+
+    public string GetInputName()
+    {
+        if (rebindComposite)
+        {
+            int index = GetBindingIndex();
+            if (index == -1)
+            {
+                Debug.LogError("Couldnt find keybind");
+                return "Unknown";
+            }
+            return InputControlPath.ToHumanReadableString(inputToRebind.action.bindings[index].effectivePath);
+        }
+        else
+        {
+            return InputControlPath.ToHumanReadableString(inputToRebind.action.bindings[0].effectivePath);
+        }
     }
 }

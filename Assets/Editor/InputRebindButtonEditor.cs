@@ -38,7 +38,10 @@ public class InputRebindButtonEditor : ButtonEditor {
 
         while (it.NextVisible(false))
         {
-            if (it.name.Contains("inputToRebind") || it.name.Contains("rebindMouse"))
+            if (it.name.Contains("inputToRebind") ||
+                it.name.Contains("rebindMouse") ||
+                it.name.Contains("rebindComposite") ||
+                it.name.Contains("componsiteDirection"))
                 EditorGUILayout.PropertyField(it);
 
 
