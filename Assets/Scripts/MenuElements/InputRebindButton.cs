@@ -71,7 +71,7 @@ public class InputRebindButton : Button {
 
     int GetBindingIndex()
     {
-
+        return 0;
     }
 
 
