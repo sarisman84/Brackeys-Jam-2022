@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour {
     public void OnCoreEnemySpawn(GameObject coreEnemy)
     {
         PollingStation.Instance.audioManager.Play("CE_Spawn_Intro", true).OnComplete(manager => manager.Play("MainLoop", true));
-        PollingStation.Instance.audioManager.Play("CE_Scream");
+        PollingStation.Instance.audioManager.Play("CE_Spawn");
         var _ = new PopupEffect(this, "You are not alone", 1.5f);
         this.coreEnemy = coreEnemy;
     }

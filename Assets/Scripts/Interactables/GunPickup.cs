@@ -8,6 +8,7 @@ public class GunPickup : MonoBehaviour, IInteractable
     {
         if (owner && owner.GetComponent<WeaponManager>() is WeaponManager weaponManager)
         {
+            PollingStation.Instance.audioManager.Play("GunPickup");
             weaponManager.EquiptNewWeapon(assignedGun);
             Destroy(gameObject);
         }
