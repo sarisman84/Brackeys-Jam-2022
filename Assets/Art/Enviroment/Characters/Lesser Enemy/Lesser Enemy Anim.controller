@@ -32,13 +32,13 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Movement
     m_Mirror: 0
-  m_BlendParameter: Movement
-  m_BlendParameterY: Blend
+  m_BlendParameter: Attack
+  m_BlendParameterY: Movement
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
-  m_BlendType: 1
+  m_BlendType: 2
 --- !u!1102 &-2514828322951484513
 AnimatorState:
   serializedVersion: 6
@@ -75,6 +75,12 @@ AnimatorController:
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Movement
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Attack
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0

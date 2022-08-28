@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -25,7 +26,7 @@ public class Gun : IEquatable<BaseGun>
     private Coroutine cUpdateRecoil;
 
 
-
+    public List<GameObject> activeBulletEffects { get; private set; }
     public BaseGun template { get; private set; }
     public int CurrentAmmo { get; private set; }
     public Transform gunBarrel { get; private set; }
@@ -46,7 +47,7 @@ public class Gun : IEquatable<BaseGun>
         }
 
         template = templateGun;
-
+        activeBulletEffects = new List<GameObject>();
 
         CurrentAmmo = templateGun.ammunitionAmm;
 
@@ -94,6 +95,10 @@ public class Gun : IEquatable<BaseGun>
 
         if (cUpdateRecoil != null)
             coroutine.StopCoroutine(cUpdateRecoil);
+
+        for (int i = 0; i < activeBulletEffects.Count; i++) {
+            Object.Destroy(activeBulletEffects[i]);//Destroy all left over bullet effects
+        }
     }
 
 
@@ -175,7 +180,7 @@ public class Gun : IEquatable<BaseGun>
         rotOffset.m_RecoilAmount = currentRotation;
     }
 
-    public bool Equals(BaseGun? other)
+    public bool Equals(BaseGun other)
     {
         return template == other;
     }
@@ -206,7 +211,9 @@ public class Gun : IEquatable<BaseGun>
         return !gun.Equals(template);
     }
 
-
+    public override int GetHashCode() {
+        return base.GetHashCode();
+    }
 }
 
 

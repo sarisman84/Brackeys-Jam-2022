@@ -10,7 +10,6 @@ public class DefaultGun : BaseGun
     public float maxHitRange = 10.0f;
 
 
-    private List<GameObject> activeBulletEffects;
     private Vector3 targetPos;
     protected override IEnumerator BulletDefinition(Gun gun)
     {
@@ -19,7 +18,7 @@ public class DefaultGun : BaseGun
         GameObject obj = Instantiate(bulletEffect, PollingStation.Instance.gameManager.GetEntityParent());
         obj.transform.position = gun.gunBarrel.position;
         obj.transform.forward = gun.gunBarrel.forward;
-        activeBulletEffects.Add(obj);
+        gun.activeBulletEffects.Add(obj);
 
         LineRenderer line = obj.GetComponentInChildren<LineRenderer>();
 
@@ -42,7 +41,7 @@ public class DefaultGun : BaseGun
         }
 
         Destroy(obj);
-        activeBulletEffects.Remove(obj);
+        gun.activeBulletEffects.Remove(obj);
     }
 
     protected override void Fire(Gun gun)
@@ -103,13 +102,5 @@ public class DefaultGun : BaseGun
 
 
         Destroy(obj);
-    }
-
-
-
-    private void OnDestroy() {
-        for(int i = 0; i < activeBulletEffects.Count; i++) {
-            Destroy(activeBulletEffects[i]);//Destroy all left over bullet effects
-        }
     }
 }
