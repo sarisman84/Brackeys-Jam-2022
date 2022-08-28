@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c546a1b740cc933448861b1a3e39302b, type: 3}
-  m_Name: BulletImpact Organic
+  m_Name: GunPickup
   m_EditorClassIdentifier: 
   channel: {fileID: -2604444409765086274, guid: a4dba07aaa2be33479881e199f3f4c80, type: 2}
-  clip: {fileID: 8300000, guid: ef4ad0b5d6a89bd41b8ae6542e0fa602, type: 3}
+  clip: {fileID: 8300000, guid: 5950baea4ef325b4f8171c114faf2a19, type: 3}
   playOnAwake: 0
   loop: 0
   initialVolume: 1

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c546a1b740cc933448861b1a3e39302b, type: 3}
   m_Name: BulletImpact General
   m_EditorClassIdentifier: 
-  channel: {fileID: 0}
-  clip: {fileID: 0}
+  channel: {fileID: -2604444409765086274, guid: a4dba07aaa2be33479881e199f3f4c80, type: 2}
+  clip: {fileID: 8300000, guid: 7ffc6b3a63398cb49ba3b66f08c74151, type: 3}
   playOnAwake: 0
   loop: 0
   initialVolume: 1

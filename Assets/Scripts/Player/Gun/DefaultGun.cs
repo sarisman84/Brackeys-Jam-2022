@@ -46,6 +46,7 @@ public class DefaultGun : BaseGun
 
     protected override void Fire(Gun gun)
     {
+        PollingStation.Instance.audioManager.Play("GunFire", gun.gunBarrel.position);
 
         //weaponManager.recoilCM.GenerateImpulse(Camera.main.transform.forward.normalized * recoilForce);
 
@@ -70,10 +71,12 @@ public class DefaultGun : BaseGun
                 printOut += $"Dealing Damage ({damage})!";
                 targetPos = hitInfo.point;
                 damageable.OnDamageTaken(damage);
+                PollingStation.Instance.audioManager.Play("BulletImpact Organic", hitInfo.point);
             }
             else {
                 targetPos = hitInfo.point;
                 CreateImpactDecal(hitInfo);//create bullet hole for not damagable objects
+                PollingStation.Instance.audioManager.Play("BulletImpact General", hitInfo.point);
             }
         }
         else
