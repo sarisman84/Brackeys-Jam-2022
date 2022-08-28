@@ -1,3 +1,4 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,12 +70,14 @@ public class LesserEnemy : MonoBehaviour {
             animationManager?.ExecuteAnimCommand("Attack", AnimationType.AnimTypeDef.Float, 1.0f);
             if (foundCoreEnemy)
             {
+                transform.LookAt(coreEnemy, Vector3.up);
                 head.transform.LookAt(coreEnemy);
                 gunHolder.transform.LookAt(coreEnemy);
 
             }
             else if (foundPlayer)
             {
+                transform.LookAt(playerTarget, Vector3.up);
                 head.transform.LookAt(playerTarget);
                 gunHolder.transform.LookAt(playerTarget);
 

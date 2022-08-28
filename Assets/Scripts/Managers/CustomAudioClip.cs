@@ -9,10 +9,10 @@ public class CustomAudioClip : ScriptableObject {
     public AudioClip clip;
     public bool playOnAwake;
     public bool loop;
-    public float initialVolume;
-    public float initialPitch;
-    public float clipStartTimestamp;
-    public float clipEndTimestamp;
+    public float initialVolume = 1.0f;
+    public float initialPitch = 1.0f;
+    public float clipStartTimestamp = -1.0f;
+    public float clipEndTimestamp = -1.0f;
 
 
 }

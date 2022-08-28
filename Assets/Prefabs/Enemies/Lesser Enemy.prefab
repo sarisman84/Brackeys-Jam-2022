@@ -143,8 +143,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6533064507467706518}
+  m_Children: []
   m_Father: {fileID: 6533064507683787627}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -158,7 +157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6533064507467706518}
   m_Layer: 0
-  m_Name: Gun Holde
+  m_Name: Gun Holder
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -171,13 +170,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6533064507467706517}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.37400007, y: 0, z: 0.485}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6533064506343941976}
-  m_RootOrder: 0
+  m_Father: {fileID: 6121772089901622418}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6533064507683787626
 GameObject:
@@ -257,6 +256,7 @@ MonoBehaviour:
   head: {fileID: 6533064506343941976}
   gunHolder: {fileID: 6533064507467706518}
   travelDestination: {x: -15, y: 0, z: 0}
+  destinationDespawnRange: 3
 --- !u!114 &1937457613795986588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,6 +387,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ch44_nonPBR
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: a39f2d9963e5022479d70f62738d5003, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: b77e80eb8f265384585aacb701274a20, type: 2}
+    - target: {fileID: 5866666021909216657, guid: a39f2d9963e5022479d70f62738d5003, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a39f2d9963e5022479d70f62738d5003, type: 3}
 --- !u!95 &2029960304549947083 stripped
@@ -397,5 +405,10 @@ Animator:
 --- !u!4 &5389668495068380337 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a39f2d9963e5022479d70f62738d5003, type: 3}
+  m_PrefabInstance: {fileID: 5566813686440876890}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6121772089901622418 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: a39f2d9963e5022479d70f62738d5003, type: 3}
   m_PrefabInstance: {fileID: 5566813686440876890}
   m_PrefabAsset: {fileID: 0}
