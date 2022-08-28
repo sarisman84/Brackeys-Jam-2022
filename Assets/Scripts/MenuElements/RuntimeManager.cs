@@ -4,6 +4,9 @@ using System;
 using UnityEngine.InputSystem;
 using Cinemachine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 public class RuntimeManager : MonoBehaviour {
     public enum RuntimeState {
         MainMenu, Paused, Playing, GameOver
@@ -181,6 +184,21 @@ public class RuntimeManager : MonoBehaviour {
             //menuManager.ExitCurrentCanvas(IsValidCanvas, OnExitingCanvas);
 
         SetState(RuntimeState.GameOver);
+    }
+
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        if (Application.isEditor && Application.isPlaying)
+        {
+            EditorApplication.ExitPlaymode();
+        }
+#else
+        Application.Quit();
+#endif
+
+
     }
 
 
