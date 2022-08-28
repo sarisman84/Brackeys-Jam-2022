@@ -24,6 +24,7 @@ public class AudioManager : MonoBehaviour {
                 yield return null;
                 if (source.time >= dur)
                 {
+                    Debug.Log($"[Log]<AudioManager/Player/{audioSource.clip.name}>: On Complete Event called for {audioSource.clip}.");
                     onCompleteEvent?.Invoke(manager);
                     break;
                 }

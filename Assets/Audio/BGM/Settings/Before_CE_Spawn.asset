@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Before_CE_Spawn
   m_EditorClassIdentifier: 
   channel: {fileID: 5871973527467479303, guid: a4dba07aaa2be33479881e199f3f4c80, type: 2}
-  clip: {fileID: 8300000, guid: c357d0692f689e74ca1a9528548bbc5d, type: 3}
+  clip: {fileID: 8300000, guid: 48df1986e8af85a40a68adc00ce85073, type: 3}
   playOnAwake: 0
   loop: 1
   initialVolume: 1
   initialPitch: 1
-  clipStartTimestamp: 0
-  clipEndTimestamp: 15.43
+  clipStartTimestamp: -1
+  clipEndTimestamp: -1
