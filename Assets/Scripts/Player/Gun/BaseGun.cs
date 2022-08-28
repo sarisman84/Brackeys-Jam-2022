@@ -112,6 +112,7 @@ public class Gun : IEquatable<BaseGun>
     public void RefillCurrentAmmo(int amm)
     {
         CurrentAmmo += amm;
+        CurrentAmmo = Mathf.Min(CurrentAmmo, template.ammunitionAmm);//make sure we cant have more ammunition than the maximum
     }
 
     private void ADS(Vector3 offset, AnimationCurve adsTransitionRate)

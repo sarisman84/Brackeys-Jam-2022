@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-using System.Threading.Tasks;
-using Cinemachine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "New Default Gun", menuName = "Gun/Default", order = 0)]
 public class DefaultGun : BaseGun
@@ -11,16 +10,16 @@ public class DefaultGun : BaseGun
     public float maxHitRange = 10.0f;
 
 
-
+    private List<GameObject> activeBulletEffects;
     private Vector3 targetPos;
     protected override IEnumerator BulletDefinition(Gun gun)
     {
         if (gun.gunBarrel == null) yield break;
 
-        GameObject obj = Instantiate(bulletEffect);
+        GameObject obj = Instantiate(bulletEffect, PollingStation.Instance.gameManager.GetEntityParent());
         obj.transform.position = gun.gunBarrel.position;
         obj.transform.forward = gun.gunBarrel.forward;
-
+        activeBulletEffects.Add(obj);
 
         LineRenderer line = obj.GetComponentInChildren<LineRenderer>();
 
@@ -40,10 +39,10 @@ public class DefaultGun : BaseGun
             line.startWidth = width;
             line.endWidth = width;
             yield return null;
-
         }
 
         Destroy(obj);
+        activeBulletEffects.Remove(obj);
     }
 
     protected override void Fire(Gun gun)
@@ -74,6 +73,7 @@ public class DefaultGun : BaseGun
                 damageable.OnDamageTaken(damage);
             }
             else {
+                targetPos = hitInfo.point;
                 CreateImpactDecal(hitInfo);//create bullet hole for not damagable objects
             }
         }
@@ -103,5 +103,13 @@ public class DefaultGun : BaseGun
 
 
         Destroy(obj);
+    }
+
+
+
+    private void OnDestroy() {
+        for(int i = 0; i < activeBulletEffects.Count; i++) {
+            Destroy(activeBulletEffects[i]);//Destroy all left over bullet effects
+        }
     }
 }

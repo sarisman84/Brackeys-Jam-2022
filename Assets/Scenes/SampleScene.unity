@@ -472,5 +472,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8499093425983681212, guid: 3a3673eeae21f7847bba12598965946f, type: 3}
+      propertyPath: startMessage.Array.data[0]
+      value: 'Stage 1:
+
+        Escape'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499093425983681212, guid: 3a3673eeae21f7847bba12598965946f, type: 3}
+      propertyPath: startMessage.Array.data[1]
+      value: 'Stage 2:
+
+        Run Away'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499093425983681212, guid: 3a3673eeae21f7847bba12598965946f, type: 3}
+      propertyPath: startMessage.Array.data[2]
+      value: 'Stage 3:
+
+        Find Freedom'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a3673eeae21f7847bba12598965946f, type: 3}

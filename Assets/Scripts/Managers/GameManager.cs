@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour {
     public GameObject exitRoom { private get; set; }
 
     public int currentRunCount = 0;
-    public int runCount = 3; 
+    public int runCount = 3;
     public string[] startMessage = { "Escape", "Run Away", "Find Freedom"};
 
     private void Start()
